@@ -1,6 +1,7 @@
 package raf.dsw.classycraft.app.core;
 
 import raf.dsw.classycraft.app.gui.swing.view.MainFrame;
+
 public class ApplicationFramework {
 
     private static ApplicationFramework instance;

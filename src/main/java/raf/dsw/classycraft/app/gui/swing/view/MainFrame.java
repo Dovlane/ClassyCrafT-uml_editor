@@ -1,5 +1,7 @@
 package raf.dsw.classycraft.app.gui.swing.view;
 
+import raf.dsw.classycraft.app.gui.swing.controller.ActionManager;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -7,10 +9,10 @@ public class MainFrame extends JFrame {
 
     private static MainFrame instance;
 
-    //buduca polja za sve komponente view-a na glavnom prozoru
+    private ActionManager actionManager;
 
     private MainFrame(){
-
+        actionManager = new ActionManager();
     }
 
     private void initialize(){
@@ -40,4 +42,7 @@ public class MainFrame extends JFrame {
         return instance;
     }
 
+    public ActionManager getActionManager() {
+        return actionManager;
+    }
 }
