@@ -1,5 +1,7 @@
 package raf.dsw.classycraft.app.gui.swing.view;
 
+import raf.dsw.classycraft.app.model.messageGenerator.MessageGenerator;
+
 import javax.swing.*;
 
 public class MyToolBar extends JToolBar {
@@ -9,5 +11,6 @@ public class MyToolBar extends JToolBar {
 
         add(MainFrame.getInstance().getActionManager().getNewProjectAction());
         add(MainFrame.getInstance().getActionManager().getExitAction());
+        add(MainFrame.getInstance().getActionManager().getErrorTestAction());
     }
 }
