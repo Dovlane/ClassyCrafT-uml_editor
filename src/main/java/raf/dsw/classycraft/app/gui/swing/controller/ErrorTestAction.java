@@ -1,12 +1,9 @@
 package raf.dsw.classycraft.app.gui.swing.controller;
 
-import raf.dsw.classycraft.app.model.messageGenerator.MessageGenerator;
-import raf.dsw.classycraft.app.model.messageGenerator.SystemEventType;
+import raf.dsw.classycraft.app.model.MessageGenerator.MessageGenerator;
+import raf.dsw.classycraft.app.model.MessageGenerator.MessageType;
 
-import javax.swing.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.text.ParseException;
 
 public class ErrorTestAction extends AbstractClassyAction{
     private MessageGenerator msgGenerator;
@@ -20,12 +17,7 @@ public class ErrorTestAction extends AbstractClassyAction{
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        msgGenerator.generateMessage(this, SystemEventType.NAME_CANNOT_BE_EMPTY);
-        try {
-            msgGenerator.notifySuscribers(e);
-        } catch (ParseException ex) {
-            throw new RuntimeException(ex);
-        }
+        msgGenerator.generateMessage("name cannot be empty", MessageType.ERROR);
     }
 
     @Override

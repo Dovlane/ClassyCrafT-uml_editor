@@ -1,38 +1,28 @@
 package raf.dsw.classycraft.app.gui.swing.view;
 
 import raf.dsw.classycraft.app.gui.swing.controller.ActionManager;
-import raf.dsw.classycraft.app.model.logger.ConsoleLogger;
-import raf.dsw.classycraft.app.model.logger.FileLogger;
-import raf.dsw.classycraft.app.model.logger.Logger;
-import raf.dsw.classycraft.app.model.logger.LoggerFactory;
-import raf.dsw.classycraft.app.model.messageGenerator.Message;
-import raf.dsw.classycraft.app.model.messageGenerator.MessageGenerator;
-import raf.dsw.classycraft.app.model.messageGenerator.MessageType;
+import raf.dsw.classycraft.app.model.MessageGenerator.Message;
+import raf.dsw.classycraft.app.model.MessageGenerator.MessageGenerator;
+import raf.dsw.classycraft.app.model.MessageGenerator.MessageType;
 import raf.dsw.classycraft.app.model.observerPattern.IListener;
 
 import javax.swing.*;
 import java.awt.*;
-import java.text.ParseException;
 import java.time.LocalDateTime;
 
 public class MainFrame extends JFrame implements IListener {
 
     private static MainFrame instance;
     private MessageGenerator msgGenerator;
-    private LoggerFactory loggerFactory;
-    private Logger consoleLogger;
-    private Logger fileLogger;
     private ActionManager actionManager;
 
     private MainFrame(){
         msgGenerator = new MessageGenerator();
         msgGenerator.addListener(this);
-        Logger consoleLogger = LoggerFactory.createLogger("CONSOLELOGGER", msgGenerator);
-        fileLogger = LoggerFactory.createLogger("FILELOGGER", msgGenerator);
         actionManager = new ActionManager(msgGenerator);
     }
 
-    private void initialize(){
+    private void initialize() {
         Toolkit kit = Toolkit.getDefaultToolkit();
         Dimension screenSize = kit.getScreenSize();
         int screenHeight = screenSize.height;
@@ -49,8 +39,7 @@ public class MainFrame extends JFrame implements IListener {
         add(toolBar, BorderLayout.NORTH);
     }
 
-    public static MainFrame getInstance()
-    {
+    public static MainFrame getInstance() {
         if(instance == null)
         {
             instance = new MainFrame();
@@ -64,9 +53,8 @@ public class MainFrame extends JFrame implements IListener {
     }
 
     @Override
-    public void update(Object notification) throws ParseException {
-        Message msg = (Message)notification;
-
+    public void update(Object notification) {
+        Message msg = (Message) notification;
 
         LocalDateTime dateTime = msg.getTimestamp().toLocalDateTime();
         int day = dateTime.getDayOfMonth();

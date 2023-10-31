@@ -1,6 +1,6 @@
 package raf.dsw.classycraft.app.gui.swing.controller;
 
-import raf.dsw.classycraft.app.model.messageGenerator.MessageGenerator;
+import raf.dsw.classycraft.app.model.MessageGenerator.MessageGenerator;
 
 public class ActionManager {
 
