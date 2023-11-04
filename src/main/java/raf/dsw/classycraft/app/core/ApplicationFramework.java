@@ -3,8 +3,8 @@ package raf.dsw.classycraft.app.core;
 import raf.dsw.classycraft.app.gui.swing.tree.ClassyTreeImplementation;
 import raf.dsw.classycraft.app.gui.swing.tree.IClassyTree;
 import raf.dsw.classycraft.app.gui.swing.view.MainFrame;
-import raf.dsw.classycraft.app.model.classyRepository.ClassyRepository;
-import raf.dsw.classycraft.app.model.classyRepository.IClassyRepository;
+import raf.dsw.classycraft.app.model.ClassyRepository.ClassyRepository;
+import raf.dsw.classycraft.app.model.ClassyRepository.IClassyRepository;
 
 public class ApplicationFramework {
 

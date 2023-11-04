@@ -2,7 +2,6 @@ package raf.dsw.classycraft.app.gui.swing.controller;
 
 import raf.dsw.classycraft.app.core.ApplicationFramework;
 import raf.dsw.classycraft.app.gui.swing.tree.model.ClassyTreeItem;
-import raf.dsw.classycraft.app.model.classyRepository.ClassyNodeType;
 
 import java.awt.event.ActionEvent;
 

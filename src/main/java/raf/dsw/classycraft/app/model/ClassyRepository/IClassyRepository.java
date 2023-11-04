@@ -1,4 +1,4 @@
-package raf.dsw.classycraft.app.model.classyRepository;
+package raf.dsw.classycraft.app.model.ClassyRepository;
 
 public interface IClassyRepository {
 

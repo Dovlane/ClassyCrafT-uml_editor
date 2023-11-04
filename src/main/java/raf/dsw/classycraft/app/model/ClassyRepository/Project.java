@@ -1,4 +1,4 @@
-package raf.dsw.classycraft.app.model.classyRepository;
+package raf.dsw.classycraft.app.model.ClassyRepository;
 
 import raf.dsw.classycraft.app.model.compositePattern.ClassyNode;
 import raf.dsw.classycraft.app.model.compositePattern.ClassyNodeComposite;

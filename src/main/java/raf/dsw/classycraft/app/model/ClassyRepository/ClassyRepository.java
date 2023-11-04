@@ -1,4 +1,4 @@
-package raf.dsw.classycraft.app.model.classyRepository;
+package raf.dsw.classycraft.app.model.ClassyRepository;
 
 public class ClassyRepository implements IClassyRepository {
     private ProjectExplorer projectExplorer;

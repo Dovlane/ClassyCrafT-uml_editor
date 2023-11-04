@@ -1,8 +1,8 @@
 package raf.dsw.classycraft.app.gui.swing.tree.view;
 
 import raf.dsw.classycraft.app.gui.swing.tree.model.ClassyTreeItem;
-import raf.dsw.classycraft.app.model.classyRepository.Project;
-import raf.dsw.classycraft.app.model.classyRepository.ProjectExplorer;
+import raf.dsw.classycraft.app.model.ClassyRepository.Project;
+import raf.dsw.classycraft.app.model.ClassyRepository.ProjectExplorer;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultTreeCellRenderer;

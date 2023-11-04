@@ -2,8 +2,8 @@ package raf.dsw.classycraft.app.gui.swing.tree;
 
 import raf.dsw.classycraft.app.gui.swing.tree.model.ClassyTreeItem;
 import raf.dsw.classycraft.app.gui.swing.tree.view.ClassyTreeView;
-import raf.dsw.classycraft.app.model.classyRepository.ClassyNodeType;
-import raf.dsw.classycraft.app.model.classyRepository.ProjectExplorer;
+import raf.dsw.classycraft.app.model.ClassyRepository.ClassyNodeType;
+import raf.dsw.classycraft.app.model.ClassyRepository.ProjectExplorer;
 
 public interface IClassyTree {
 
