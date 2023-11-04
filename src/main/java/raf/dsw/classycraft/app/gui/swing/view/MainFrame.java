@@ -1,5 +1,6 @@
 package raf.dsw.classycraft.app.gui.swing.view;
 
+import raf.dsw.classycraft.app.core.ApplicationFramework;
 import raf.dsw.classycraft.app.gui.swing.controller.ActionManager;
 import raf.dsw.classycraft.app.model.MessageGenerator.Message;
 import raf.dsw.classycraft.app.model.MessageGenerator.MessageGenerator;
@@ -13,13 +14,13 @@ import java.time.LocalDateTime;
 public class MainFrame extends JFrame implements IListener {
 
     private static MainFrame instance;
-    private MessageGenerator msgGenerator;
+    private MessageGenerator messageGenerator;
     private ActionManager actionManager;
 
-    private MainFrame(){
-        msgGenerator = new MessageGenerator();
-        msgGenerator.addListener(this);
-        actionManager = new ActionManager(msgGenerator);
+    private MainFrame() {
+        messageGenerator = new MessageGenerator();
+        messageGenerator.addListener(this);
+        actionManager = new ActionManager();
     }
 
     private void initialize() {
@@ -37,6 +38,16 @@ public class MainFrame extends JFrame implements IListener {
 
         MyToolBar toolBar = new MyToolBar();
         add(toolBar, BorderLayout.NORTH);
+
+        JTree projectExplorer = ApplicationFramework.getInstance().getClassyTree().generateTree(ApplicationFramework.getInstance().getClassyRepository().getRoot());
+        JPanel desktop = new JPanel();
+
+        JScrollPane scroll = new JScrollPane(projectExplorer);
+        scroll.setMinimumSize(new Dimension(200,150));
+        JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, scroll, desktop);
+        getContentPane().add(split, BorderLayout.CENTER);
+        split.setDividerLocation(250);
+        split.setOneTouchExpandable(true);
     }
 
     public static MainFrame getInstance() {
@@ -46,6 +57,10 @@ public class MainFrame extends JFrame implements IListener {
             instance.initialize();
         }
         return instance;
+    }
+
+    public MessageGenerator getMessageGenerator() {
+        return messageGenerator;
     }
 
     public ActionManager getActionManager() {

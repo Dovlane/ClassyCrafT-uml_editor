@@ -8,4 +8,5 @@ public class AppCore {
         ApplicationFramework appCore = ApplicationFramework.getInstance();
         appCore.initialize();
     }
+
 }
