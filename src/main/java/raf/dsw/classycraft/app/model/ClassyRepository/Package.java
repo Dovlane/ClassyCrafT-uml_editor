@@ -2,9 +2,14 @@ package raf.dsw.classycraft.app.model.ClassyRepository;
 
 import raf.dsw.classycraft.app.model.compositePattern.ClassyNode;
 import raf.dsw.classycraft.app.model.compositePattern.ClassyNodeComposite;
+import raf.dsw.classycraft.app.model.observerPattern.IListener;
+import raf.dsw.classycraft.app.model.observerPattern.IPublisher;
 
-public class Package extends ClassyNodeComposite {
+import java.util.ArrayList;
+import java.util.List;
 
+public class Package extends ClassyNodeComposite implements IPublisher {
+    List<IListener> listeners = new ArrayList<>();
     private int nmbOfCreatedPackages;
     private int nmbOfCreatedDiagrams;
 
@@ -47,4 +52,21 @@ public class Package extends ClassyNodeComposite {
         this.nmbOfCreatedDiagrams = nmbOfCreatedDiagrams;
     }
 
+    @Override
+    public void addListener(IListener listener) {
+        if (!listeners.contains(listener))
+            listeners.add(listener);
+    }
+
+    @Override
+    public void removeListener(IListener listener) {
+        if (listeners.contains(listener))
+            listeners.remove(listener);
+    }
+
+    @Override
+    public void notifyAllSubscribers(Object notification) {
+        for (IListener listener : listeners)
+            listener.update(notification);
+    }
 }

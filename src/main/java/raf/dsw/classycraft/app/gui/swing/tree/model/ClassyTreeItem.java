@@ -6,6 +6,7 @@ import raf.dsw.classycraft.app.model.compositePattern.ClassyNode;
 import raf.dsw.classycraft.app.model.compositePattern.ClassyNodeComposite;
 
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreeNode;
 
 public class ClassyTreeItem extends DefaultMutableTreeNode {
 
@@ -35,6 +36,7 @@ public class ClassyTreeItem extends DefaultMutableTreeNode {
 
         if (!name.isEmpty() && parent.getChildByName(name) == null) {
             this.classyNode.setName(name);
+
         } else {
             String errorMessage = "The path of the file is ambiguous.";
             MainFrame.getInstance().getMessageGenerator().generateMessage(errorMessage, MessageType.ERROR);
@@ -48,4 +50,5 @@ public class ClassyTreeItem extends DefaultMutableTreeNode {
     public void setClassyNode(ClassyNode classyNode) {
         this.classyNode = classyNode;
     }
+
 }

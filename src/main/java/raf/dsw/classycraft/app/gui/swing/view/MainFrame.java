@@ -2,6 +2,7 @@ package raf.dsw.classycraft.app.gui.swing.view;
 
 import raf.dsw.classycraft.app.core.ApplicationFramework;
 import raf.dsw.classycraft.app.gui.swing.controller.ActionManager;
+import raf.dsw.classycraft.app.gui.swing.tree.view.ClassyTreeView;
 import raf.dsw.classycraft.app.model.MessageGenerator.Message;
 import raf.dsw.classycraft.app.model.MessageGenerator.MessageGenerator;
 import raf.dsw.classycraft.app.model.MessageGenerator.MessageType;
@@ -16,7 +17,7 @@ public class MainFrame extends JFrame implements IListener {
     private static MainFrame instance;
     private MessageGenerator messageGenerator;
     private ActionManager actionManager;
-
+    private ProjectView projectView;
     private MainFrame() {
         messageGenerator = new MessageGenerator();
         messageGenerator.addListener(this);
@@ -39,16 +40,24 @@ public class MainFrame extends JFrame implements IListener {
         MyToolBar toolBar = new MyToolBar();
         add(toolBar, BorderLayout.NORTH);
 
+
         JTree projectExplorer = ApplicationFramework.getInstance().getClassyTree().generateTree(ApplicationFramework.getInstance().getClassyRepository().getRoot());
-        JPanel desktop = new JPanel();
+        Label labelProjectName = new Label("Project name");
+        Label labelAuthorName = new Label("Author name");
+        projectView = new ProjectView(new PackageView(labelProjectName, labelAuthorName), labelProjectName, labelAuthorName);
+
+        ((ClassyTreeView)projectExplorer).getClassyTreeCellEditor().addListener(projectView.getPackageView());
 
         JScrollPane scroll = new JScrollPane(projectExplorer);
         scroll.setMinimumSize(new Dimension(200,150));
-        JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, scroll, desktop);
+        JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, scroll, projectView);
         getContentPane().add(split, BorderLayout.CENTER);
         split.setDividerLocation(250);
         split.setOneTouchExpandable(true);
+
     }
+
+
 
     public static MainFrame getInstance() {
         if(instance == null)
@@ -88,5 +97,9 @@ public class MainFrame extends JFrame implements IListener {
             JOptionPane.showMessageDialog(this, messageText, "INFO", JOptionPane.INFORMATION_MESSAGE);
         else
             JOptionPane.showMessageDialog(this, messageText, "NO ERROR, NO WARNING, NO INFO", JOptionPane.PLAIN_MESSAGE);
+    }
+
+    public ProjectView getProjectView() {
+        return projectView;
     }
 }

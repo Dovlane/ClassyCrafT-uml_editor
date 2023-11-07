@@ -7,13 +7,26 @@ import javax.swing.*;
 import javax.swing.tree.DefaultTreeModel;
 
 public class ClassyTreeView extends JTree {
-
+    private ClassyTreeSelectionListener classyTreeSelectionListener;
+    private ClassyTreeCellEditor classyTreeCellEditor;
     public ClassyTreeView(DefaultTreeModel defaultTreeModel) {
         setModel(defaultTreeModel);
         ClassyTreeCellRenderer classyTreeCellRenderer = new ClassyTreeCellRenderer();
-        addTreeSelectionListener(new ClassyTreeSelectionListener());
-        setCellEditor(new ClassyTreeCellEditor(this, classyTreeCellRenderer));
+        classyTreeSelectionListener = new ClassyTreeSelectionListener();
+        addTreeSelectionListener(classyTreeSelectionListener);
+
+        classyTreeCellEditor = new ClassyTreeCellEditor(this, classyTreeCellRenderer);
+        setCellEditor(classyTreeCellEditor);
         setCellRenderer(classyTreeCellRenderer);
         setEditable(true);
     }
+
+    public ClassyTreeCellEditor getClassyTreeCellEditor() {
+        return classyTreeCellEditor;
+    }
+
+    public ClassyTreeSelectionListener getClassyTreeSelectionListener() {
+        return classyTreeSelectionListener;
+    }
+
 }

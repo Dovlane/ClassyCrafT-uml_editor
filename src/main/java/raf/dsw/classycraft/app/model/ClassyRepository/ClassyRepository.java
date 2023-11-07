@@ -2,7 +2,6 @@ package raf.dsw.classycraft.app.model.ClassyRepository;
 
 public class ClassyRepository implements IClassyRepository {
     private ProjectExplorer projectExplorer;
-
     public ClassyRepository() {
         projectExplorer = new ProjectExplorer("My Project Explorer");
     }
@@ -16,4 +15,5 @@ public class ClassyRepository implements IClassyRepository {
     public void printTree() {
         getRoot().printNode(0);
     }
+
 }

@@ -2,6 +2,9 @@ package raf.dsw.classycraft.app.gui.swing.controller;
 
 import raf.dsw.classycraft.app.gui.swing.controller.debug.ErrorTestAction;
 import raf.dsw.classycraft.app.gui.swing.controller.debug.PrintTreeAction;
+import raf.dsw.classycraft.app.model.observerPattern.IListener;
+
+import java.util.ArrayList;
 
 public class ActionManager {
 
@@ -17,7 +20,6 @@ public class ActionManager {
     // DEBUG actions
     private ErrorTestAction errorTestAction;
     private PrintTreeAction printTreeAction;
-
     public ActionManager() {
         initializeActions();
     }

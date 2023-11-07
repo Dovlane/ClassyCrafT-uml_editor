@@ -34,6 +34,8 @@ public class Project extends ClassyNodeComposite {
     }
 
     public String getAuthor() {
+        if (author == null)
+            return "";
         return author;
     }
 
