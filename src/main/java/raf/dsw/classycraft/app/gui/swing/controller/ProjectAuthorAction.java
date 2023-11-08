@@ -3,6 +3,7 @@ package raf.dsw.classycraft.app.gui.swing.controller;
 import raf.dsw.classycraft.app.core.ApplicationFramework;
 import raf.dsw.classycraft.app.gui.swing.tree.model.ClassyTreeItem;
 import raf.dsw.classycraft.app.gui.swing.view.MainFrame;
+import raf.dsw.classycraft.app.model.ClassyRepository.Package;
 import raf.dsw.classycraft.app.model.MessageGenerator.MessageType;
 import raf.dsw.classycraft.app.model.ClassyRepository.Project;
 import raf.dsw.classycraft.app.model.compositePattern.ClassyNode;
@@ -59,6 +60,13 @@ public class ProjectAuthorAction extends AbstractClassyAction {
                     ((Project) node).setAuthor(content);
                     System.out.println(((Project) node).getAuthor() + " has been set as an author of the project " + node.getName());
 
+                    Project chosenProject = (Project) node;
+                    for (ClassyNode childOfProject : chosenProject.getChildren()){
+                        //System.out.println("childOfProject " + childOfProject);
+                        if (childOfProject instanceof Package)
+                            notifyAllPackageSubscribers((Package)childOfProject);
+                    }
+
                     // Close the window after successful renaming
                     frame.dispose();
 
@@ -73,5 +81,12 @@ public class ProjectAuthorAction extends AbstractClassyAction {
         frame.setVisible(true);
 
         System.out.println("ProjectAuthorAction has been performed.");
+    }
+    private void notifyAllPackageSubscribers(Package chosenPackage){
+        for (ClassyNode childOfPackage : chosenPackage.getChildren()) {
+            if (childOfPackage instanceof Package)
+                notifyAllPackageSubscribers((Package)childOfPackage);
+        }
+        chosenPackage.notifyAllSubscribers(chosenPackage);
     }
 }

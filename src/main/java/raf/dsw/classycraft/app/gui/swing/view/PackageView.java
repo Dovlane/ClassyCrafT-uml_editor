@@ -16,6 +16,7 @@ import java.awt.*;
 public class PackageView extends JTabbedPane implements IListener {
     private Label labelProjectName;
     private Label labelAuthorName;
+
     public PackageView(Label labelProjectName, Label labelAuthorName) {
         this.labelProjectName = labelProjectName;
         this.labelAuthorName = labelAuthorName;
@@ -25,18 +26,29 @@ public class PackageView extends JTabbedPane implements IListener {
     public void update(Object notification) {
         if (notification instanceof Package)
             updatePackageView((Package)notification);
+        else if (notification instanceof Project){
+            clearRightPanel();
+            Project chosenProject = (Project) notification;
+            labelAuthorName.setText(chosenProject.getAuthor());
+            labelProjectName.setText(chosenProject.getName());
+        }
+        System.out.println("Update-ujem Package --- Update-ujem Package --- Update-ujem Package");
     }
     public void updatePackageView(Package chosenPackage) {
         clearRightPanel();
+        //System.out.println("chosenPackage.getParent() = " + chosenPackage.getParent());
+
         if (chosenPackage.getParent() == null) {
             chosenPackage = null;
             deleteProjectData();
             deleteTabView();
             return;
         }
+        System.out.println("chosenPackage.getParent() = " + chosenPackage.getParent());
         refreshProjectData(chosenPackage);
 
         for (ClassyNode child: chosenPackage.getChildren()) {
+            System.out.println("child = " + child);
             if (child instanceof Diagram) {
                 Diagram diagram = (Diagram)child;
                 DiagramView diagramView = new DiagramView();
@@ -44,11 +56,8 @@ public class PackageView extends JTabbedPane implements IListener {
                 addTab(child.getName(), new DiagramView());
             }
         }
-    }
-    private ClassyTreeCellEditor getClassyTreeCellEditor(){
-        ClassyTreeImplementation classyTreeImplementation = (ClassyTreeImplementation)  ApplicationFramework.getInstance().getClassyTree();
-        ClassyTreeView classyTreeView = classyTreeImplementation.getTreeView();
-        return classyTreeView.getClassyTreeCellEditor();
+        ApplicationFramework.getInstance().getClassyRepository().printTree();
+
     }
 
     public void clearRightPanel(){
@@ -60,9 +69,17 @@ public class PackageView extends JTabbedPane implements IListener {
         ApplicationFramework.getInstance().getClassyRepository().printTree();
     }
     public void refreshProjectData(Package chosenPackage){
-        Project chosenProject = (Project) chosenPackage.getParent();
-        labelAuthorName.setText(chosenProject.getAuthor());
-        labelProjectName.setText(chosenProject.getName());
+        ClassyNode tmpClassyNode = (ClassyNode)chosenPackage;
+        while (tmpClassyNode.getParent() instanceof Package){
+            tmpClassyNode = tmpClassyNode.getParent();
+        }
+        if (tmpClassyNode != null) {
+            if (tmpClassyNode.getParent() instanceof Project) {
+                Project chosenProject = (Project) tmpClassyNode.getParent();
+                labelAuthorName.setText(chosenProject.getAuthor());
+                labelProjectName.setText(chosenProject.getName());
+            }
+        }
     }
     public void deleteProjectData(){
         labelAuthorName.setText("Author");

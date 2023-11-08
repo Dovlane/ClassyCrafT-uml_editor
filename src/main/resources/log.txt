@@ -1,4 +1,0 @@
-[ERROR][2023-11-08 17:34:05.4068497] Project Author cannot be an empty string.
-[ERROR][2023-11-08 17:34:16.4374933] New name cannot be an empty string.
-[ERROR][2023-11-08 17:34:26.7703961] The path of the file is ambiguous.
-[ERROR][2023-11-08 17:35:09.1520457] Project Author cannot be an empty string.

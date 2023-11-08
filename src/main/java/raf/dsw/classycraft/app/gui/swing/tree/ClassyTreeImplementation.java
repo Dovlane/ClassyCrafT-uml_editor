@@ -59,12 +59,20 @@ public class ClassyTreeImplementation implements IClassyTree {
             ((ClassyNodeComposite) parent.getClassyNode()).addChild(child);
             treeView.expandPath(treeView.getSelectionPath());
             SwingUtilities.updateComponentTreeUI(treeView);
+
+            if (child instanceof Diagram){
+                Package chosenPackage = (Package)parent.getClassyNode();
+                chosenPackage.notifyAllSubscribers(chosenPackage);
+            }
+            if (child instanceof Package){
+                Package chosenPackage = (Package) child;
+                chosenPackage.notifyAllSubscribers(chosenPackage);
+            }
         }
     }
 
     @Override
     public void removeItem(ClassyTreeItem item) {
-
         if (item == null) {
             MainFrame.getInstance().getMessageGenerator().generateMessage(
                     "ClassyTreeItem must be first selected.", MessageType.ERROR);
@@ -79,8 +87,10 @@ public class ClassyTreeImplementation implements IClassyTree {
         }
         ClassyTreeItem parent = (ClassyTreeItem) item.getParent();
 
-        node.removeFromParent();
+        node.removeSubtree();
         item.removeFromParent();
+
+
         if (item.getClassyNode() instanceof Diagram) {
             //System.out.println("Obrisali smo DIAGRAM");
             Package chosenPackage = (Package)parent.getClassyNode();
@@ -89,14 +99,29 @@ public class ClassyTreeImplementation implements IClassyTree {
         if (item.getClassyNode() instanceof Package) {
             //System.out.println("Obrisali smo PACKAGE");
             Package chosenPackage = (Package)item.getClassyNode();
-            chosenPackage.notifyAllSubscribers(chosenPackage);
+            notifyAllPackageSubscribers(chosenPackage);
         }
+        if (item.getClassyNode() instanceof Project) {
+            Project chosenProject = (Project)item.getClassyNode();
+            System.out.println("item.getClassyNode() " + item.getClassyNode());
+            System.out.println("chosenProject.getChildren() = " + chosenProject.getChildren());
+            for (ClassyNode childOfProject : chosenProject.getChildren()){
+                //System.out.println("childOfProject " + childOfProject);
+                notifyAllPackageSubscribers((Package)childOfProject);
+            }
 
+        }
         treeView.expandPath(treeView.getSelectionPath());
         SwingUtilities.updateComponentTreeUI(treeView);
         ApplicationFramework.getInstance().getClassyRepository().printTree();
+    }
 
-        //notifyAllSubscribers(new ClassyTreeImplementationEvent(parent, ClassyTreeImplementationEvents.REMOVE));
+    private void notifyAllPackageSubscribers(Package chosenPackage){
+        for (ClassyNode childOfPackage : chosenPackage.getChildren()) {
+            if (childOfPackage instanceof Package)
+                notifyAllPackageSubscribers((Package)childOfPackage);
+        }
+        chosenPackage.notifyAllSubscribers(chosenPackage);
     }
 
     @Override
@@ -134,10 +159,25 @@ public class ClassyTreeImplementation implements IClassyTree {
                 if (!content.isEmpty() && nodeParent.getChildByName(content) == null) {
 
                     // Rename
-                    node.setName(content);
+                    //node.setName(content);
+                    item.setName(content);
                     SwingUtilities.updateComponentTreeUI(treeView);
                     System.out.println(node.getName() + " has been renamed to " + content);
 
+                    if (item.getClassyNode() instanceof Diagram) {
+                        System.out.println("RENAMING DIAGRAM");
+                        Package chosenPackage = (Package)item.getClassyNode().getParent();
+                        chosenPackage.notifyAllSubscribers(chosenPackage);
+                    }
+                    if (item.getClassyNode() instanceof Project) {
+                        Project chosenProject = (Project)item.getClassyNode();
+                        for (ClassyNode childOfProject : chosenProject.getChildren()){
+                            //System.out.println("childOfProject " + childOfProject);
+                            if (childOfProject instanceof Package)
+                                notifyAllPackageSubscribers((Package)childOfProject);
+                        }
+
+                    }
                     // Close the window after successful renaming
                     frame.dispose();
 
@@ -154,12 +194,6 @@ public class ClassyTreeImplementation implements IClassyTree {
 
         // Display the JFrame
         frame.setVisible(true);
-
-        if (item.getClassyNode() instanceof Diagram) {
-            System.out.println("RENAMING DIAGRAM");
-            Package chosenPackage = (Package)item.getClassyNode().getParent();
-            chosenPackage.notifyAllSubscribers(chosenPackage);
-        }
 
         System.out.println("RenameAction has been performed.");
     }

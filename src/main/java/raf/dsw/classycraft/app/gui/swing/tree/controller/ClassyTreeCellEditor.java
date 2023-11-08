@@ -51,8 +51,8 @@ public class ClassyTreeCellEditor extends DefaultTreeCellEditor implements Actio
                     Package chosenPackage = (Package) treeItemSelected.getClassyNode();
                     chosenPackage.addListener(MainFrame.getInstance().getProjectView().getPackageView());
                     chosenPackage.notifyAllSubscribers(chosenPackage);
+                    notifyAllSubscribers(treeItemSelected.getClassyNode());
                 }
-                notifyAllSubscribers(treeItemSelected);
             }
         }
         return false;
@@ -63,10 +63,6 @@ public class ClassyTreeCellEditor extends DefaultTreeCellEditor implements Actio
         }
         ClassyTreeItem clicked = (ClassyTreeItem) clickedOn;
         clicked.setName(e.getActionCommand());
-        if (clicked.getClassyNode() instanceof Diagram){
-            Package chosenPackage = (Package) clicked.getClassyNode().getParent();
-            chosenPackage.notifyAllSubscribers(chosenPackage);
-        }
     }
     @Override
     public void addListener(IListener listener) {

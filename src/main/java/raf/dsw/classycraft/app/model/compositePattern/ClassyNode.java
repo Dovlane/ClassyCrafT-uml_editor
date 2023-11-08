@@ -36,7 +36,14 @@ public abstract class ClassyNode {
     public ClassyNode getParent() {
         return parent;
     }
-
+    public void removeSubtree() {
+        if (this instanceof ClassyNodeComposite) {
+            while (((ClassyNodeComposite) this).getChildCount() > 0) {
+                ((ClassyNodeComposite) this).getChildren().get(0).removeSubtree();
+            }
+        }
+        removeFromParent();
+    }
     public void setParent(ClassyNode parent) {
         this.parent = parent;
     }

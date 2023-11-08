@@ -2,6 +2,11 @@ package raf.dsw.classycraft.app.model.ClassyRepository;
 
 import raf.dsw.classycraft.app.model.compositePattern.ClassyNode;
 import raf.dsw.classycraft.app.model.compositePattern.ClassyNodeComposite;
+import raf.dsw.classycraft.app.model.observerPattern.IListener;
+import raf.dsw.classycraft.app.model.observerPattern.IPublisher;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Project extends ClassyNodeComposite {
     private String author;
@@ -58,5 +63,4 @@ public class Project extends ClassyNodeComposite {
     public void setNmbOfCreatedPackages(int nmbOfCreatedPackages) {
         this.nmbOfCreatedPackages = nmbOfCreatedPackages;
     }
-
 }
