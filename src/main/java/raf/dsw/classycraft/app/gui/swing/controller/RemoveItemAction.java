@@ -16,7 +16,7 @@ public class RemoveItemAction extends AbstractClassyAction {
     ArrayList<IListener> listeners = new ArrayList<>();
     public RemoveItemAction() {
         // putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_F4, ActionEvent.ALT_MASK));
-        putValue(SMALL_ICON, loadIcon("/images/add.png"));
+        putValue(SMALL_ICON, loadIcon("/images/Remove.png"));
         putValue(NAME, "Remove Item");
         putValue(SHORT_DESCRIPTION, "Remove the Item from the tree.");
     }

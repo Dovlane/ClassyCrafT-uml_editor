@@ -13,7 +13,7 @@ public class NewDiagramAction extends AbstractClassyAction {
 
     public NewDiagramAction() {
         // putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_F4, ActionEvent.ALT_MASK));
-        putValue(SMALL_ICON, loadIcon("/images/add.png"));
+        putValue(SMALL_ICON, loadIcon("/images/AddDiagram.png"));
         putValue(NAME, "New Diagram");
         putValue(SHORT_DESCRIPTION, "Create a new Diagram");
     }

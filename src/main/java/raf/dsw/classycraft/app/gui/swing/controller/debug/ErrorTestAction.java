@@ -11,7 +11,7 @@ public class ErrorTestAction extends AbstractClassyAction {
 
     public ErrorTestAction() {
         //putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_F4, ActionEvent.ALT_MASK));
-        putValue(SMALL_ICON, loadIcon("/images/error_test.png"));
+        putValue(SMALL_ICON, loadIcon("/images/ErrorTest.png"));
         putValue(NAME, "ErrorTest");
         putValue(SHORT_DESCRIPTION, "ErrorTest");
     }

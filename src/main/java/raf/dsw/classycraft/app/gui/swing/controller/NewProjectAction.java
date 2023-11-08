@@ -10,7 +10,7 @@ public class NewProjectAction extends AbstractClassyAction {
 
     public NewProjectAction() {
         // putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_F4, ActionEvent.ALT_MASK));
-        putValue(SMALL_ICON, loadIcon("/images/add.png"));
+        putValue(SMALL_ICON, loadIcon("/images/AddProject.png"));
         putValue(NAME, "New Project");
         putValue(SHORT_DESCRIPTION, "Create a new Project");
     }

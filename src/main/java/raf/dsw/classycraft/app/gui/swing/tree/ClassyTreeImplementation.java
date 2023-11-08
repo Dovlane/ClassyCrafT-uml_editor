@@ -141,6 +141,9 @@ public class ClassyTreeImplementation implements IClassyTree {
                     // Close the window after successful renaming
                     frame.dispose();
 
+                } else if (content.isEmpty()) {
+                    String errorMessage = "New name cannot be an empty string.";
+                    MainFrame.getInstance().getMessageGenerator().generateMessage(errorMessage, MessageType.ERROR);
                 } else {
                     System.out.println(content);
                     String errorMessage = "The path of the file is ambiguous.";
@@ -148,14 +151,17 @@ public class ClassyTreeImplementation implements IClassyTree {
                 }
             }
         });
-        System.out.println("RENAMING");
+
+        // Display the JFrame
+        frame.setVisible(true);
+
         if (item.getClassyNode() instanceof Diagram) {
             System.out.println("RENAMING DIAGRAM");
             Package chosenPackage = (Package)item.getClassyNode().getParent();
             chosenPackage.notifyAllSubscribers(chosenPackage);
         }
-        // Display the JFrame
-        frame.setVisible(true);
+
+        System.out.println("RenameAction has been performed.");
     }
 
     @Override

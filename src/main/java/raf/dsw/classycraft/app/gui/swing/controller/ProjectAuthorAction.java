@@ -15,7 +15,7 @@ public class ProjectAuthorAction extends AbstractClassyAction {
 
     public ProjectAuthorAction() {
         // putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_F4, ActionEvent.ALT_MASK));
-        // putValue(SMALL_ICON, loadIcon("/images/add.png"));
+        putValue(SMALL_ICON, loadIcon("/images/SetProjectAuthor.png"));
         putValue(NAME, "Set Project Author");
         putValue(SHORT_DESCRIPTION, "Set the Project Author");
     }
@@ -63,7 +63,7 @@ public class ProjectAuthorAction extends AbstractClassyAction {
                     frame.dispose();
 
                 } else {
-                    String errorMessage = "The path of the file is ambiguous.";
+                    String errorMessage = "Project Author cannot be an empty string.";
                     MainFrame.getInstance().getMessageGenerator().generateMessage(errorMessage, MessageType.ERROR);
                 }
             }

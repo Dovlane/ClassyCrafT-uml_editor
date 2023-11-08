@@ -10,7 +10,7 @@ public class NewPackageAction extends AbstractClassyAction {
 
     public NewPackageAction() {
         // putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_F4, ActionEvent.ALT_MASK));
-        putValue(SMALL_ICON, loadIcon("/images/add.png"));
+        putValue(SMALL_ICON, loadIcon("/images/AddPackage.png"));
         putValue(NAME, "New Package");
         putValue(SHORT_DESCRIPTION, "Create a new Package");
     }
