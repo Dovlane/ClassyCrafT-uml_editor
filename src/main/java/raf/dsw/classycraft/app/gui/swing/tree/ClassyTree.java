@@ -22,14 +22,11 @@ public class ClassyTree implements IClassyTree {
     private ClassyTreeView treeView;
     private DefaultTreeModel treeModel;
 
-    private ArrayList<IListener> listeners;
-
     @Override
     public ClassyTreeView generateTree(ProjectExplorer projectExplorer) {
         ClassyTreeItem root = new ClassyTreeItem(projectExplorer);
         treeModel = new DefaultTreeModel(root);
         treeView = new ClassyTreeView(treeModel);
-        listeners = new ArrayList<>();
         return treeView;
     }
 
