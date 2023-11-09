@@ -25,8 +25,4 @@ public class ClassyTreeView extends JTree {
         setToggleClickCount(0);
     }
 
-    public ClassyTreeCellEditor getClassyTreeCellEditor() {
-        return classyTreeCellEditor;
-    }
-
 }

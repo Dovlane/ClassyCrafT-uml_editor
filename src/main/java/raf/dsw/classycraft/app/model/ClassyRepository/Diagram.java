@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Diagram extends ClassyNodeLeaf implements IPublisher {
+
     List<IListener> listeners = new ArrayList<>();
 
     public Diagram(String name, ClassyNode parent) {

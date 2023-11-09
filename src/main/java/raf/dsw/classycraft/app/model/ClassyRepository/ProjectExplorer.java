@@ -29,7 +29,4 @@ public class ProjectExplorer extends ClassyNodeComposite {
         return nmbOfCreatedProjects;
     }
 
-    public void setNmbOfCreatedProjects(int nmbOfCreatedProjects) {
-        this.nmbOfCreatedProjects = nmbOfCreatedProjects;
-    }
 }

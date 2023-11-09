@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Project extends ClassyNodeComposite {
+
     private String author;
     private String resourcePath;
     private int nmbOfCreatedPackages;
@@ -48,19 +49,8 @@ public class Project extends ClassyNodeComposite {
         this.author = author;
     }
 
-    public String getResourcePath() {
-        return resourcePath;
-    }
-
-    public void setResourcePath(String resourcePath) {
-        this.resourcePath = resourcePath;
-    }
-
     public int getNmbOfCreatedPackages() {
         return nmbOfCreatedPackages;
     }
 
-    public void setNmbOfCreatedPackages(int nmbOfCreatedPackages) {
-        this.nmbOfCreatedPackages = nmbOfCreatedPackages;
-    }
 }
