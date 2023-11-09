@@ -1,7 +1,5 @@
 package raf.dsw.classycraft.app.model.compositePattern;
 
-import javax.swing.tree.MutableTreeNode;
-import javax.swing.tree.TreeNode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -94,10 +92,6 @@ public abstract class ClassyNodeComposite extends ClassyNode {
 
     public List<ClassyNode> getChildren() {
         return children;
-    }
-
-    public void setChildren(List<ClassyNode> children) {
-        this.children = children;
     }
 
 }

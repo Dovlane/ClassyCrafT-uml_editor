@@ -1,11 +1,9 @@
 package raf.dsw.classycraft.app.gui.swing.controller;
 
-import raf.dsw.classycraft.app.core.ApplicationFramework;
 import raf.dsw.classycraft.app.gui.swing.tree.model.ClassyTreeItem;
+import raf.dsw.classycraft.app.gui.swing.view.MainFrame;
 
-import javax.swing.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class RenameAction extends AbstractClassyAction {
 
@@ -18,8 +16,8 @@ public class RenameAction extends AbstractClassyAction {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        ClassyTreeItem selectedItem = ApplicationFramework.getInstance().getClassyTree().getSelectedNode();
-        ApplicationFramework.getInstance().getClassyTree().renameItem(selectedItem);
+        ClassyTreeItem selectedItem = MainFrame.getInstance().getClassyTree().getSelectedNode();
+        MainFrame.getInstance().getClassyTree().renameItem(selectedItem);
         System.out.println("RenameAction has been performed.");
     }
 }

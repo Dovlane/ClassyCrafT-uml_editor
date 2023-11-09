@@ -1,20 +1,15 @@
 package raf.dsw.classycraft.app.gui.swing.tree;
 
-//import org.jetbrains.annotations.NotNull;
-//import org.jetbrains.annotations.Nullable;
 import raf.dsw.classycraft.app.core.ApplicationFramework;
 import raf.dsw.classycraft.app.gui.swing.tree.model.ClassyTreeItem;
 import raf.dsw.classycraft.app.gui.swing.tree.view.ClassyTreeView;
 import raf.dsw.classycraft.app.gui.swing.view.MainFrame;
-import raf.dsw.classycraft.app.model.ClassyRepository.Package;
 import raf.dsw.classycraft.app.model.MessageGenerator.MessageType;
 import raf.dsw.classycraft.app.model.ClassyRepository.*;
-//import raf.dsw.classycraft.app.model.ClassyRepository.Package;
 import raf.dsw.classycraft.app.model.compositePattern.ClassyNode;
 import raf.dsw.classycraft.app.model.compositePattern.ClassyNodeComposite;
 import raf.dsw.classycraft.app.model.compositePattern.ClassyNodeLeaf;
 import raf.dsw.classycraft.app.model.observerPattern.IListener;
-import raf.dsw.classycraft.app.model.observerPattern.IPublisher;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultTreeModel;
@@ -22,7 +17,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-public class ClassyTreeImplementation implements IClassyTree {
+public class ClassyTree implements IClassyTree {
 
     private ClassyTreeView treeView;
     private DefaultTreeModel treeModel;
@@ -55,20 +50,20 @@ public class ClassyTreeImplementation implements IClassyTree {
 
         ClassyNode child = createChild(parent.getClassyNode(), type);
         if (child != null) {
+
+            // Add child to both JTree and Model
             parent.add(new ClassyTreeItem(child));
             ((ClassyNodeComposite) parent.getClassyNode()).addChild(child);
+
+            // Refresh GUI
             treeView.expandPath(treeView.getSelectionPath());
             SwingUtilities.updateComponentTreeUI(treeView);
-
-            if (child instanceof Diagram){
-                Package chosenPackage = (Package)parent.getClassyNode();
-                chosenPackage.notifyAllSubscribers(chosenPackage);
-            }
-            if (child instanceof Package){
-                Package chosenPackage = (Package) child;
-                chosenPackage.notifyAllSubscribers(chosenPackage);
-            }
+            ApplicationFramework.getInstance().getClassyRepository().getPackageView().updatePackageView();
         }
+    }
+
+    private ClassyNode createChild(ClassyNode parent, ClassyNodeType type) {
+        return ClassyNodeFactory.createClassyNode(parent, type);
     }
 
     @Override
@@ -85,43 +80,14 @@ public class ClassyTreeImplementation implements IClassyTree {
                     "ProjectExplorer cannot be deleted.", MessageType.ERROR);
             return;
         }
-        ClassyTreeItem parent = (ClassyTreeItem) item.getParent();
 
         node.removeSubtree();
         item.removeFromParent();
 
-
-        if (item.getClassyNode() instanceof Diagram) {
-            //System.out.println("Obrisali smo DIAGRAM");
-            Package chosenPackage = (Package)parent.getClassyNode();
-            chosenPackage.notifyAllSubscribers(chosenPackage);
-        }
-        if (item.getClassyNode() instanceof Package) {
-            //System.out.println("Obrisali smo PACKAGE");
-            Package chosenPackage = (Package)item.getClassyNode();
-            notifyAllPackageSubscribers(chosenPackage);
-        }
-        if (item.getClassyNode() instanceof Project) {
-            Project chosenProject = (Project)item.getClassyNode();
-            System.out.println("item.getClassyNode() " + item.getClassyNode());
-            System.out.println("chosenProject.getChildren() = " + chosenProject.getChildren());
-            for (ClassyNode childOfProject : chosenProject.getChildren()){
-                //System.out.println("childOfProject " + childOfProject);
-                notifyAllPackageSubscribers((Package)childOfProject);
-            }
-
-        }
+        // Refresh GUI
         treeView.expandPath(treeView.getSelectionPath());
         SwingUtilities.updateComponentTreeUI(treeView);
-        ApplicationFramework.getInstance().getClassyRepository().printTree();
-    }
-
-    private void notifyAllPackageSubscribers(Package chosenPackage){
-        for (ClassyNode childOfPackage : chosenPackage.getChildren()) {
-            if (childOfPackage instanceof Package)
-                notifyAllPackageSubscribers((Package)childOfPackage);
-        }
-        chosenPackage.notifyAllSubscribers(chosenPackage);
+        ApplicationFramework.getInstance().getClassyRepository().getPackageView().updatePackageView();
     }
 
     @Override
@@ -158,26 +124,14 @@ public class ClassyTreeImplementation implements IClassyTree {
 
                 if (!content.isEmpty() && nodeParent.getChildByName(content) == null) {
 
-                    // Rename
-                    //node.setName(content);
-                    item.setName(content);
+                    // Rename a selected Node
+                    node.setName(content);
+
+                    // Refresh GUI
                     SwingUtilities.updateComponentTreeUI(treeView);
-                    System.out.println(node.getName() + " has been renamed to " + content);
+                    ApplicationFramework.getInstance().getClassyRepository().getPackageView().updatePackageView();
+                    System.out.println(node.getName() + " has been renamed to " + content + ".");
 
-                    if (item.getClassyNode() instanceof Diagram) {
-                        System.out.println("RENAMING DIAGRAM");
-                        Package chosenPackage = (Package)item.getClassyNode().getParent();
-                        chosenPackage.notifyAllSubscribers(chosenPackage);
-                    }
-                    if (item.getClassyNode() instanceof Project) {
-                        Project chosenProject = (Project)item.getClassyNode();
-                        for (ClassyNode childOfProject : chosenProject.getChildren()){
-                            //System.out.println("childOfProject " + childOfProject);
-                            if (childOfProject instanceof Package)
-                                notifyAllPackageSubscribers((Package)childOfProject);
-                        }
-
-                    }
                     // Close the window after successful renaming
                     frame.dispose();
 
@@ -203,22 +157,7 @@ public class ClassyTreeImplementation implements IClassyTree {
         return (ClassyTreeItem) treeView.getLastSelectedPathComponent();
     }
 
-    private ClassyNode createChild(ClassyNode parent, ClassyNodeType type) {
-        return ClassyNodeFactory.createClassyNode(parent, type);
-    }
-
     public ClassyTreeView getTreeView() {
         return treeView;
     }
-
-    public DefaultTreeModel getTreeModel() {
-        return treeModel;
-    }
-
-
-    public ArrayList<IListener> getListeners() {
-        return listeners;
-    }
-
-
 }

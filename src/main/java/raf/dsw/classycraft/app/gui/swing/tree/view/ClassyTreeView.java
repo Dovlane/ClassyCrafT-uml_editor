@@ -7,8 +7,10 @@ import javax.swing.*;
 import javax.swing.tree.DefaultTreeModel;
 
 public class ClassyTreeView extends JTree {
+
     private ClassyTreeSelectionListener classyTreeSelectionListener;
     private ClassyTreeCellEditor classyTreeCellEditor;
+
     public ClassyTreeView(DefaultTreeModel defaultTreeModel) {
         setModel(defaultTreeModel);
         ClassyTreeCellRenderer classyTreeCellRenderer = new ClassyTreeCellRenderer();
@@ -19,14 +21,12 @@ public class ClassyTreeView extends JTree {
         setCellEditor(classyTreeCellEditor);
         setCellRenderer(classyTreeCellRenderer);
         setEditable(true);
+
+        setToggleClickCount(0);
     }
 
     public ClassyTreeCellEditor getClassyTreeCellEditor() {
         return classyTreeCellEditor;
-    }
-
-    public ClassyTreeSelectionListener getClassyTreeSelectionListener() {
-        return classyTreeSelectionListener;
     }
 
 }

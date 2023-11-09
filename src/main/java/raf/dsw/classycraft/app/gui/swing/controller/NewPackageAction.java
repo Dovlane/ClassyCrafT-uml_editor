@@ -1,7 +1,7 @@
 package raf.dsw.classycraft.app.gui.swing.controller;
 
-import raf.dsw.classycraft.app.core.ApplicationFramework;
 import raf.dsw.classycraft.app.gui.swing.tree.model.ClassyTreeItem;
+import raf.dsw.classycraft.app.gui.swing.view.MainFrame;
 import raf.dsw.classycraft.app.model.ClassyRepository.ClassyNodeType;
 
 import java.awt.event.ActionEvent;
@@ -17,8 +17,8 @@ public class NewPackageAction extends AbstractClassyAction {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        ClassyTreeItem selectedNode = ApplicationFramework.getInstance().getClassyTree().getSelectedNode();
-        ApplicationFramework.getInstance().getClassyTree().addChild(selectedNode, ClassyNodeType.PACKAGE);
+        ClassyTreeItem selectedNode = MainFrame.getInstance().getClassyTree().getSelectedNode();
+        MainFrame.getInstance().getClassyTree().addChild(selectedNode, ClassyNodeType.PACKAGE);
         System.out.println("NewPackageAction has been performed.");
     }
 

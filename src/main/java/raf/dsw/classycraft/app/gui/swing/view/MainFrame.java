@@ -2,7 +2,8 @@ package raf.dsw.classycraft.app.gui.swing.view;
 
 import raf.dsw.classycraft.app.core.ApplicationFramework;
 import raf.dsw.classycraft.app.gui.swing.controller.ActionManager;
-import raf.dsw.classycraft.app.gui.swing.tree.view.ClassyTreeView;
+import raf.dsw.classycraft.app.gui.swing.tree.ClassyTree;
+import raf.dsw.classycraft.app.gui.swing.tree.IClassyTree;
 import raf.dsw.classycraft.app.model.MessageGenerator.Message;
 import raf.dsw.classycraft.app.model.MessageGenerator.MessageGenerator;
 import raf.dsw.classycraft.app.model.MessageGenerator.MessageType;
@@ -17,11 +18,13 @@ public class MainFrame extends JFrame implements IListener {
     private static MainFrame instance;
     private MessageGenerator messageGenerator;
     private ActionManager actionManager;
-    private ProjectView projectView;
+    private ClassyTree classyTree;
+
     private MainFrame() {
         messageGenerator = new MessageGenerator();
         messageGenerator.addListener(this);
         actionManager = new ActionManager();
+        classyTree = new ClassyTree();
     }
 
     private void initialize() {
@@ -40,24 +43,18 @@ public class MainFrame extends JFrame implements IListener {
         MyToolBar toolBar = new MyToolBar();
         add(toolBar, BorderLayout.NORTH);
 
-
-        JTree projectExplorer = ApplicationFramework.getInstance().getClassyTree().generateTree(ApplicationFramework.getInstance().getClassyRepository().getRoot());
-        Label labelProjectName = new Label("Project name");
-        Label labelAuthorName = new Label("Author name");
-        projectView = new ProjectView(new PackageView(labelProjectName, labelAuthorName), labelProjectName, labelAuthorName);
-
-        ((ClassyTreeView)projectExplorer).getClassyTreeCellEditor().addListener(projectView.getPackageView());
-
+        // Generate ProjectExplorer
+        JTree projectExplorer = classyTree.generateTree(ApplicationFramework.getInstance().getClassyRepository().getRoot());
         JScrollPane scroll = new JScrollPane(projectExplorer);
         scroll.setMinimumSize(new Dimension(200,150));
-        JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, scroll, projectView);
+
+        // Merge ProjectExplorer and Right Panel
+        JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
+                scroll, ApplicationFramework.getInstance().getClassyRepository().getPackageView());
         getContentPane().add(split, BorderLayout.CENTER);
         split.setDividerLocation(250);
         split.setOneTouchExpandable(true);
-
     }
-
-
 
     public static MainFrame getInstance() {
         if(instance == null)
@@ -66,14 +63,6 @@ public class MainFrame extends JFrame implements IListener {
             instance.initialize();
         }
         return instance;
-    }
-
-    public MessageGenerator getMessageGenerator() {
-        return messageGenerator;
-    }
-
-    public ActionManager getActionManager() {
-        return actionManager;
     }
 
     @Override
@@ -99,7 +88,16 @@ public class MainFrame extends JFrame implements IListener {
             JOptionPane.showMessageDialog(this, messageText, "NO ERROR, NO WARNING, NO INFO", JOptionPane.PLAIN_MESSAGE);
     }
 
-    public ProjectView getProjectView() {
-        return projectView;
+    public MessageGenerator getMessageGenerator() {
+        return messageGenerator;
     }
+
+    public ActionManager getActionManager() {
+        return actionManager;
+    }
+
+    public ClassyTree getClassyTree() {
+        return classyTree;
+    }
+
 }

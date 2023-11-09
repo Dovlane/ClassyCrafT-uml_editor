@@ -1,11 +1,8 @@
 package raf.dsw.classycraft.app.gui.swing.controller;
 
-import raf.dsw.classycraft.app.core.ApplicationFramework;
 import raf.dsw.classycraft.app.gui.swing.tree.model.ClassyTreeItem;
+import raf.dsw.classycraft.app.gui.swing.view.MainFrame;
 import raf.dsw.classycraft.app.model.ClassyRepository.ClassyNodeType;
-import raf.dsw.classycraft.app.model.compositePattern.ClassyNodeComposite;
-import raf.dsw.classycraft.app.model.observerPattern.IListener;
-import raf.dsw.classycraft.app.model.observerPattern.IPublisher;
 
 import java.awt.event.ActionEvent;
 
@@ -20,8 +17,8 @@ public class NewDiagramAction extends AbstractClassyAction {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        ClassyTreeItem selectedNode = ApplicationFramework.getInstance().getClassyTree().getSelectedNode();
-        ApplicationFramework.getInstance().getClassyTree().addChild(selectedNode, ClassyNodeType.DIAGRAM);
+        ClassyTreeItem selectedNode = MainFrame.getInstance().getClassyTree().getSelectedNode();
+        MainFrame.getInstance().getClassyTree().addChild(selectedNode, ClassyNodeType.DIAGRAM);
         System.out.println("NewDiagramAction has been performed.");
     }
 }

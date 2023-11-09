@@ -8,24 +8,24 @@ import raf.dsw.classycraft.app.model.observerPattern.IListener;
 import javax.swing.*;
 
 public class DiagramView extends JPanel implements IListener {
+
     private Diagram diagram;
-    public DiagramView() {
-    }
+
     public DiagramView(Diagram diagram){
         this.diagram = diagram;
+    }
+
+    @Override
+    public void update(Object notification) {
+        ;
     }
 
     public Diagram getDiagram() {
         return diagram;
     }
 
-
     public void setDiagram(Diagram diagram) {
         this.diagram = diagram;
     }
 
-    @Override
-    public void update(Object notification) {
-
-    }
 }
