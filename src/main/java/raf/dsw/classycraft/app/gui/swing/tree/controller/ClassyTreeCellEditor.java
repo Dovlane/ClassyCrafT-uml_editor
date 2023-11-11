@@ -2,12 +2,10 @@ package raf.dsw.classycraft.app.gui.swing.tree.controller;
 
 import raf.dsw.classycraft.app.core.ApplicationFramework;
 import raf.dsw.classycraft.app.gui.swing.tree.model.ClassyTreeItem;
-import raf.dsw.classycraft.app.model.ClassyRepository.Package;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultTreeCellEditor;
 import javax.swing.tree.DefaultTreeCellRenderer;
-import javax.swing.tree.TreePath;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
@@ -33,15 +31,7 @@ public class ClassyTreeCellEditor extends DefaultTreeCellEditor {
     @Override
     public boolean isCellEditable(EventObject arg0) {
         if (arg0 instanceof MouseEvent) {
-            if (((MouseEvent)arg0).getClickCount() == 2) {
-                MouseEvent e = (MouseEvent) arg0;
-                TreePath path = tree.getPathForLocation(e.getX(), e.getY());
-                ClassyTreeItem treeItemSelected = (ClassyTreeItem) path.getLastPathComponent();
-                if (treeItemSelected.getClassyNode() instanceof Package) {
-                    Package chosenPackage = (Package) treeItemSelected.getClassyNode();
-                    chosenPackage.notifyAllSubscribers(chosenPackage);
-                }
-            } else if (((MouseEvent) arg0).getClickCount() == 3) {
+            if (((MouseEvent) arg0).getClickCount() == 3) {
                 return true;
             }
         }
