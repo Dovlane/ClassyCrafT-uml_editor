@@ -1,22 +1,25 @@
 package raf.dsw.classycraft.app.gui.swing.controller;
 
-import javax.swing.*;
+import raf.dsw.classycraft.app.gui.swing.tree.model.ClassyTreeItem;
+import raf.dsw.classycraft.app.gui.swing.view.MainFrame;
+import raf.dsw.classycraft.app.model.ClassyRepository.ClassyNodeType;
+
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
 
 public class NewProjectAction extends AbstractClassyAction {
 
     public NewProjectAction() {
-
         // putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_F4, ActionEvent.ALT_MASK));
-        putValue(SMALL_ICON, loadIcon("/images/add.png"));
+        putValue(SMALL_ICON, loadIcon("/images/AddProject.png"));
         putValue(NAME, "New Project");
         putValue(SHORT_DESCRIPTION, "Create a new Project");
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        System.out.println("NewProjectAction is performed.");
+        ClassyTreeItem selectedNode = MainFrame.getInstance().getClassyTree().getSelectedNode();
+        MainFrame.getInstance().getClassyTree().addChild(selectedNode, ClassyNodeType.PROJECT);
+        System.out.println("NewProjectAction has been performed.");
     }
 
 }
