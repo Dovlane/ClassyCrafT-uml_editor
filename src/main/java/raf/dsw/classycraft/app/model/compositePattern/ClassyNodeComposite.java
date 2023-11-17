@@ -14,7 +14,7 @@ public abstract class ClassyNodeComposite extends ClassyNode {
 
     public abstract void addChild(ClassyNode child);
 
-    public void remove(ClassyNode aChild) {
+    public void removeAt(ClassyNode aChild) {
         if (aChild == null) {
             throw new IllegalArgumentException("argument is null");
         }
@@ -23,10 +23,10 @@ public abstract class ClassyNodeComposite extends ClassyNode {
             throw new IllegalArgumentException("argument is not a child");
         }
 
-        remove(getIndex(aChild));
+        removeAt(getIndex(aChild));
     }
 
-    public void remove(int childIndex) {
+    public void removeAt(int childIndex) {
         ClassyNode child = (ClassyNode) getChildAt(childIndex);
         children.remove(childIndex);
         child.setParent(null);

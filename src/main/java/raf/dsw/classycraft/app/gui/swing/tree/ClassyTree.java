@@ -20,13 +20,10 @@ import java.util.ArrayList;
 public class ClassyTree implements IClassyTree {
 
     private ClassyTreeView treeView;
-    private DefaultTreeModel treeModel;
-
     @Override
     public ClassyTreeView generateTree(ProjectExplorer projectExplorer) {
         ClassyTreeItem root = new ClassyTreeItem(projectExplorer);
-        treeModel = new DefaultTreeModel(root);
-        treeView = new ClassyTreeView(treeModel);
+        treeView = new ClassyTreeView(new DefaultTreeModel(root));
         return treeView;
     }
 

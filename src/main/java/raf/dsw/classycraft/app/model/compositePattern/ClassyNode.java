@@ -22,7 +22,7 @@ public abstract class ClassyNode {
     public void removeFromParent() {
         ClassyNodeComposite parent = (ClassyNodeComposite) getParent();
         if (parent != null) {
-            parent.remove(this);
+            parent.removeAt(this);
         }
     }
 
