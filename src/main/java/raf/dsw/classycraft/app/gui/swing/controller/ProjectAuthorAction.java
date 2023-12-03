@@ -53,16 +53,9 @@ public class ProjectAuthorAction extends AbstractClassyAction {
             public void actionPerformed(ActionEvent e) {
                 String content = textField.getText();
 
-                if (!content.isEmpty()) {
+                if (((Project) node).setAuthor(content)) {
 
-                    // Set Project Author
-                    ((Project) node).setAuthor(content);
-
-                    // Refresh Right Panel
-                    ApplicationFramework.getInstance().getClassyRepository().getPackageView().updatePackageView();
-                    System.out.println(((Project) node).getAuthor() + " has been set as an author of the project " + node.getName() + ".");
-
-                    // Close the window after successful renaming
+                    // Close the window after successful changing the author name
                     frame.dispose();
 
                 } else {

@@ -1,6 +1,5 @@
 package raf.dsw.classycraft.app.model.ClassyRepository;
 
-import raf.dsw.classycraft.app.core.ApplicationFramework;
 import raf.dsw.classycraft.app.model.compositePattern.ClassyNode;
 import raf.dsw.classycraft.app.model.compositePattern.ClassyNodeComposite;
 import raf.dsw.classycraft.app.model.observerPattern.IListener;
@@ -14,12 +13,13 @@ public class Package extends ClassyNodeComposite implements IPublisher {
     List<IListener> listeners = new ArrayList<>();
     private int nmbOfCreatedPackages;
     private int nmbOfCreatedDiagrams;
+    private static Package defaultPackage;
+    private static Package displayedPackage;
 
     public Package(String name, ClassyNode parent) {
         super(name, parent);
         nmbOfCreatedPackages = 0;
         nmbOfCreatedDiagrams = 0;
-        addListener(ApplicationFramework.getInstance().getClassyRepository().getPackageView());
     }
 
     @Override
@@ -29,6 +29,19 @@ public class Package extends ClassyNodeComposite implements IPublisher {
                 getChildren().add(child);
             }
         }
+    }
+
+    public Project findParentProject() {
+        ClassyNode tmp = this;
+        while ((tmp != null) && !(tmp instanceof Project)) {
+            tmp = tmp.getParent();
+        }
+
+        if (tmp == null) {
+            throw new IllegalArgumentException("Package is not part of any Project.");
+        }
+
+        return (Project) tmp;
     }
 
     @Override
@@ -45,8 +58,35 @@ public class Package extends ClassyNodeComposite implements IPublisher {
 
     @Override
     public void notifyAllSubscribers(Object notification) {
-        for (IListener listener : listeners)
-            listener.update(notification);
+
+        // There will be only 1 listener in the array of
+        // listeners, because there is only one PackageView.
+
+        // Problem with for-each loop is because every time
+        // the update happens the listener should be removed
+        // from the listeners array list.
+
+        // Solution is to only use the first element of the
+        // list which is at the same time the only listener.
+
+        listeners.get(0).update(notification);
+        System.out.println("The Number of listeners of this package is " + listeners.size());
+    }
+
+    public static Package getDefaultPackage() {
+        if (defaultPackage == null)
+            defaultPackage = new Package("Default Package", null);
+        return defaultPackage;
+    }
+
+    public static Package getDisplayedPackage() {
+        if (displayedPackage == null)
+            displayedPackage = getDefaultPackage();
+        return displayedPackage;
+    }
+
+    public static void setDisplayedPackage(Package displayedPackage) {
+        Package.displayedPackage = displayedPackage;
     }
 
     public void increasePackageCounter() {

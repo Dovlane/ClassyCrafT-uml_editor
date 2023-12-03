@@ -16,7 +16,7 @@ public class PackageView extends JSplitPane implements IListener {
     private Label labelAuthorName;
     private JTabbedPane tabbedPane;
 
-    public PackageView(Package newPackage) {
+    public PackageView() {
         super(JSplitPane.VERTICAL_SPLIT);
 
         labelProjectName = new Label();
@@ -27,26 +27,36 @@ public class PackageView extends JSplitPane implements IListener {
         add(labelPane);
         add(tabbedPane);
 
-        setCurrentPackage(newPackage);
+        setCurrentPackage(Package.getDisplayedPackage());
     }
 
     @Override
     public void update(Object notification) {
+
+        // If null is passed it means that only the update
+        // on the existing package should happen
+        if (notification == null) {
+            updatePackageView();
+        }
+
+        // If Package is passed it means that the displayed
+        // package had been changed.
         if (notification instanceof Package) {
+            currentPackage.removeListener(this);
             setCurrentPackage((Package) notification);
         }
     }
 
     public void setCurrentPackage(Package newPackage) {
         currentPackage = newPackage;
+        currentPackage.addListener(this);
         updatePackageView();
     }
 
     public void updatePackageView() {
 
-        if ((currentPackage == null) || (currentPackage.getParent() == null)) {
+        if (currentPackage == Package.getDefaultPackage()) {
             setDefaultRightPanel();
-            currentPackage = null;
             return;
         }
 
@@ -79,17 +89,10 @@ public class PackageView extends JSplitPane implements IListener {
 
     public void setPackageMetadata() {
 
-        ClassyNode tmp = currentPackage;
-        while ((tmp != null) && !(tmp instanceof Project)) {
-            tmp = tmp.getParent();
-        }
+        Project parentProject = currentPackage.findParentProject();
 
-        if (tmp == null) {
-            throw new IllegalArgumentException("Package is not part of any Project.");
-        }
-
-        labelProjectName.setText(tmp.getName());
-        labelAuthorName.setText(((Project) tmp).getAuthor());
+        labelProjectName.setText(parentProject.getName());
+        labelAuthorName.setText(parentProject.getAuthor());
     }
 
     public void setDefaultRightPanel() {
@@ -98,4 +101,7 @@ public class PackageView extends JSplitPane implements IListener {
         tabbedPane.removeAll();
     }
 
+    public Package getCurrentPackage() {
+        return currentPackage;
+    }
 }

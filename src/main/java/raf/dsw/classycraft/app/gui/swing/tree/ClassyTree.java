@@ -119,8 +119,6 @@ public class ClassyTree implements IClassyTree {
 
                     // Refresh GUI
                     SwingUtilities.updateComponentTreeUI(treeView);
-                    ApplicationFramework.getInstance().getClassyRepository().getPackageView().updatePackageView();
-                    System.out.println(node.getName() + " has been renamed to " + content + ".");
 
                     // Close the window after successful renaming
                     frame.dispose();

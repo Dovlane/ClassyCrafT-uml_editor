@@ -1,6 +1,8 @@
 package raf.dsw.classycraft.app.model.compositePattern;
 
 import raf.dsw.classycraft.app.gui.swing.view.MainFrame;
+import raf.dsw.classycraft.app.model.ClassyRepository.Package;
+import raf.dsw.classycraft.app.model.ClassyRepository.Project;
 import raf.dsw.classycraft.app.model.MessageGenerator.MessageType;
 
 public abstract class ClassyNode {
@@ -23,6 +25,14 @@ public abstract class ClassyNode {
     }
 
     public void removeFromParent() {
+
+        // If current Classy Node is displayed, it should
+        // notify the PackageView about its removal.
+        if (this == Package.getDisplayedPackage()) {
+            Package.getDisplayedPackage().notifyAllSubscribers(Package.getDefaultPackage());
+            Package.setDisplayedPackage(Package.getDefaultPackage());
+        }
+
         ClassyNodeComposite parent = (ClassyNodeComposite) getParent();
         if (parent != null) {
             parent.removeAt(this);
@@ -42,18 +52,37 @@ public abstract class ClassyNode {
     }
 
     public boolean setName(String name) {
+
+        // Check if the same name is entered
+        if (getName().equals(name)) {
+            return true;
+        }
+
         ClassyNodeComposite parent = (ClassyNodeComposite) this.parent;
         if (!name.isEmpty() && parent.getChildByName(name) == null) {
+
+            // Set new name
+            String oldName = this.name;
             this.name = name;
+            System.out.println(oldName + " has been renamed to " + name + ".");
+
+            // Check if the Project of the displayed package is renamed
+            if ((this instanceof Project) && (this == Package.getDisplayedPackage().findParentProject())) {
+                Package.getDisplayedPackage().notifyAllSubscribers(null);
+            }
+
             return true;
-        } else if (name.isEmpty()) {
+        }
+        else if (name.isEmpty()) {
             String errorMessage = "New name cannot be an empty string.";
             MainFrame.getInstance().getMessageGenerator().generateMessage(errorMessage, MessageType.ERROR);
-        } else {
-            System.out.println(name);
+        }
+        else {
+            System.out.println("Ambiguous name is " + name);
             String errorMessage = "The path of the file is ambiguous.";
             MainFrame.getInstance().getMessageGenerator().generateMessage(errorMessage, MessageType.ERROR);
         }
+
         return false;
     }
 

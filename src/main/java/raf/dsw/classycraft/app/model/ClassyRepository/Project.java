@@ -1,12 +1,9 @@
 package raf.dsw.classycraft.app.model.ClassyRepository;
 
+import raf.dsw.classycraft.app.gui.swing.view.MainFrame;
+import raf.dsw.classycraft.app.model.MessageGenerator.MessageType;
 import raf.dsw.classycraft.app.model.compositePattern.ClassyNode;
 import raf.dsw.classycraft.app.model.compositePattern.ClassyNodeComposite;
-import raf.dsw.classycraft.app.model.observerPattern.IListener;
-import raf.dsw.classycraft.app.model.observerPattern.IPublisher;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class Project extends ClassyNodeComposite {
 
@@ -45,8 +42,32 @@ public class Project extends ClassyNodeComposite {
         return author;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
+    public boolean setAuthor(String author) {
+
+        // Check if the same author name is entered
+        if (getAuthor().equals(author)) {
+            return true;
+        }
+
+        if (!author.isEmpty()) {
+
+            // Set new author
+            this.author = author;
+            System.out.println(this.author + " has been set as an author of the project " + this.getName() + ".");
+
+            // Check if the Project of the displayed package got a new author
+            if (this == Package.getDisplayedPackage().findParentProject()) {
+                Package.getDisplayedPackage().notifyAllSubscribers(null);
+            }
+
+            return true;
+        }
+        else {
+            String errorMessage = "Author name cannot be an empty string.";
+            MainFrame.getInstance().getMessageGenerator().generateMessage(errorMessage, MessageType.ERROR);
+        }
+
+        return false;
     }
 
     public int getNmbOfCreatedPackages() {
