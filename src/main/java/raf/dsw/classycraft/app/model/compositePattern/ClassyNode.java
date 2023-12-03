@@ -1,5 +1,8 @@
 package raf.dsw.classycraft.app.model.compositePattern;
 
+import raf.dsw.classycraft.app.gui.swing.view.MainFrame;
+import raf.dsw.classycraft.app.model.MessageGenerator.MessageType;
+
 public abstract class ClassyNode {
 
     private String name;
@@ -38,8 +41,20 @@ public abstract class ClassyNode {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public boolean setName(String name) {
+        ClassyNodeComposite parent = (ClassyNodeComposite) this.parent;
+        if (!name.isEmpty() && parent.getChildByName(name) == null) {
+            this.name = name;
+            return true;
+        } else if (name.isEmpty()) {
+            String errorMessage = "New name cannot be an empty string.";
+            MainFrame.getInstance().getMessageGenerator().generateMessage(errorMessage, MessageType.ERROR);
+        } else {
+            System.out.println(name);
+            String errorMessage = "The path of the file is ambiguous.";
+            MainFrame.getInstance().getMessageGenerator().generateMessage(errorMessage, MessageType.ERROR);
+        }
+        return false;
     }
 
     public ClassyNode getParent() {

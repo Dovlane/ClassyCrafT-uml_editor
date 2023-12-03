@@ -9,17 +9,16 @@ import raf.dsw.classycraft.app.model.ClassyRepository.*;
 import raf.dsw.classycraft.app.model.compositePattern.ClassyNode;
 import raf.dsw.classycraft.app.model.compositePattern.ClassyNodeComposite;
 import raf.dsw.classycraft.app.model.compositePattern.ClassyNodeLeaf;
-import raf.dsw.classycraft.app.model.observerPattern.IListener;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultTreeModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 public class ClassyTree implements IClassyTree {
 
     private ClassyTreeView treeView;
+
     @Override
     public ClassyTreeView generateTree(ProjectExplorer projectExplorer) {
         ClassyTreeItem root = new ClassyTreeItem(projectExplorer);
@@ -116,10 +115,7 @@ public class ClassyTree implements IClassyTree {
             public void actionPerformed(ActionEvent e) {
                 String content = textField.getText();
 
-                if (!content.isEmpty() && nodeParent.getChildByName(content) == null) {
-
-                    // Rename a selected Node
-                    node.setName(content);
+                if (node.setName(content)) {
 
                     // Refresh GUI
                     SwingUtilities.updateComponentTreeUI(treeView);
@@ -129,13 +125,6 @@ public class ClassyTree implements IClassyTree {
                     // Close the window after successful renaming
                     frame.dispose();
 
-                } else if (content.isEmpty()) {
-                    String errorMessage = "New name cannot be an empty string.";
-                    MainFrame.getInstance().getMessageGenerator().generateMessage(errorMessage, MessageType.ERROR);
-                } else {
-                    System.out.println(content);
-                    String errorMessage = "The path of the file is ambiguous.";
-                    MainFrame.getInstance().getMessageGenerator().generateMessage(errorMessage, MessageType.ERROR);
                 }
             }
         });
