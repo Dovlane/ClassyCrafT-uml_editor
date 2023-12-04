@@ -17,8 +17,8 @@ public class InterfaceElement extends Interclass {
         methods = new ArrayList<>();
     }
 
-    public InterfaceElement(String name, ClassyNode parent, Point location, AccessModifiers visibility, String className) {
-        super(name, parent, location, visibility, className);
+    public InterfaceElement(String name, ClassyNode parent, Point point, AccessModifiers visibility, String className) {
+        super(name, parent, point, visibility, className);
         methods = new ArrayList<>();
     }
 

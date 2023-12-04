@@ -17,8 +17,8 @@ public class ClassElement extends Interclass {
         classContent = new ArrayList<>();
     }
 
-    public ClassElement(String name, ClassyNode parent, Point location, AccessModifiers visibility, String className) {
-        super(name, parent, location, visibility, className);
+    public ClassElement(String name, ClassyNode parent, Point point, AccessModifiers visibility, String className) {
+        super(name, parent, point, visibility, className);
         classContent = new ArrayList<>();
     }
 

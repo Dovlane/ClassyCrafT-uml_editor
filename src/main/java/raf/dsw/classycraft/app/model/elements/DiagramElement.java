@@ -6,9 +6,6 @@ import java.awt.*;
 
 public abstract class DiagramElement extends ClassyNode {
 
-    protected Color color;
-    protected int stroke;
-
     public DiagramElement(String name, ClassyNode parent) {
         super(name, parent);
     }

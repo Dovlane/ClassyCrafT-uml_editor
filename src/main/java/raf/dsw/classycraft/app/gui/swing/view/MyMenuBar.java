@@ -30,6 +30,7 @@ public class MyMenuBar extends JMenuBar {
         debugMenu.setMnemonic(KeyEvent.VK_D);
         debugMenu.add(MainFrame.getInstance().getActionManager().getErrorTestAction());
         debugMenu.add(MainFrame.getInstance().getActionManager().getPrintTreeAction());
+        debugMenu.add(MainFrame.getInstance().getActionManager().getPaintTestAction());
         add(debugMenu);
     }
 

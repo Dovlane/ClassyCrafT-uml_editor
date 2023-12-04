@@ -1,1 +1,0 @@
-[ERROR][2023-12-04 12:54:03.0626172] ProjectExplorer cannot be deleted.

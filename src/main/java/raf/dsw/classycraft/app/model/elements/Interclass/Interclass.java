@@ -8,31 +8,23 @@ import java.awt.*;
 
 public abstract class Interclass extends DiagramElement {
 
-    protected Point location;
     protected AccessModifiers visibility;
     protected String className;
+    protected Point point;
 
     public Interclass(String name, ClassyNode parent) {
         super(name, parent);
     }
 
-    public Interclass(String name, ClassyNode parent, Point location, AccessModifiers visibility, String className) {
+    public Interclass(String name, ClassyNode parent, Point point, AccessModifiers visibility, String className) {
         super(name, parent);
-        this.location = location;
         this.visibility = visibility;
         this.className = className;
+        this.point = point;
     }
 
 
     // Getters and Setters
-    public Point getLocation() {
-        return location;
-    }
-
-    public void setLocation(Point location) {
-        this.location = location;
-    }
-
     public AccessModifiers getVisibility() {
         return visibility;
     }

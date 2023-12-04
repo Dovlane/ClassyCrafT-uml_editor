@@ -1,9 +1,11 @@
 package raf.dsw.classycraft.app.gui.swing.controller;
 
 import raf.dsw.classycraft.app.gui.swing.controller.debug.ErrorTestAction;
+import raf.dsw.classycraft.app.gui.swing.controller.debug.PaintTestAction;
 import raf.dsw.classycraft.app.gui.swing.controller.debug.PrintTreeAction;
 import raf.dsw.classycraft.app.model.observerPattern.IListener;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 public class ActionManager {
@@ -20,6 +22,7 @@ public class ActionManager {
     // DEBUG actions
     private ErrorTestAction errorTestAction;
     private PrintTreeAction printTreeAction;
+    private PaintTestAction paintTestAction;
     public ActionManager() {
         initializeActions();
     }
@@ -37,6 +40,7 @@ public class ActionManager {
         // DEBUG actions
         errorTestAction = new ErrorTestAction();
         printTreeAction = new PrintTreeAction();
+        paintTestAction = new PaintTestAction();
     }
 
     public ExitAction getExitAction() {
@@ -79,4 +83,7 @@ public class ActionManager {
         return printTreeAction;
     }
 
+    public PaintTestAction getPaintTestAction() {
+        return paintTestAction;
+    }
 }

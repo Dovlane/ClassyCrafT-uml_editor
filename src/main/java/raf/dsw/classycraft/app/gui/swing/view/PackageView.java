@@ -37,6 +37,7 @@ public class PackageView extends JSplitPane implements IListener {
         // on the existing package should happen
         if (notification == null) {
             updatePackageView();
+            return;
         }
 
         // If Package is passed it means that the displayed
@@ -53,7 +54,7 @@ public class PackageView extends JSplitPane implements IListener {
         updatePackageView();
     }
 
-    public void updatePackageView() {
+    private void updatePackageView() {
 
         if (currentPackage == Package.getDefaultPackage()) {
             setDefaultRightPanel();
@@ -85,6 +86,15 @@ public class PackageView extends JSplitPane implements IListener {
                 break;
             }
         }
+    }
+
+    public DiagramView getLastSelectedTab(){
+        DiagramView displayedDiagramView = null;
+        if (tabbedPane.getTabCount() > 0) {
+            displayedDiagramView = (DiagramView) tabbedPane.getComponentAt(tabbedPane.getSelectedIndex());
+            System.out.println(displayedDiagramView);
+        }
+        return displayedDiagramView;
     }
 
     public void setPackageMetadata() {
