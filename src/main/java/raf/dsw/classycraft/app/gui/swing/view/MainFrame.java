@@ -3,7 +3,6 @@ package raf.dsw.classycraft.app.gui.swing.view;
 import raf.dsw.classycraft.app.core.ApplicationFramework;
 import raf.dsw.classycraft.app.gui.swing.controller.ActionManager;
 import raf.dsw.classycraft.app.gui.swing.tree.ClassyTree;
-import raf.dsw.classycraft.app.gui.swing.tree.IClassyTree;
 import raf.dsw.classycraft.app.model.MessageGenerator.Message;
 import raf.dsw.classycraft.app.model.MessageGenerator.MessageGenerator;
 import raf.dsw.classycraft.app.model.MessageGenerator.MessageType;
