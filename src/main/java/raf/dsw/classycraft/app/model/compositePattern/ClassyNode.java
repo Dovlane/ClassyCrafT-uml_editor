@@ -1,6 +1,7 @@
 package raf.dsw.classycraft.app.model.compositePattern;
 
 import raf.dsw.classycraft.app.gui.swing.view.MainFrame;
+import raf.dsw.classycraft.app.model.ClassyRepository.Diagram;
 import raf.dsw.classycraft.app.model.ClassyRepository.Package;
 import raf.dsw.classycraft.app.model.ClassyRepository.Project;
 import raf.dsw.classycraft.app.model.MessageGenerator.MessageType;
@@ -35,7 +36,18 @@ public abstract class ClassyNode {
 
         ClassyNodeComposite parent = (ClassyNodeComposite) getParent();
         if (parent != null) {
+
+            // Remove the unwanted item
             parent.removeAt(this);
+
+            // If the diagram within the currently displayed package
+            // is removed, it should notify the PackageView about it.
+            if (parent == Package.getDisplayedPackage()) {
+
+                // null is equivalent to updatePackageView
+                Package.getDisplayedPackage().notifyAllSubscribers(null);
+
+            }
         }
     }
 
@@ -68,7 +80,18 @@ public abstract class ClassyNode {
 
             // Check if the Project of the displayed package is renamed
             if ((this instanceof Project) && (this == Package.getDisplayedPackage().findParentProject())) {
+
+                // null is equivalent to updatePackageView
                 Package.getDisplayedPackage().notifyAllSubscribers(null);
+
+            }
+
+            // Check if the Diagram of the displayed package is renamed
+            if ((this instanceof Diagram) && (getParent() == Package.getDisplayedPackage())) {
+
+                // null is equivalent to updatePackageView
+                Package.getDisplayedPackage().notifyAllSubscribers(null);
+
             }
 
             return true;

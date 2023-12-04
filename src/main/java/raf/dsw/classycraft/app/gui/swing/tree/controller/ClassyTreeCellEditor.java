@@ -44,6 +44,5 @@ public class ClassyTreeCellEditor extends DefaultTreeCellEditor {
         }
         ClassyTreeItem clicked = (ClassyTreeItem) clickedOn;
         clicked.getClassyNode().setName(e.getActionCommand());
-        ApplicationFramework.getInstance().getClassyRepository().getPackageView().updatePackageView();
     }
 }

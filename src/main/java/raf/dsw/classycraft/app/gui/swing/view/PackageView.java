@@ -1,9 +1,9 @@
 package raf.dsw.classycraft.app.gui.swing.view;
 
+import raf.dsw.classycraft.app.core.ApplicationFramework;
 import raf.dsw.classycraft.app.model.ClassyRepository.Diagram;
 import raf.dsw.classycraft.app.model.ClassyRepository.Package;
 import raf.dsw.classycraft.app.model.ClassyRepository.Project;
-import raf.dsw.classycraft.app.model.compositePattern.ClassyNode;
 import raf.dsw.classycraft.app.model.observerPattern.IListener;
 
 import javax.swing.*;
@@ -70,10 +70,10 @@ public class PackageView extends JSplitPane implements IListener {
         // Refresh
         setPackageMetadata();
         tabbedPane.removeAll();
-        for (ClassyNode child: currentPackage.getChildren()) {
-            if (child instanceof Diagram) {
-                DiagramView diagramView = new DiagramView((Diagram) child);
-                tabbedPane.addTab(child.getName(), diagramView);
+        for (DiagramView diagramView: ApplicationFramework.getInstance().getClassyRepository().getDiagramViewList()) {
+            Diagram diagram = diagramView.getDiagram();
+            if (currentPackage == diagram.getParent()) {
+                tabbedPane.addTab(diagram.getName(), diagramView);
             }
         }
 
@@ -101,7 +101,4 @@ public class PackageView extends JSplitPane implements IListener {
         tabbedPane.removeAll();
     }
 
-    public Package getCurrentPackage() {
-        return currentPackage;
-    }
 }

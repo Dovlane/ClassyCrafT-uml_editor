@@ -36,11 +36,6 @@ public class Package extends ClassyNodeComposite implements IPublisher {
         while ((tmp != null) && !(tmp instanceof Project)) {
             tmp = tmp.getParent();
         }
-
-        if (tmp == null) {
-            throw new IllegalArgumentException("Package is not part of any Project.");
-        }
-
         return (Project) tmp;
     }
 
@@ -65,6 +60,7 @@ public class Package extends ClassyNodeComposite implements IPublisher {
         // Problem with for-each loop is because every time
         // the update happens the listener should be removed
         // from the listeners array list.
+        // It raises ConcurrentModificationException.
 
         // Solution is to only use the first element of the
         // list which is at the same time the only listener.

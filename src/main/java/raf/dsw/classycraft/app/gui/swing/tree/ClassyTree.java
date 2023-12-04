@@ -51,7 +51,6 @@ public class ClassyTree implements IClassyTree {
             // Refresh GUI
             treeView.expandPath(treeView.getSelectionPath());
             SwingUtilities.updateComponentTreeUI(treeView);
-            ApplicationFramework.getInstance().getClassyRepository().getPackageView().updatePackageView();
         }
     }
 
@@ -78,9 +77,7 @@ public class ClassyTree implements IClassyTree {
         item.removeFromParent();
 
         // Refresh GUI
-        treeView.expandPath(treeView.getSelectionPath());
         SwingUtilities.updateComponentTreeUI(treeView);
-        ApplicationFramework.getInstance().getClassyRepository().getPackageView().updatePackageView();
     }
 
     @Override
