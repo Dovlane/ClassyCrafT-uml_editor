@@ -2,14 +2,14 @@ package raf.dsw.classycraft.app.model.ClassyRepository;
 
 import raf.dsw.classycraft.app.core.ApplicationFramework;
 import raf.dsw.classycraft.app.model.compositePattern.ClassyNode;
-import raf.dsw.classycraft.app.model.compositePattern.ClassyNodeLeaf;
+import raf.dsw.classycraft.app.model.compositePattern.ClassyNodeComposite;
 import raf.dsw.classycraft.app.model.observerPattern.IListener;
 import raf.dsw.classycraft.app.model.observerPattern.IPublisher;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Diagram extends ClassyNodeLeaf implements IPublisher {
+public class Diagram extends ClassyNodeComposite implements IPublisher {
 
     List<IListener> listeners = new ArrayList<>();
 
@@ -25,6 +25,11 @@ public class Diagram extends ClassyNodeLeaf implements IPublisher {
             Package.getDisplayedPackage().notifyAllSubscribers(null);
 
         }
+    }
+
+    @Override
+    public void addChild(ClassyNode child) {
+        ;
     }
 
     @Override
