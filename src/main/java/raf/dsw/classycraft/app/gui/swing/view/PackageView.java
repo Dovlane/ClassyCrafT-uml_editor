@@ -8,34 +8,78 @@ import raf.dsw.classycraft.app.model.StatePattern.StateManager;
 import raf.dsw.classycraft.app.model.observerPattern.IListener;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 
 public class PackageView extends JSplitPane implements IListener {
 
     private Package currentPackage;
+    private StateManager stateManager;
     private Label labelProjectName;
     private Label labelAuthorName;
     private JTabbedPane tabbedPane;
-    private StateManager stateManager;
+    private static JToggleButton selectedButton;
 
     public PackageView() {
         super(JSplitPane.VERTICAL_SPLIT);
 
+        // Project Name and Project Author labels
         labelProjectName = new Label();
         labelAuthorName = new Label();
+        JSplitPane labelPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, labelProjectName, labelAuthorName);
+        add(labelPane);
 
+        // TabbedPane
         tabbedPane = new JTabbedPane();
         TabbedPaneMouseAdapter tabbedPaneMouseAdapter = new TabbedPaneMouseAdapter();
         tabbedPane.addMouseListener(tabbedPaneMouseAdapter);
         tabbedPane.addMouseMotionListener(tabbedPaneMouseAdapter);
 
-        JSplitPane labelPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, labelProjectName, labelAuthorName);
-        add(labelPane);
-        add(tabbedPane);
+        // Toolbar
+        JToolBar toolBar = new JToolBar(JToolBar.VERTICAL);
+        toolBar.setLayout(new GridLayout(0, 1));
+        addButton(toolBar, "S1", true);
+        addButton(toolBar, "S2", false);
+        addButton(toolBar, "S3", false);
+        addButton(toolBar, "S4", false);
+        addButton(toolBar, "S5", false);
+
+        // Merge TabbedPane and ToolBar
+        JSplitPane drawingPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, tabbedPane, toolBar);
+        drawingPane.setResizeWeight(0.95);
+        add(drawingPane);
 
         setCurrentPackage(Package.getDisplayedPackage());
 
         stateManager = new StateManager();
+    }
+
+    private static void addButton(JToolBar toolBar, String toolText, boolean startSelected) {
+        JToggleButton button = new JToggleButton(toolText);
+        button.setFocusPainted(false); // Remove focus border
+        button.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                if (button.isSelected()) {
+                    // If another button was selected, unselect it
+                    if (selectedButton != null && !button.equals(selectedButton)) {
+                        selectedButton.setSelected(false);
+                        selectedButton.setBorder(BorderFactory.createEmptyBorder());
+                    }
+                    button.setBorder(BorderFactory.createRaisedBevelBorder());
+                    selectedButton = button; // Update the reference to the selected button
+                }
+            }
+        });
+
+        // Set the initial selected state
+        button.setBorder(BorderFactory.createEmptyBorder());
+        if (startSelected) {
+            button.setBorder(BorderFactory.createRaisedBevelBorder());
+            selectedButton = button; // Update the reference to the selected button
+        }
+        toolBar.add(button);
     }
 
 
