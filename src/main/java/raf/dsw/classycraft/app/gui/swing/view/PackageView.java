@@ -4,6 +4,7 @@ import raf.dsw.classycraft.app.core.ApplicationFramework;
 import raf.dsw.classycraft.app.model.ClassyRepository.Diagram;
 import raf.dsw.classycraft.app.model.ClassyRepository.Package;
 import raf.dsw.classycraft.app.model.ClassyRepository.Project;
+import raf.dsw.classycraft.app.model.MessageGenerator.MessageType;
 import raf.dsw.classycraft.app.model.StatePattern.StateManager;
 import raf.dsw.classycraft.app.model.observerPattern.IListener;
 
@@ -39,11 +40,11 @@ public class PackageView extends JSplitPane implements IListener {
         // Toolbar
         JToolBar toolBar = new JToolBar(JToolBar.VERTICAL);
         toolBar.setLayout(new GridLayout(0, 1));
-        addButton(toolBar, "S1", true);
-        addButton(toolBar, "S2", false);
-        addButton(toolBar, "S3", false);
-        addButton(toolBar, "S4", false);
-        addButton(toolBar, "S5", false);
+        addButton(toolBar, "AI", true);
+        addButton(toolBar, "AC", false);
+        addButton(toolBar, "ACC", false);
+        addButton(toolBar, "R", false);
+        addButton(toolBar, "S", false);
 
         // Merge TabbedPane and ToolBar
         JSplitPane drawingPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, tabbedPane, toolBar);
@@ -55,20 +56,41 @@ public class PackageView extends JSplitPane implements IListener {
         stateManager = new StateManager();
     }
 
-    private static void addButton(JToolBar toolBar, String toolText, boolean startSelected) {
+    private void addButton(JToolBar toolBar, String toolText, boolean startSelected) {
         JToggleButton button = new JToggleButton(toolText);
         button.setFocusPainted(false); // Remove focus border
         button.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
                 if (button.isSelected()) {
+
                     // If another button was selected, unselect it
                     if (selectedButton != null && !button.equals(selectedButton)) {
+
+                        // Release the previous state
                         selectedButton.setSelected(false);
                         selectedButton.setBorder(BorderFactory.createEmptyBorder());
+
+                        // Change the state of application
+                        String buttonName = button.getText();
+                        if (buttonName.equals("AI"))
+                            startAddInterclassState();
+                        else if (buttonName.equals("AC"))
+                            startAddConnectionState();
+                        else if (buttonName.equals("ACC"))
+                            startAddClassContentState();
+                        else if (buttonName.equals("R"))
+                            startRemoveElementState();
+                        else if (buttonName.equals("S"))
+                            startSelectElementState();
+                        else
+                            MainFrame.getInstance().getMessageGenerator().generateMessage(
+                                    "Something is wrong with the names of the buttons and the states.", MessageType.ERROR);
                     }
+
+                    // Update the reference to the selected button
                     button.setBorder(BorderFactory.createRaisedBevelBorder());
-                    selectedButton = button; // Update the reference to the selected button
+                    selectedButton = button;
                 }
             }
         });

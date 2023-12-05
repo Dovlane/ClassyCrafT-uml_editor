@@ -9,7 +9,7 @@ public class AddConnectionState implements State {
 
     @Override
     public void mousePressed(Point location, DiagramView diagramView) {
-
+        System.out.println("Adding Connection!");
     }
 
     @Override
