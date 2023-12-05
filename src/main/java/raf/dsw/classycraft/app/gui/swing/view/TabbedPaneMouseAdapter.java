@@ -10,7 +10,6 @@ import java.awt.event.MouseEvent;
 public class TabbedPaneMouseAdapter extends MouseAdapter {
 
     private MouseState mouseState = MouseState.MOUSE_INACTIVE;
-
     private DiagramView diagramViewSelected = null;
 
     @Override
@@ -41,8 +40,6 @@ public class TabbedPaneMouseAdapter extends MouseAdapter {
         if (tabbedPaneIsEmpty(tabbedPane))
             return;
 
-        double eX = e.getX();
-        double eY = e.getY();
         if (mouseEventInsideTab(tabbedPane, e)) {
             if (mouseState == MouseState.MOUSE_DRAGGED){
                 System.out.println("Mouse is not dragging anymore");
@@ -96,9 +93,7 @@ public class TabbedPaneMouseAdapter extends MouseAdapter {
             double eY = location.getY() + y;
             double width = diagramViewSelected.getWidth();
             double height = diagramViewSelected.getHeight();
-            boolean isInsideTab = x < eX && y < eY && eX < x + width && eY < y + height;
-
-            return isInsideTab;
+            return (x < eX && y < eY && eX < x + width && eY < y + height);
         }
         return false;
     }
@@ -106,6 +101,5 @@ public class TabbedPaneMouseAdapter extends MouseAdapter {
     private boolean tabbedPaneIsEmpty(JTabbedPane tabbedPane){
         return tabbedPane.getTabCount() == 0;
     }
-
 
 }

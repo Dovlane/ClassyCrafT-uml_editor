@@ -35,6 +35,11 @@ public class DiagramView extends JPanel implements IListener {
         System.out.println("DiagramView paintComponent is being performed");
     }
 
+    public void addPainter(ElementPainter painter) {
+        painters.add(painter);
+    }
+
+    // Getters
     public Diagram getDiagram() {
         return diagram;
     }

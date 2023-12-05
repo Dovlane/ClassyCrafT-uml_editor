@@ -10,17 +10,17 @@ public abstract class Interclass extends DiagramElement {
 
     protected AccessModifiers visibility;
     protected String className;
-    protected Point point;
+    protected Point location;
 
     public Interclass(String name, ClassyNode parent) {
         super(name, parent);
     }
 
-    public Interclass(String name, ClassyNode parent, Point point, AccessModifiers visibility, String className) {
+    public Interclass(String name, ClassyNode parent, Point location, AccessModifiers visibility, String className) {
         super(name, parent);
         this.visibility = visibility;
         this.className = className;
-        this.point = point;
+        this.location = location;
     }
 
 
@@ -39,6 +39,14 @@ public abstract class Interclass extends DiagramElement {
 
     public void setClassName(String className) {
         this.className = className;
+    }
+
+    public Point getLocation() {
+        return location;
+    }
+
+    public void setLocation(Point location) {
+        this.location = location;
     }
 
 }

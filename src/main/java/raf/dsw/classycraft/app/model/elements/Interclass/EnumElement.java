@@ -11,7 +11,7 @@ public class EnumElement extends Interclass {
         super(name, parent);
     }
 
-    public EnumElement(String name, ClassyNode parent, Point point, AccessModifiers visibility, String className) {
-        super(name, parent, point, visibility, className);
+    public EnumElement(String name, ClassyNode parent, Point location, AccessModifiers visibility, String className) {
+        super(name, parent, location, visibility, className);
     }
 }

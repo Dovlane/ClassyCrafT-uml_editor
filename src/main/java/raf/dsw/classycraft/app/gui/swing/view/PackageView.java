@@ -40,38 +40,29 @@ public class PackageView extends JSplitPane implements IListener {
 
 
     // PERFORM ALL STATE ACTIONS
-    public void addClassElement() {
-        stateManager.getCurrentState().addClassElement();
+    public void mousePressed(DiagramView diagramView, Point location) {
+        System.out.println("PackageView - mousePressed:");
+        System.out.println("\tDiagramView pressed: " + diagramView);
+        System.out.println("\tmousePressed location: " + location);
+
+        stateManager.getCurrentState().mousePressed(location, diagramView);
     }
-    public void addInterfaceElement() {
-        stateManager.getCurrentState().addInterfaceElement();
+
+    public void mouseReleased(DiagramView diagramView, Point location) {
+        System.out.println("PackageView - mouseReleased:");
+        System.out.println("\tDiagramView released: " + diagramView);
+        System.out.println("\tmouseReleased location: " + location);
+
+        stateManager.getCurrentState().mouseReleased(location, diagramView);
     }
-    public void addEnumElement() {
-        stateManager.getCurrentState().addEnumElement();
-    }
-    public void addAggregation() {
-        stateManager.getCurrentState().addAggregation();
-    }
-    public void addComposition() {
-        stateManager.getCurrentState().addComposition();
-    }
-    public void addDependency() {
-        stateManager.getCurrentState().addDependency();
-    }
-    public void addGeneralization() {
-        stateManager.getCurrentState().addGeneralization();
-    }
-    public void addMethod() {
-        stateManager.getCurrentState().addMethod();
-    }
-    public void addAttribute() {
-        stateManager.getCurrentState().addAttribute();
-    }
-    public void removeElement() {
-        stateManager.getCurrentState().removeElement();
-    }
-    public void selectElement() {
-        stateManager.getCurrentState().selectElement();
+
+    public void mouseDragged(DiagramView diagramView, Point location) {
+        System.out.println("PackageView - mouseDragged:");
+        System.out.println("\tDiagramView dragged: " + diagramView);
+        System.out.println("\tmouseDragged location: " + location);
+
+        // TODO: change mouseDragged Signature
+        stateManager.getCurrentState().mouseDragged(location, location, diagramView);
     }
 
 
@@ -93,6 +84,7 @@ public class PackageView extends JSplitPane implements IListener {
     }
 
 
+    // RIGHT PANEL
     @Override
     public void update(Object notification) {
 
@@ -174,21 +166,4 @@ public class PackageView extends JSplitPane implements IListener {
         tabbedPane.removeAll();
     }
 
-    public void mousePressed(DiagramView diagramView, Point location) {
-        System.out.println("PackageView - mousePressed:");
-        System.out.println("\tDiagramView pressed: " + diagramView);
-        System.out.println("\tmousePressed location: " + location);
-    }
-
-    public void mouseDragged(DiagramView diagramView, Point location) {
-        System.out.println("PackageView - mouseDragged:");
-        System.out.println("\tDiagramView dragged: " + diagramView);
-        System.out.println("\tmouseDragged location: " + location);
-    }
-
-    public void mouseReleased(DiagramView diagramView, Point location) {
-        System.out.println("PackageView - mouseReleased:");
-        System.out.println("\tDiagramView released: " + diagramView);
-        System.out.println("\tmouseReleased location: " + location);
-    }
 }

@@ -1,48 +1,49 @@
 package raf.dsw.classycraft.app.model.StatePattern.concrete;
 
+import raf.dsw.classycraft.app.core.ApplicationFramework;
+import raf.dsw.classycraft.app.gui.swing.tree.model.ClassyTreeItem;
+import raf.dsw.classycraft.app.gui.swing.view.DiagramView;
+import raf.dsw.classycraft.app.gui.swing.view.MainFrame;
+import raf.dsw.classycraft.app.gui.swing.view.painters.ElementPainter;
+import raf.dsw.classycraft.app.gui.swing.view.painters.interclassPainters.ClassPainter;
+import raf.dsw.classycraft.app.model.ClassyRepository.Diagram;
+import raf.dsw.classycraft.app.model.MessageGenerator.MessageType;
 import raf.dsw.classycraft.app.model.StatePattern.State;
+import raf.dsw.classycraft.app.model.elements.Interclass.ClassElement;
+
+import java.awt.*;
 
 public class AddInterclassState implements State {
 
-    // Methods for AddInterclassState
     @Override
-    public void addClassElement() {
-        System.out.println("Added a new class on a Diagram!");
+    public void mousePressed(Point location, DiagramView diagramView) {
+        Diagram currentDiagram = diagramView.getDiagram();
+        ClassElement newClass = new ClassElement("Test Class", currentDiagram);
+
+        ElementPainter painter = new ClassPainter(newClass);
+        diagramView.addPainter(painter);
+
+        ClassyTreeItem classyTreeDiagram =
+                MainFrame.getInstance().getClassyTree().getRoot().getTreeItemFromClassyNode(currentDiagram);
+        if (classyTreeDiagram ==  null) {
+            MainFrame.getInstance().getMessageGenerator().generateMessage(
+                    "Diagram cannot be found in ClassyTree.", MessageType.ERROR);
+            return;
+        }
+        MainFrame.getInstance().getClassyTree().attachChild(classyTreeDiagram, newClass);
+
+        // Debug
+        ApplicationFramework.getInstance().getClassyRepository().printTree();
+        System.out.println("Creating Interclass!");
     }
 
     @Override
-    public void addInterfaceElement() {
+    public void mouseReleased(Point location, DiagramView diagramView) {
 
     }
 
     @Override
-    public void addEnumElement() {
+    public void mouseDragged(Point start, Point location, DiagramView diagramView) {
 
     }
-
-    // Methods for other states
-    @Override
-    public void addAggregation() { }
-
-    @Override
-    public void addComposition() { }
-
-    @Override
-    public void addDependency() { }
-
-    @Override
-    public void addGeneralization() { }
-
-    @Override
-    public void addMethod() { }
-
-    @Override
-    public void addAttribute() { }
-
-    @Override
-    public void removeElement() { }
-
-    @Override
-    public void selectElement() { }
-
 }

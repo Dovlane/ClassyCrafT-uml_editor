@@ -12,6 +12,20 @@ public class ClassyTreeItem extends DefaultMutableTreeNode {
         this.classyNode = classyNode;
     }
 
+    public ClassyTreeItem getTreeItemFromClassyNode(ClassyNode node) {
+        if (classyNode == node) {
+            return this;
+        }
+        ClassyTreeItem returnTreeItem = null;
+        for (int i = 0; i < getChildCount(); i++) {
+            returnTreeItem = ((ClassyTreeItem) getChildAt(i)).getTreeItemFromClassyNode(node);
+            if (returnTreeItem != null) {
+                break;
+            }
+        }
+        return returnTreeItem;
+    }
+
     @Override
     public String toString() {
         return getName();

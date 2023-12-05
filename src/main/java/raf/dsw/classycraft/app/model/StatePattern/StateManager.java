@@ -46,6 +46,7 @@ public class StateManager {
         currentState = selectElementState;
     }
 
+
     // Getters
     public State getCurrentState() {
         return currentState;
