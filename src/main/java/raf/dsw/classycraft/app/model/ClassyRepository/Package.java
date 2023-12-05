@@ -23,12 +23,14 @@ public class Package extends ClassyNodeComposite implements IPublisher {
     }
 
     @Override
-    public void addChild(ClassyNode child) {
+    public boolean addChild(ClassyNode child) {
         if (child instanceof Package || child instanceof Diagram) {
             if (!getChildren().contains(child)) {
                 getChildren().add(child);
+                return true;
             }
         }
+        return false;
     }
 
     public Project findParentProject() {

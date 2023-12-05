@@ -29,13 +29,15 @@ public class Diagram extends ClassyNodeComposite implements IPublisher {
     }
 
     @Override
-    public void addChild(ClassyNode child) {
+    public boolean addChild(ClassyNode child) {
         if (child instanceof DiagramElement) {
             if (!getChildren().contains(child)) {
                 getChildren().add(child);
                 notifyAllSubscribers(null);
+                return true;
             }
         }
+        return false;
     }
 
     @Override

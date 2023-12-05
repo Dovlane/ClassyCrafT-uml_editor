@@ -13,12 +13,14 @@ public class ProjectExplorer extends ClassyNodeComposite {
     }
 
     @Override
-    public void addChild(ClassyNode child) {
+    public boolean addChild(ClassyNode child) {
         if (child instanceof Project) {
             if (!getChildren().contains(child)) {
                 getChildren().add(child);
+                return true;
             }
         }
+        return false;
     }
 
     public void increaseCounter() {

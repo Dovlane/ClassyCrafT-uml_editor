@@ -12,13 +12,14 @@ import raf.dsw.classycraft.app.model.StatePattern.State;
 import raf.dsw.classycraft.app.model.elements.Interclass.ClassElement;
 
 import java.awt.*;
+import java.util.Random;
 
 public class AddInterclassState implements State {
 
     @Override
     public void mousePressed(Point location, DiagramView diagramView) {
         Diagram currentDiagram = diagramView.getDiagram();
-        ClassElement newClass = new ClassElement("Test Class", currentDiagram);
+        ClassElement newClass = new ClassElement("Test Class" + (new Random()).nextInt(1), currentDiagram);
 
         ElementPainter painter = new ClassPainter(newClass);
         diagramView.addPainter(painter);

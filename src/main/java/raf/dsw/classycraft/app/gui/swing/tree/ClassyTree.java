@@ -55,16 +55,19 @@ public class ClassyTree implements IClassyTree {
             return;
         }
 
-        if (child == null)
-            return;
+        // Add child to both Model and JTree
+        boolean success = ((ClassyNodeComposite) parent.getClassyNode()).addChild(child);
+        if (success) {
 
-        // Add child to both JTree and Model
-        parent.add(new ClassyTreeItem(child));
-        ((ClassyNodeComposite) parent.getClassyNode()).addChild(child);
+            // It should be added first to model because
+            // JTree does not override equal by value.
+            // Instead, it uses default equal implementation.
+            parent.add(new ClassyTreeItem(child));
 
-        // Refresh GUI - Classy Tree
-        treeView.expandPath(new TreePath(parent.getPath()));
-        SwingUtilities.updateComponentTreeUI(treeView);
+            // Refresh GUI - Classy Tree
+            treeView.expandPath(new TreePath(parent.getPath()));
+            SwingUtilities.updateComponentTreeUI(treeView);
+        }
 
     }
 

@@ -12,7 +12,7 @@ public abstract class ClassyNodeComposite extends ClassyNode {
         children = new ArrayList<>();
     }
 
-    public abstract void addChild(ClassyNode child);
+    public abstract boolean addChild(ClassyNode child);
 
     public void removeAt(ClassyNode aChild) {
         if (aChild == null) {
