@@ -24,11 +24,13 @@ public class PackageView extends JSplitPane implements IListener {
         labelProjectName = new Label();
         labelAuthorName = new Label();
         tabbedPane = new JTabbedPane();
+        TabbedPaneMouseAdapter tabbedPaneMouseAdapter = new TabbedPaneMouseAdapter();
+        tabbedPane.addMouseListener(tabbedPaneMouseAdapter);
+        tabbedPane.addMouseMotionListener(tabbedPaneMouseAdapter);
 
         JSplitPane labelPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, labelProjectName, labelAuthorName);
         add(labelPane);
         add(tabbedPane);
-
         setCurrentPackage(Package.getDisplayedPackage());
 
         stateManager = new StateManager();
