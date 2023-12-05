@@ -174,4 +174,21 @@ public class PackageView extends JSplitPane implements IListener {
         tabbedPane.removeAll();
     }
 
+    public void mousePressed(DiagramView diagramView, Point location) {
+        System.out.println("PackageView - mousePressed:");
+        System.out.println("\tDiagramView pressed: " + diagramView);
+        System.out.println("\tmousePressed location: " + location);
+    }
+
+    public void mouseDragged(DiagramView diagramView, Point location) {
+        System.out.println("PackageView - mouseDragged:");
+        System.out.println("\tDiagramView dragged: " + diagramView);
+        System.out.println("\tmouseDragged location: " + location);
+    }
+
+    public void mouseReleased(DiagramView diagramView, Point location) {
+        System.out.println("PackageView - mouseReleased:");
+        System.out.println("\tDiagramView released: " + diagramView);
+        System.out.println("\tmouseReleased location: " + location);
+    }
 }
