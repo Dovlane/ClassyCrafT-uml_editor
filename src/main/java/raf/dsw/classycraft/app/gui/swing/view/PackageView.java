@@ -16,10 +16,10 @@ import java.awt.*;
 public class PackageView extends JSplitPane implements IListener {
 
     private Package currentPackage;
-    private StateManager stateManager;
-    private Label labelProjectName;
-    private Label labelAuthorName;
-    private JTabbedPane tabbedPane;
+    private final StateManager stateManager;
+    private final Label labelProjectName;
+    private final Label labelAuthorName;
+    private final JTabbedPane tabbedPane;
     private static JToggleButton selectedButton;
 
     public PackageView() {
@@ -73,19 +73,15 @@ public class PackageView extends JSplitPane implements IListener {
 
                         // Change the state of application
                         String buttonName = button.getText();
-                        if (buttonName.equals("AI"))
-                            startAddInterclassState();
-                        else if (buttonName.equals("AC"))
-                            startAddConnectionState();
-                        else if (buttonName.equals("ACC"))
-                            startAddClassContentState();
-                        else if (buttonName.equals("R"))
-                            startRemoveElementState();
-                        else if (buttonName.equals("S"))
-                            startSelectElementState();
-                        else
-                            MainFrame.getInstance().getMessageGenerator().generateMessage(
+                        switch (buttonName) {
+                            case "AI" -> startAddInterclassState();
+                            case "AC" -> startAddConnectionState();
+                            case "ACC" -> startAddClassContentState();
+                            case "R" -> startRemoveElementState();
+                            case "S" -> startSelectElementState();
+                            default -> MainFrame.getInstance().getMessageGenerator().generateMessage(
                                     "Something is wrong with the names of the buttons and the states.", MessageType.ERROR);
+                        }
                     }
 
                     // Update the reference to the selected button
@@ -122,13 +118,13 @@ public class PackageView extends JSplitPane implements IListener {
         stateManager.getCurrentState().mouseReleased(location, diagramView);
     }
 
-    public void mouseDragged(DiagramView diagramView, Point location) {
+    public void mouseDragged(DiagramView diagramView, Point startLocation, Point currentLocation) {
         System.out.println("PackageView - mouseDragged:");
         System.out.println("\tDiagramView dragged: " + diagramView);
-        System.out.println("\tmouseDragged location: " + location);
+        System.out.println("\tmouseDragged startLocation: " + startLocation);
+        System.out.println("\tmouseDragged currentLocation: " + currentLocation);
 
-        // TODO: change mouseDragged Signature
-        stateManager.getCurrentState().mouseDragged(location, location, diagramView);
+        stateManager.getCurrentState().mouseDragged(startLocation, currentLocation, diagramView);
     }
 
 

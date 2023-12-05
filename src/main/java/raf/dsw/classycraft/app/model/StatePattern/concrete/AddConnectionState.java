@@ -18,7 +18,7 @@ public class AddConnectionState implements State {
     }
 
     @Override
-    public void mouseDragged(Point start, Point location, DiagramView diagramView) {
+    public void mouseDragged(Point startLocation, Point currentLocation, DiagramView diagramView) {
 
     }
 

@@ -9,8 +9,13 @@ import java.awt.event.MouseEvent;
 
 public class TabbedPaneMouseAdapter extends MouseAdapter {
 
-    private MouseState mouseState = MouseState.MOUSE_INACTIVE;
-    private DiagramView diagramViewSelected = null;
+    private MouseState mouseState;
+    private DiagramView diagramViewSelected;
+    private Point startLocation;
+
+    public TabbedPaneMouseAdapter() {
+        this.mouseState = MouseState.MOUSE_INACTIVE;
+    }
 
     @Override
     public void mousePressed(MouseEvent e) {
@@ -24,8 +29,9 @@ public class TabbedPaneMouseAdapter extends MouseAdapter {
         if (mouseEventInsideTab(tabbedPane, e)) {
             System.out.println("Mouse is pressed in tab");
             mouseState = MouseState.MOUSE_PRESSED;
-            Point location = getLocationOfMouseOnDiagramView(e);
-            ApplicationFramework.getInstance().getClassyRepository().getPackageView().mousePressed(diagramViewSelected, location);
+            startLocation = getLocationOfMouseOnDiagramView(e);
+            ApplicationFramework.getInstance().getClassyRepository().getPackageView()
+                    .mousePressed(diagramViewSelected, startLocation);
         }
         else {
             System.out.println("Mouse is pressed outside of tab");
@@ -41,13 +47,15 @@ public class TabbedPaneMouseAdapter extends MouseAdapter {
             return;
 
         if (mouseEventInsideTab(tabbedPane, e)) {
-            if (mouseState == MouseState.MOUSE_DRAGGED){
+
+            if (mouseState == MouseState.MOUSE_DRAGGED) {
                 System.out.println("Mouse is not dragging anymore");
             }
 
             if (mouseState != MouseState.MOUSE_INACTIVE) {
                 Point location = getLocationOfMouseOnDiagramView(e);
-                ApplicationFramework.getInstance().getClassyRepository().getPackageView().mouseReleased(diagramViewSelected, location);
+                ApplicationFramework.getInstance().getClassyRepository().getPackageView()
+                        .mouseReleased(diagramViewSelected, location);
             }
 
             System.out.println("Mouse is released in tab");
@@ -55,13 +63,15 @@ public class TabbedPaneMouseAdapter extends MouseAdapter {
         else {
             System.out.println("Mouse is released outside of tab");
         }
+
         mouseState = MouseState.MOUSE_INACTIVE;
     }
 
     @Override
     public void mouseDragged(MouseEvent e) {
         super.mouseDragged(e);
-        if (mouseState == MouseState.MOUSE_INACTIVE){
+
+        if (mouseState == MouseState.MOUSE_INACTIVE) {
             return;
         }
 
@@ -72,8 +82,10 @@ public class TabbedPaneMouseAdapter extends MouseAdapter {
         else if (mouseState == MouseState.MOUSE_DRAGGED) {
             System.out.println("Mouse is still dragging");
         }
-        Point location = getLocationOfMouseOnDiagramView(e);
-        ApplicationFramework.getInstance().getClassyRepository().getPackageView().mouseDragged(diagramViewSelected, location);
+
+        Point currentLocation = getLocationOfMouseOnDiagramView(e);
+        ApplicationFramework.getInstance().getClassyRepository().getPackageView().
+                mouseDragged(diagramViewSelected, startLocation, currentLocation);
     }
 
 
