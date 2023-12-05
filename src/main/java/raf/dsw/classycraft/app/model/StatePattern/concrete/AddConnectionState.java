@@ -17,7 +17,7 @@ public class AddConnectionState implements State {
     // Methods for AddConnectionState
     @Override
     public void addAggregation() {
-
+        System.out.println("Added a new aggregation on a Diagram!");
     }
 
     @Override

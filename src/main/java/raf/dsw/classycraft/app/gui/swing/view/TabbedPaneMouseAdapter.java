@@ -1,7 +1,8 @@
 package raf.dsw.classycraft.app.gui.swing.view;
 
+import raf.dsw.classycraft.app.core.ApplicationFramework;
+
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -17,11 +18,11 @@ public class TabbedPaneMouseAdapter extends MouseAdapter {
         double eY = e.getY();
         if (tabbedPaneIsEmpty(tabbedPane))
             return;
-        if (mouseEventInsideTab(tabbedPane, eX, eY)){
+        if (mouseEventInsideTab(tabbedPane, eX, eY)) {
             System.out.println("Mouse is pressed in tab");
             mouseState = MouseState.MOUSE_PRESSED;
         }
-        else{
+        else {
             System.out.println("Mouse is pressed outside of tab");
         }
     }
@@ -34,7 +35,7 @@ public class TabbedPaneMouseAdapter extends MouseAdapter {
         double eY = e.getY();
         if (tabbedPaneIsEmpty(tabbedPane))
             return;
-        if (mouseEventInsideTab(tabbedPane, eX, eY)){
+        if (mouseEventInsideTab(tabbedPane, eX, eY)) {
             if (mouseState == MouseState.MOUSE_DRAGGED){
                 System.out.println("Mouse is not dragging anymore");
             }
@@ -52,7 +53,7 @@ public class TabbedPaneMouseAdapter extends MouseAdapter {
         if (mouseState == MouseState.MOUSE_INACTIVE){
             return;
         }
-        if (mouseState == MouseState.MOUSE_PRESSED){
+        if (mouseState == MouseState.MOUSE_PRESSED) {
             System.out.println("Mouse has started dragging");
             mouseState = MouseState.MOUSE_DRAGGED;
         }
@@ -62,7 +63,7 @@ public class TabbedPaneMouseAdapter extends MouseAdapter {
     }
 
     private boolean mouseEventInsideTab(JTabbedPane tabbedPane, double eX, double eY) {
-        if (tabbedPane.getTabCount() > 0){
+        if (tabbedPane.getTabCount() > 0) {
             DiagramView selectedDiagramView = (DiagramView) tabbedPane.getComponentAt(tabbedPane.getSelectedIndex());
             double x = selectedDiagramView.getLocation().getX();
             double y = selectedDiagramView.getLocation().getY();

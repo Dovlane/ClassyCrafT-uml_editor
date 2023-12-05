@@ -15,8 +15,16 @@ public class ClassyTreeMouseAdapter extends MouseAdapter {
     @Override
     public void mouseClicked(MouseEvent e) {
         if (e.getClickCount() == 2) {
+
+            // Fetch a Classy Tree Item
             JTree tree = MainFrame.getInstance().getClassyTree().getTreeView();
             TreePath path = tree.getPathForLocation(e.getX(), e.getY());
+            if (path == null) {
+                System.out.println("[INFO] Valid Classy Tree Item must be selected.");
+                return;
+            }
+
+            // Execute double click action
             ClassyTreeItem treeItemSelected = (ClassyTreeItem) path.getLastPathComponent();
             if (treeItemSelected.getClassyNode() instanceof Package) {
                 Package chosenPackage = (Package) treeItemSelected.getClassyNode();
