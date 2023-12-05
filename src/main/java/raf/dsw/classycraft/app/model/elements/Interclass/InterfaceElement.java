@@ -1,5 +1,6 @@
 package raf.dsw.classycraft.app.model.elements.Interclass;
 
+import raf.dsw.classycraft.app.model.ClassyRepository.Diagram;
 import raf.dsw.classycraft.app.model.compositePattern.ClassyNode;
 import raf.dsw.classycraft.app.model.elements.ClassContent.Method;
 import raf.dsw.classycraft.app.model.elements.Modifiers.AccessModifiers;
@@ -12,19 +13,19 @@ public class InterfaceElement extends Interclass {
 
     private List<Method> methods;
 
-    public InterfaceElement(String name, ClassyNode parent) {
+    public InterfaceElement(String name, Diagram parent) {
         super(name, parent);
         methods = new ArrayList<>();
     }
 
-    public InterfaceElement(String name, ClassyNode parent, Point point, AccessModifiers visibility, String className) {
-        super(name, parent, point, visibility, className);
+    public InterfaceElement(String name, Diagram parent, Point point, AccessModifiers visibility) {
+        super(name, parent, point, visibility);
         methods = new ArrayList<>();
     }
 
 
     // Getters and Setters
-    public List<Method> getMethods() {
+    public List<Method> getInterfaceMethods() {
         return methods;
     }
 

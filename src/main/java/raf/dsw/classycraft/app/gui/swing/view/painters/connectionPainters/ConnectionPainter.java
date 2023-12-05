@@ -12,7 +12,7 @@ public class ConnectionPainter extends ElementPainter {
     }
 
     @Override
-    public void draw(Graphics2D graphics2D, int eX, int eY) {
+    public void draw(Graphics2D graphics2D) {
 
     }
 

@@ -8,8 +8,9 @@ public class Method extends ClassContent {
     private AccessModifiers accessModifiers;
     private NonAccessModifiers nonAccessModifiers;
     private String name;
+    private String type;
 
-    public Method(AccessModifiers accessModifiers, NonAccessModifiers nonAccessModifiers, String name) {
+    public Method( String name, AccessModifiers accessModifiers, NonAccessModifiers nonAccessModifiers, String type) {
         super();
         this.accessModifiers = accessModifiers;
         this.nonAccessModifiers = nonAccessModifiers;
@@ -42,4 +43,25 @@ public class Method extends ClassContent {
         this.name = name;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        switch (accessModifiers) {
+            case PRIVATE -> stringBuilder.append('-');
+            case PUBLIC -> stringBuilder.append('+');
+            case PROTECTED -> stringBuilder.append('#');
+            case DEFAULT -> stringBuilder.append('~');
+        }
+        stringBuilder.append(name + "() : " + getType());
+        return stringBuilder.toString();
+
+    }
 }

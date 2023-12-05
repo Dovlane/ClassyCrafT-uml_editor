@@ -3,17 +3,19 @@ package raf.dsw.classycraft.app.model.elements.ClassContent;
 import raf.dsw.classycraft.app.model.elements.Modifiers.AccessModifiers;
 import raf.dsw.classycraft.app.model.elements.Modifiers.NonAccessModifiers;
 
-public class Attributes extends ClassContent {
+public class Attribute extends ClassContent {
 
     private AccessModifiers accessModifiers;
     private NonAccessModifiers nonAccessModifiers;
     private String name;
+    private String type;
 
-    public Attributes(AccessModifiers accessModifiers, NonAccessModifiers nonAccessModifiers, String name) {
+    public Attribute(AccessModifiers accessModifiers, NonAccessModifiers nonAccessModifiers, String name, String type) {
         super();
         this.accessModifiers = accessModifiers;
         this.nonAccessModifiers = nonAccessModifiers;
         this.name = name;
+        this.type = type;
     }
 
 
@@ -42,4 +44,23 @@ public class Attributes extends ClassContent {
         this.name = name;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        switch (accessModifiers) {
+            case PRIVATE -> stringBuilder.append('-');
+            case PUBLIC -> stringBuilder.append('+');
+            case PROTECTED -> stringBuilder.append('#');
+            case DEFAULT -> stringBuilder.append('~');
+        }
+        stringBuilder.append(type + " " + name);
+        return stringBuilder.toString();
+    }
 }

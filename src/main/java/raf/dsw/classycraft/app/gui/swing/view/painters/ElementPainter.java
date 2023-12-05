@@ -10,7 +10,7 @@ public abstract class ElementPainter {
     protected Color color;
     protected int stroke;
 
-    public abstract void draw(Graphics2D graphics2D, int eX, int eY);
+    public abstract void draw(Graphics2D graphics2D);
 
     public abstract boolean elementAt(int eX, int eY);
 
