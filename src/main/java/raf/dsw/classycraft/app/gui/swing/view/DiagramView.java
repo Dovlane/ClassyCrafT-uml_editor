@@ -15,7 +15,7 @@ public class DiagramView extends JPanel implements IListener {
 
     private Diagram diagram;
     private List<ElementPainter> painters;
-    private List<InterclassPainter> selectionModel;
+    private List<ElementPainter> selectionModel;
     private LassoPainter lassoPainter;
     private boolean selectionFinished;
 
@@ -43,7 +43,7 @@ public class DiagramView extends JPanel implements IListener {
 
         // Stand out all selected ElementPainters
         if (selectionFinished) {
-            for (InterclassPainter painter: selectionModel) {
+            for (ElementPainter painter: selectionModel) {
                 painter.drawSelectionBox(graphics2D);
             }
         }
@@ -65,13 +65,13 @@ public class DiagramView extends JPanel implements IListener {
 
     public void updateSelectionModel(Point location) {
         for (ElementPainter painter: painters) {
-            if ((painter instanceof InterclassPainter) && (painter.elementAt(location))) {
-                addSelectedPainter((InterclassPainter) painter);
+            if (painter.elementAt(location)) {
+                addSelectedPainter(painter);
             }
         }
     }
 
-    public void addSelectedPainter(InterclassPainter painter) {
+    public void addSelectedPainter(ElementPainter painter) {
         if (!selectionModel.contains(painter)) {
             selectionModel.add(painter);
         }

@@ -50,6 +50,7 @@ public class InterclassPainter extends ElementPainter {
         graphics2D.drawRect((int)x, (int)y, (int)boxWidth, (int)boxHeight);
     }
 
+    @Override
     public void drawSelectionBox(Graphics2D graphics2D) {
         graphics2D.setColor(new Color(255, 0, 0));
         graphics2D.drawRect((int) getX(), (int) getY(), (int) getBoxWidth(), (int) getBoxHeight());

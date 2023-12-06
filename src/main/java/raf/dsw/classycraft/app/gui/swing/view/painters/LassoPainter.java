@@ -23,6 +23,11 @@ public class LassoPainter extends ElementPainter {
     }
 
     @Override
+    public void drawSelectionBox(Graphics2D graphics2D) {
+
+    }
+
+    @Override
     public boolean elementAt(Point location) {
         return false;
     }
