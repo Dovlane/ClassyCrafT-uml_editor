@@ -29,7 +29,6 @@ public class InterclassPainter extends ElementPainter {
     protected static int padding = 5;
     protected float yBelowInterclassName;
 
-
     public InterclassPainter(Interclass diagramElement) {
         super(diagramElement);
     }
@@ -87,7 +86,7 @@ public class InterclassPainter extends ElementPainter {
     private float interclassNameWidth(Graphics2D graphics2D) {
         Font lastFont = graphics2D.getFont();
         graphics2D.setFont(interclassNameFont);
-        float interclassNameWidth = (float) graphics2D.getFont().getStringBounds(getInterclasElement().getName(), graphics2D.getFontRenderContext()).getWidth();
+        float interclassNameWidth = (float) graphics2D.getFont().getStringBounds(getInterclassElement().getName(), graphics2D.getFontRenderContext()).getWidth();
         graphics2D.setFont(lastFont);
         return interclassNameWidth;
     }
@@ -147,7 +146,12 @@ public class InterclassPainter extends ElementPainter {
 
     @Override
     public boolean elementAt(Point location) {
-        return false;
+        Point upperLeft = ((Interclass) diagramElement).getLocation();
+        boolean insideX = ((upperLeft.x <= location.x) &&
+                            (location.x <= upperLeft.x + getBoxWidth()));
+        boolean insideY = ((upperLeft.y <= location.y) &&
+                            (location.y <= upperLeft.y + getBoxHeight()));
+        return (insideX && insideY);
     }
 
     protected double getX() {
@@ -158,7 +162,7 @@ public class InterclassPainter extends ElementPainter {
         return ((Interclass) diagramElement).getLocation().getY();
     }
 
-    private Interclass getInterclasElement() { return (Interclass) diagramElement; }
+    private Interclass getInterclassElement() { return (Interclass) diagramElement; }
 
     protected void setBoxWidth(double newBoxWidth) { ((Interclass) diagramElement).setBoxWidth((int)newBoxWidth); }
 
