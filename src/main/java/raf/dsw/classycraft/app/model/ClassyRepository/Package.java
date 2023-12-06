@@ -68,7 +68,6 @@ public class Package extends ClassyNodeComposite implements IPublisher {
         // list which is at the same time the only listener.
 
         listeners.get(0).update(notification);
-        System.out.println("The Number of listeners of this package is " + listeners.size());
     }
 
     public static Package getDefaultPackage() {

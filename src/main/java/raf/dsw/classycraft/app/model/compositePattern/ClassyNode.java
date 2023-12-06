@@ -6,6 +6,7 @@ import raf.dsw.classycraft.app.model.ClassyRepository.Package;
 import raf.dsw.classycraft.app.model.ClassyRepository.Project;
 import raf.dsw.classycraft.app.model.ClassyRepository.ProjectExplorer;
 import raf.dsw.classycraft.app.model.MessageGenerator.MessageType;
+import raf.dsw.classycraft.app.model.elements.DiagramElement;
 
 public abstract class ClassyNode {
 
@@ -38,17 +39,16 @@ public abstract class ClassyNode {
         ClassyNodeComposite parent = (ClassyNodeComposite) getParent();
         if (parent != null) {
 
+            if (this instanceof Diagram) {
+                Package.getDisplayedPackage().notifyAllSubscribers(this);
+            }
+
+            if (this instanceof DiagramElement) {
+                ((Diagram) parent).notifyAllSubscribers(this);
+            }
+
             // Remove the unwanted item
             parent.removeAt(this);
-
-            // If the diagram within the currently displayed package
-            // is removed, it should notify the PackageView about it.
-            if (parent == Package.getDisplayedPackage()) {
-
-                // null is equivalent to updatePackageView
-                Package.getDisplayedPackage().notifyAllSubscribers(null);
-
-            }
         }
     }
 
@@ -61,8 +61,8 @@ public abstract class ClassyNode {
     }
 
     public String getAbsolutePath() {
-        if (this instanceof ProjectExplorer) {
-            return "ProjectExplorer";
+        if (getParent() == null) {
+            return getName();
         }
         return getParent().getAbsolutePath() + "/" + getName();
     }

@@ -2,8 +2,8 @@ package raf.dsw.classycraft.app.gui.swing.view;
 
 import raf.dsw.classycraft.app.gui.swing.view.painters.ElementPainter;
 import raf.dsw.classycraft.app.gui.swing.view.painters.LassoPainter;
-import raf.dsw.classycraft.app.gui.swing.view.painters.interclassPainters.InterclassPainter;
 import raf.dsw.classycraft.app.model.ClassyRepository.Diagram;
+import raf.dsw.classycraft.app.model.elements.DiagramElement;
 import raf.dsw.classycraft.app.model.observerPattern.IListener;
 
 import javax.swing.*;
@@ -28,6 +28,11 @@ public class DiagramView extends JPanel implements IListener {
 
     @Override
     public void update(Object notification) {
+
+        if (notification instanceof DiagramElement) {
+            // TODO: remove element painter or a group of selected painters
+        }
+
         repaint();
     }
 

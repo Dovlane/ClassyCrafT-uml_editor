@@ -53,10 +53,10 @@ public class PackageView extends JSplitPane implements IListener {
         drawingPane.setResizeWeight(0.95);
         add(drawingPane);
 
-        setCurrentPackage(Package.getDisplayedPackage());
-
         diagramViewList = new ArrayList<>();
         stateManager = new StateManager();
+
+        setCurrentPackage(Package.getDisplayedPackage());
     }
 
     private void addButton(JToolBar toolBar, String toolText, boolean startSelected) {
@@ -153,11 +153,8 @@ public class PackageView extends JSplitPane implements IListener {
     @Override
     public void update(Object notification) {
 
-        // If null is passed it means that only the update
-        // on the existing package should happen
-        if (notification == null) {
-            updatePackageView();
-            return;
+        if (notification instanceof Diagram) {
+            removeDiagramView((Diagram) notification);
         }
 
         // If Package is passed it means that the displayed
@@ -166,6 +163,8 @@ public class PackageView extends JSplitPane implements IListener {
             currentPackage.removeListener(this);
             setCurrentPackage((Package) notification);
         }
+
+        updatePackageView();
     }
 
     public void setCurrentPackage(Package newPackage) {
@@ -176,6 +175,7 @@ public class PackageView extends JSplitPane implements IListener {
 
     private void updatePackageView() {
 
+        System.out.println("Number of diagramViews " + diagramViewList.size());
         if (currentPackage == Package.getDefaultPackage()) {
             setDefaultRightPanel();
             return;
@@ -193,7 +193,7 @@ public class PackageView extends JSplitPane implements IListener {
         tabbedPane.removeAll();
         for (DiagramView diagramView: diagramViewList) {
             Diagram diagram = diagramView.getDiagram();
-            if (currentPackage == diagram.getParent()) {
+            if (currentPackage.equals(diagram.getParent())) {
                 tabbedPane.addTab(diagram.getName(), diagramView);
             }
         }
@@ -234,6 +234,15 @@ public class PackageView extends JSplitPane implements IListener {
     public void addDiagramView(Diagram diagram) {
         DiagramView diagramView = new DiagramView(diagram);
         diagramViewList.add(diagramView);
+    }
+
+    public void removeDiagramView(Diagram diagram) {
+        for (int i = 0; i < diagramViewList.size(); i++) {
+            if (diagramViewList.get(i).getDiagram().equals(diagram)) {
+                diagramViewList.remove(i);
+                break;
+            }
+        }
     }
 
     public List<DiagramView> getDiagramViewList() {
