@@ -29,8 +29,9 @@ public class DiagramView extends JPanel implements IListener {
     @Override
     public void update(Object notification) {
 
+        // Remove selected painter
         if (notification instanceof DiagramElement) {
-            // TODO: remove element painter or a group of selected painters
+            removePainter((DiagramElement) notification);
         }
 
         repaint();
@@ -68,6 +69,16 @@ public class DiagramView extends JPanel implements IListener {
         }
     }
 
+    public void removePainter(DiagramElement diagramElement) {
+        for (int i = 0; i < painters.size(); i++) {
+            if (painters.get(i).getDiagramElement().equals(diagramElement)) {
+                ElementPainter painter = painters.get(i);
+                painters.remove(painter);
+                selectionModel.remove(painter);
+            }
+        }
+    }
+
     public void updateSelectionModel(Point location) {
         for (ElementPainter painter: painters) {
             if (painter.elementAt(location)) {
@@ -101,6 +112,14 @@ public class DiagramView extends JPanel implements IListener {
 
     public Diagram getDiagram() {
         return diagram;
+    }
+
+    public List<ElementPainter> getPainters() {
+        return painters;
+    }
+
+    public List<ElementPainter> getSelectionModel() {
+        return selectionModel;
     }
 
 }

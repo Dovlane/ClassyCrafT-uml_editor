@@ -65,10 +65,6 @@ public class ClassyTree implements IClassyTree {
                 Package.getDisplayedPackage().notifyAllSubscribers(child);
             }
 
-            if (child instanceof DiagramElement) {
-                ((Diagram) child.getParent()).notifyAllSubscribers(child);
-            }
-
             // It should be added first to model because
             // JTree does not override equal by value.
             // Instead, it uses default equal implementation.
