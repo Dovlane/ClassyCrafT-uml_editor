@@ -16,7 +16,7 @@ public class Diagram extends ClassyNodeComposite implements IPublisher {
 
     public Diagram(String name, ClassyNode parent) {
         super(name, parent);
-        ApplicationFramework.getInstance().getClassyRepository().addDiagramView(this);
+        ApplicationFramework.getInstance().getClassyRepository().getPackageView().addDiagramView(this);
 
         // If the diagram within the currently displayed package
         // is added, it should notify the PackageView about it.

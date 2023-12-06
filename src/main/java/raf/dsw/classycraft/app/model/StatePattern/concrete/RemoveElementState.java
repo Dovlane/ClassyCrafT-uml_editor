@@ -10,7 +10,7 @@ public class RemoveElementState implements State {
     @Override
     public void mousePressed(Point location, DiagramView diagramView) {
         System.out.println("Removing Element!");
-        diagramView.removePainters(location);
+        // diagramView.removePainters(location);
     }
 
     @Override

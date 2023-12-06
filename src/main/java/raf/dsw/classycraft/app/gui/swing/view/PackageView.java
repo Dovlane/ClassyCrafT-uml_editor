@@ -1,6 +1,5 @@
 package raf.dsw.classycraft.app.gui.swing.view;
 
-import raf.dsw.classycraft.app.core.ApplicationFramework;
 import raf.dsw.classycraft.app.model.ClassyRepository.Diagram;
 import raf.dsw.classycraft.app.model.ClassyRepository.Package;
 import raf.dsw.classycraft.app.model.ClassyRepository.Project;
@@ -12,10 +11,13 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PackageView extends JSplitPane implements IListener {
 
     private Package currentPackage;
+    private final List<DiagramView> diagramViewList;
     private final StateManager stateManager;
     private final Label labelProjectName;
     private final Label labelAuthorName;
@@ -53,6 +55,7 @@ public class PackageView extends JSplitPane implements IListener {
 
         setCurrentPackage(Package.getDisplayedPackage());
 
+        diagramViewList = new ArrayList<>();
         stateManager = new StateManager();
     }
 
@@ -188,7 +191,7 @@ public class PackageView extends JSplitPane implements IListener {
         // Refresh
         setPackageMetadata();
         tabbedPane.removeAll();
-        for (DiagramView diagramView: ApplicationFramework.getInstance().getClassyRepository().getDiagramViewList()) {
+        for (DiagramView diagramView: diagramViewList) {
             Diagram diagram = diagramView.getDiagram();
             if (currentPackage == diagram.getParent()) {
                 tabbedPane.addTab(diagram.getName(), diagramView);
@@ -226,6 +229,15 @@ public class PackageView extends JSplitPane implements IListener {
         labelProjectName.setText("Project name");
         labelAuthorName.setText("Author name");
         tabbedPane.removeAll();
+    }
+
+    public void addDiagramView(Diagram diagram) {
+        DiagramView diagramView = new DiagramView(diagram);
+        diagramViewList.add(diagramView);
+    }
+
+    public List<DiagramView> getDiagramViewList() {
+        return diagramViewList;
     }
 
 }

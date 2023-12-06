@@ -28,31 +28,31 @@ public class ClassyTree implements IClassyTree {
     }
 
     @Override
-    public void addChild(ClassyTreeItem parent, ClassyNodeType type) {
+    public boolean addChild(ClassyTreeItem parent, ClassyNodeType type) {
 
         if (parent == null) {
             MainFrame.getInstance().getMessageGenerator().generateMessage(
                     "Parent Node must be selected.", MessageType.ERROR);
-            return;
+            return false;
         }
 
         if (parent.getClassyNode() instanceof ClassyNodeLeaf) {
             MainFrame.getInstance().getMessageGenerator().generateMessage(
                     "Leaf Node cannot contain any other node.", MessageType.ERROR);
-            return;
+            return false;
         }
 
         ClassyNode child = createChild(parent.getClassyNode(), type);
-        attachChild(parent, child);
+        return attachChild(parent, child);
     }
 
     @Override
-    public void attachChild(ClassyTreeItem parent, ClassyNode child) {
+    public boolean attachChild(ClassyTreeItem parent, ClassyNode child) {
 
         if (parent == null) {
             MainFrame.getInstance().getMessageGenerator().generateMessage(
                     "Parent Node must be selected.", MessageType.ERROR);
-            return;
+            return false;
         }
 
         // Add child to both Model and JTree
@@ -68,7 +68,7 @@ public class ClassyTree implements IClassyTree {
             treeView.expandPath(new TreePath(parent.getPath()));
             SwingUtilities.updateComponentTreeUI(treeView);
         }
-
+        return success;
     }
 
     @Override

@@ -9,8 +9,8 @@ import raf.dsw.classycraft.app.model.compositePattern.ClassyNode;
 public interface IClassyTree {
 
     ClassyTreeView generateTree(ProjectExplorer projectExplorer);
-    void addChild(ClassyTreeItem parent, ClassyNodeType type);
-    void attachChild(ClassyTreeItem parent, ClassyNode child);
+    boolean addChild(ClassyTreeItem parent, ClassyNodeType type);
+    boolean attachChild(ClassyTreeItem parent, ClassyNode child);
     void removeItem(ClassyTreeItem item);
     void renameItem(ClassyTreeItem item);
     ClassyTreeItem getSelectedNode();
