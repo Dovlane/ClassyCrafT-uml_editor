@@ -2,6 +2,7 @@ package raf.dsw.classycraft.app.gui.swing.view;
 
 import raf.dsw.classycraft.app.gui.swing.view.painters.ElementPainter;
 import raf.dsw.classycraft.app.gui.swing.view.painters.LassoPainter;
+import raf.dsw.classycraft.app.gui.swing.view.painters.interclassPainters.InterclassPainter;
 import raf.dsw.classycraft.app.model.ClassyRepository.Diagram;
 import raf.dsw.classycraft.app.model.observerPattern.IListener;
 
@@ -14,7 +15,7 @@ public class DiagramView extends JPanel implements IListener {
 
     private Diagram diagram;
     private List<ElementPainter> painters;
-    private List<ElementPainter> selectionModel;
+    private List<InterclassPainter> selectionModel;
     private LassoPainter lassoPainter;
     private boolean selectionFinished;
 
@@ -41,10 +42,9 @@ public class DiagramView extends JPanel implements IListener {
         }
 
         // Stand out all selected ElementPainters
-        System.out.println("Selection Finished: " + selectionFinished);
         if (selectionFinished) {
-            for (ElementPainter painter: selectionModel) {
-                System.out.println(painter);
+            for (InterclassPainter painter: selectionModel) {
+                painter.drawSelectionBox(graphics2D);
             }
         }
 
@@ -65,13 +65,13 @@ public class DiagramView extends JPanel implements IListener {
 
     public void updateSelectionModel(Point location) {
         for (ElementPainter painter: painters) {
-            if (painter.elementAt(location)) {
-                addSelectedPainter(painter);
+            if ((painter instanceof InterclassPainter) && (painter.elementAt(location))) {
+                addSelectedPainter((InterclassPainter) painter);
             }
         }
     }
 
-    public void addSelectedPainter(ElementPainter painter) {
+    public void addSelectedPainter(InterclassPainter painter) {
         if (!selectionModel.contains(painter)) {
             selectionModel.add(painter);
         }

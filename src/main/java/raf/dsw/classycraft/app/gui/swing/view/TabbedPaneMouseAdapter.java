@@ -46,14 +46,14 @@ public class TabbedPaneMouseAdapter extends MouseAdapter {
         if (tabbedPaneIsEmpty(tabbedPane))
             return;
 
-        if (mouseEventInsideTab(tabbedPane, e)) {
+        Point location = getOptimalLocation(tabbedPane, e);
+        if (location != null) {
 
             if (mouseState == MouseState.MOUSE_DRAGGED) {
                 System.out.println("Mouse is not dragging anymore");
             }
 
             if (mouseState != MouseState.MOUSE_INACTIVE) {
-                Point location = getLocationOfMouseOnDiagramView(e);
                 ApplicationFramework.getInstance().getClassyRepository().getPackageView()
                         .mouseReleased(diagramViewSelected, location);
             }
@@ -70,6 +70,7 @@ public class TabbedPaneMouseAdapter extends MouseAdapter {
     @Override
     public void mouseDragged(MouseEvent e) {
         super.mouseDragged(e);
+        JTabbedPane tabbedPane = (JTabbedPane) e.getComponent();
 
         if (mouseState == MouseState.MOUSE_INACTIVE) {
             return;
@@ -83,31 +84,39 @@ public class TabbedPaneMouseAdapter extends MouseAdapter {
             System.out.println("Mouse is still dragging");
         }
 
-        Point currentLocation = getLocationOfMouseOnDiagramView(e);
+        Point currentLocation = getOptimalLocation(tabbedPane, e);
         ApplicationFramework.getInstance().getClassyRepository().getPackageView().
                 mouseDragged(diagramViewSelected, startLocation, currentLocation);
     }
 
 
     private Point getLocationOfMouseOnDiagramView(MouseEvent e) {
-        int xCoorOfMouseOnDiagramView = e.getX();
+        int xCoorOfMouseOnDiagramView = e.getX() - diagramViewSelected.getX();
         int yCoorOfMouseOnDiagramView = e.getY() - diagramViewSelected.getY();
         Point locationOfMouseOnDiagramView = new Point(xCoorOfMouseOnDiagramView, yCoorOfMouseOnDiagramView);
         return locationOfMouseOnDiagramView;
     }
 
     private boolean mouseEventInsideTab(JTabbedPane tabbedPane, MouseEvent e) {
-        if (tabbedPane.getTabCount() > 0){
-            double x = diagramViewSelected.getLocation().getX();
-            double y = diagramViewSelected.getLocation().getY();
+        if (tabbedPane.getTabCount() > 0) {
             Point location = getLocationOfMouseOnDiagramView(e);
-            double eX = location.getX();
-            double eY = location.getY() + y;
             double width = diagramViewSelected.getWidth();
             double height = diagramViewSelected.getHeight();
-            return (x < eX && y < eY && eX < x + width && eY < y + height);
+            return (0 < location.x && location.x < width && 0 < location.y && location.y < height);
         }
         return false;
+    }
+
+    private Point getOptimalLocation(JTabbedPane tabbedPane, MouseEvent e) {
+        if (tabbedPane.getTabCount() > 0) {
+            Point location = getLocationOfMouseOnDiagramView(e);
+            double width = diagramViewSelected.getWidth();
+            double height = diagramViewSelected.getHeight();
+            location.x = (int) Math.min(Math.max(1, location.x), width - 1);
+            location.y = (int) Math.min(Math.max(1, location.y), height - 1);
+            return location;
+        }
+        return null;
     }
 
     private boolean tabbedPaneIsEmpty(JTabbedPane tabbedPane){

@@ -7,7 +7,7 @@ import javax.swing.*;
 import java.net.URL;
 import java.util.ArrayList;
 
-public abstract class AbstractClassyAction extends AbstractAction{
+public abstract class AbstractClassyAction extends AbstractAction {
 
 
     public Icon loadIcon(String fileName){

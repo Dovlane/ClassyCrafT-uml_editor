@@ -50,6 +50,11 @@ public class InterclassPainter extends ElementPainter {
         graphics2D.drawRect((int)x, (int)y, (int)boxWidth, (int)boxHeight);
     }
 
+    public void drawSelectionBox(Graphics2D graphics2D) {
+        graphics2D.setColor(new Color(255, 0, 0));
+        graphics2D.drawRect((int) getX(), (int) getY(), (int) getBoxWidth(), (int) getBoxHeight());
+    }
+
     protected void drawInterclassName(Graphics2D graphics2D, float x, float y){
         float boxWidth = (float)getBoxWidth();
         String interclassName = ((Interclass)diagramElement).getName();
