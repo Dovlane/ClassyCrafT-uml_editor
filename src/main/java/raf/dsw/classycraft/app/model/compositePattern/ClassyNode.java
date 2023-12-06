@@ -4,6 +4,7 @@ import raf.dsw.classycraft.app.gui.swing.view.MainFrame;
 import raf.dsw.classycraft.app.model.ClassyRepository.Diagram;
 import raf.dsw.classycraft.app.model.ClassyRepository.Package;
 import raf.dsw.classycraft.app.model.ClassyRepository.Project;
+import raf.dsw.classycraft.app.model.ClassyRepository.ProjectExplorer;
 import raf.dsw.classycraft.app.model.MessageGenerator.MessageType;
 
 public abstract class ClassyNode {
@@ -54,9 +55,16 @@ public abstract class ClassyNode {
     @Override
     public boolean equals(Object object) {
         if (object instanceof ClassyNode) {
-            return getName().equals(((ClassyNode) object).getName());
+            return getAbsolutePath().equals(((ClassyNode) object).getAbsolutePath());
         }
         return false;
+    }
+
+    public String getAbsolutePath() {
+        if (this instanceof ProjectExplorer) {
+            return "ProjectExplorer";
+        }
+        return getParent().getAbsolutePath() + "/" + getName();
     }
 
     public String getName() {
