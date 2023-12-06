@@ -1,7 +1,7 @@
 package raf.dsw.classycraft.app.gui.swing.view;
 
 import raf.dsw.classycraft.app.gui.swing.view.painters.ElementPainter;
-import raf.dsw.classycraft.app.gui.swing.view.painters.Lasso;
+import raf.dsw.classycraft.app.gui.swing.view.painters.LassoPainter;
 import raf.dsw.classycraft.app.model.ClassyRepository.Diagram;
 import raf.dsw.classycraft.app.model.observerPattern.IListener;
 
@@ -15,7 +15,7 @@ public class DiagramView extends JPanel implements IListener {
     private Diagram diagram;
     private List<ElementPainter> painters;
     private List<ElementPainter> selectionModel;
-    private Lasso lasso;
+    private LassoPainter lassoPainter;
     private boolean selectionFinished;
 
     public DiagramView(Diagram diagram){
@@ -43,13 +43,15 @@ public class DiagramView extends JPanel implements IListener {
         // Stand out all selected ElementPainters
         System.out.println("Selection Finished: " + selectionFinished);
         if (selectionFinished) {
-            ;
+            for (ElementPainter painter: selectionModel) {
+                System.out.println(painter);
+            }
         }
 
         // Display lasso if it is necessary
-        if (lasso != null) {
+        if (lassoPainter != null) {
             // TODO: erase eX and eY once it is possible
-            lasso.draw(graphics2D, -1, -1);
+            lassoPainter.draw(graphics2D, -1, -1);
         }
 
         // Debug Info
@@ -59,6 +61,14 @@ public class DiagramView extends JPanel implements IListener {
     public void addPainter(ElementPainter painter) {
         if (!painters.contains(painter)) {
             painters.add(painter);
+        }
+    }
+
+    public void updateSelectionModel(Point location) {
+        for (ElementPainter painter: painters) {
+            if (painter.elementAt(location)) {
+                addSelectedPainter(painter);
+            }
         }
     }
 
@@ -76,8 +86,8 @@ public class DiagramView extends JPanel implements IListener {
 
 
     // Getters and setters
-    public void setLasso(Lasso lasso) {
-        this.lasso = lasso;
+    public void setLasso(LassoPainter lassoPainter) {
+        this.lassoPainter = lassoPainter;
         repaint();
     }
 

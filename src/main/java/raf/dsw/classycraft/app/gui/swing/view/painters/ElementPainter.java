@@ -17,6 +17,6 @@ public abstract class ElementPainter {
 
     public abstract void draw(Graphics2D graphics2D, int eX, int eY);
 
-    public abstract boolean elementAt(int eX, int eY);
+    public abstract boolean elementAt(Point location);
 
 }

@@ -2,12 +2,12 @@ package raf.dsw.classycraft.app.gui.swing.view.painters;
 
 import java.awt.*;
 
-public class Lasso extends ElementPainter {
+public class LassoPainter extends ElementPainter {
 
     private Point upperLeft;
     private Point bottomRight;
 
-    public Lasso(Point first, Point second) {
+    public LassoPainter(Point first, Point second) {
         super(null);
         setCorners(first, second);
     }
@@ -23,7 +23,7 @@ public class Lasso extends ElementPainter {
     }
 
     @Override
-    public boolean elementAt(int eX, int eY) {
+    public boolean elementAt(Point location) {
         return false;
     }
 

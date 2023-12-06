@@ -11,6 +11,7 @@ public class InterclassPainter extends ElementPainter {
 
     protected int x, y;
     protected int boxWidth, boxHeight;
+
     public InterclassPainter(Interclass diagramElement) {
         super(diagramElement);
     }
@@ -52,7 +53,12 @@ public class InterclassPainter extends ElementPainter {
     }
 
     @Override
-    public boolean elementAt(int eX, int eY) {
-        return false;
+    public boolean elementAt(Point location) {
+        Point upperLeft = ((Interclass) diagramElement).getLocation();
+        boolean insideX = ((upperLeft.x <= location.x) &&
+                            (location.x <= upperLeft.x + boxWidth));
+        boolean insideY = ((upperLeft.y <= location.y) &&
+                            (location.y <= upperLeft.y + boxHeight));
+        return (insideX && insideY);
     }
 }
