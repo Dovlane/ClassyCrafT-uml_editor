@@ -1,51 +1,25 @@
 package raf.dsw.classycraft.app.model.StatePattern.concrete;
 
+import raf.dsw.classycraft.app.gui.swing.view.DiagramView;
 import raf.dsw.classycraft.app.model.StatePattern.State;
+
+import java.awt.*;
 
 public class AddConnectionState implements State {
 
-    // Methods for other states
     @Override
-    public void addClassElement() { }
-
-    @Override
-    public void addInterfaceElement() { }
-
-    @Override
-    public void addEnumElement() { }
-
-    // Methods for AddConnectionState
-    @Override
-    public void addAggregation() {
-        System.out.println("Added a new aggregation on a Diagram!");
+    public void mousePressed(Point location, DiagramView diagramView) {
+        System.out.println("Adding Connection!");
     }
 
     @Override
-    public void addComposition() {
+    public void mouseReleased(Point location, DiagramView diagramView) {
 
     }
 
     @Override
-    public void addDependency() {
+    public void mouseDragged(Point startLocation, Point currentLocation, DiagramView diagramView) {
 
     }
-
-    @Override
-    public void addGeneralization() {
-
-    }
-
-    // Methods for other states
-    @Override
-    public void addMethod() { }
-
-    @Override
-    public void addAttribute() { }
-
-    @Override
-    public void removeElement() { }
-
-    @Override
-    public void selectElement() { }
 
 }

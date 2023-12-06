@@ -4,74 +4,127 @@ import raf.dsw.classycraft.app.core.ApplicationFramework;
 import raf.dsw.classycraft.app.model.ClassyRepository.Diagram;
 import raf.dsw.classycraft.app.model.ClassyRepository.Package;
 import raf.dsw.classycraft.app.model.ClassyRepository.Project;
+import raf.dsw.classycraft.app.model.MessageGenerator.MessageType;
 import raf.dsw.classycraft.app.model.StatePattern.StateManager;
 import raf.dsw.classycraft.app.model.observerPattern.IListener;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 
 public class PackageView extends JSplitPane implements IListener {
 
     private Package currentPackage;
-    private Label labelProjectName;
-    private Label labelAuthorName;
-    private JTabbedPane tabbedPane;
-    private StateManager stateManager;
+    private final StateManager stateManager;
+    private final Label labelProjectName;
+    private final Label labelAuthorName;
+    private final JTabbedPane tabbedPane;
+    private static JToggleButton selectedButton;
 
     public PackageView() {
         super(JSplitPane.VERTICAL_SPLIT);
 
+        // Project Name and Project Author labels
         labelProjectName = new Label();
         labelAuthorName = new Label();
+        JSplitPane labelPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, labelProjectName, labelAuthorName);
+        add(labelPane);
 
+        // TabbedPane
         tabbedPane = new JTabbedPane();
         TabbedPaneMouseAdapter tabbedPaneMouseAdapter = new TabbedPaneMouseAdapter();
         tabbedPane.addMouseListener(tabbedPaneMouseAdapter);
         tabbedPane.addMouseMotionListener(tabbedPaneMouseAdapter);
 
-        JSplitPane labelPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, labelProjectName, labelAuthorName);
-        add(labelPane);
-        add(tabbedPane);
+        // Toolbar
+        JToolBar toolBar = new JToolBar(JToolBar.VERTICAL);
+        toolBar.setLayout(new GridLayout(0, 1));
+        addButton(toolBar, "AI", true);
+        addButton(toolBar, "AC", false);
+        addButton(toolBar, "ACC", false);
+        addButton(toolBar, "R", false);
+        addButton(toolBar, "S", false);
+
+        // Merge TabbedPane and ToolBar
+        JSplitPane drawingPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, tabbedPane, toolBar);
+        drawingPane.setResizeWeight(0.95);
+        add(drawingPane);
 
         setCurrentPackage(Package.getDisplayedPackage());
 
         stateManager = new StateManager();
     }
 
+    private void addButton(JToolBar toolBar, String toolText, boolean startSelected) {
+        JToggleButton button = new JToggleButton(toolText);
+        button.setFocusPainted(false); // Remove focus border
+        button.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                if (button.isSelected()) {
+
+                    // If another button was selected, unselect it
+                    if (selectedButton != null && !button.equals(selectedButton)) {
+
+                        // Release the previous state
+                        selectedButton.setSelected(false);
+                        selectedButton.setBorder(BorderFactory.createEmptyBorder());
+
+                        // Change the state of application
+                        String buttonName = button.getText();
+                        switch (buttonName) {
+                            case "AI" -> startAddInterclassState();
+                            case "AC" -> startAddConnectionState();
+                            case "ACC" -> startAddClassContentState();
+                            case "R" -> startRemoveElementState();
+                            case "S" -> startSelectElementState();
+                            default -> MainFrame.getInstance().getMessageGenerator().generateMessage(
+                                    "Something is wrong with the names of the buttons and the states.", MessageType.ERROR);
+                        }
+                    }
+
+                    // Update the reference to the selected button
+                    button.setBorder(BorderFactory.createRaisedBevelBorder());
+                    selectedButton = button;
+                }
+            }
+        });
+
+        // Set the initial selected state
+        button.setBorder(BorderFactory.createEmptyBorder());
+        if (startSelected) {
+            button.setBorder(BorderFactory.createRaisedBevelBorder());
+            selectedButton = button; // Update the reference to the selected button
+        }
+        toolBar.add(button);
+    }
+
 
     // PERFORM ALL STATE ACTIONS
-    public void addClassElement() {
-        stateManager.getCurrentState().addClassElement();
+    public void mousePressed(DiagramView diagramView, Point location) {
+        System.out.println("PackageView - mousePressed:");
+        System.out.println("\tDiagramView pressed: " + diagramView);
+        System.out.println("\tmousePressed location: " + location);
+
+        stateManager.getCurrentState().mousePressed(location, diagramView);
     }
-    public void addInterfaceElement() {
-        stateManager.getCurrentState().addInterfaceElement();
+
+    public void mouseReleased(DiagramView diagramView, Point location) {
+        System.out.println("PackageView - mouseReleased:");
+        System.out.println("\tDiagramView released: " + diagramView);
+        System.out.println("\tmouseReleased location: " + location);
+
+        stateManager.getCurrentState().mouseReleased(location, diagramView);
     }
-    public void addEnumElement() {
-        stateManager.getCurrentState().addEnumElement();
-    }
-    public void addAggregation() {
-        stateManager.getCurrentState().addAggregation();
-    }
-    public void addComposition() {
-        stateManager.getCurrentState().addComposition();
-    }
-    public void addDependency() {
-        stateManager.getCurrentState().addDependency();
-    }
-    public void addGeneralization() {
-        stateManager.getCurrentState().addGeneralization();
-    }
-    public void addMethod() {
-        stateManager.getCurrentState().addMethod();
-    }
-    public void addAttribute() {
-        stateManager.getCurrentState().addAttribute();
-    }
-    public void removeElement() {
-        stateManager.getCurrentState().removeElement();
-    }
-    public void selectElement() {
-        stateManager.getCurrentState().selectElement();
+
+    public void mouseDragged(DiagramView diagramView, Point startLocation, Point currentLocation) {
+        System.out.println("PackageView - mouseDragged:");
+        System.out.println("\tDiagramView dragged: " + diagramView);
+        System.out.println("\tmouseDragged startLocation: " + startLocation);
+        System.out.println("\tmouseDragged currentLocation: " + currentLocation);
+
+        stateManager.getCurrentState().mouseDragged(startLocation, currentLocation, diagramView);
     }
 
 
@@ -93,6 +146,7 @@ public class PackageView extends JSplitPane implements IListener {
     }
 
 
+    // RIGHT PANEL
     @Override
     public void update(Object notification) {
 
@@ -174,21 +228,4 @@ public class PackageView extends JSplitPane implements IListener {
         tabbedPane.removeAll();
     }
 
-    public void mousePressed(DiagramView diagramView, Point location) {
-        System.out.println("PackageView - mousePressed:");
-        System.out.println("\tDiagramView pressed: " + diagramView);
-        System.out.println("\tmousePressed location: " + location);
-    }
-
-    public void mouseDragged(DiagramView diagramView, Point location) {
-        System.out.println("PackageView - mouseDragged:");
-        System.out.println("\tDiagramView dragged: " + diagramView);
-        System.out.println("\tmouseDragged location: " + location);
-    }
-
-    public void mouseReleased(DiagramView diagramView, Point location) {
-        System.out.println("PackageView - mouseReleased:");
-        System.out.println("\tDiagramView released: " + diagramView);
-        System.out.println("\tmouseReleased location: " + location);
-    }
 }

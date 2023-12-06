@@ -1,5 +1,6 @@
 package raf.dsw.classycraft.app.gui.swing.controller;
 
+import raf.dsw.classycraft.app.core.ApplicationFramework;
 import raf.dsw.classycraft.app.gui.swing.tree.model.ClassyTreeItem;
 import raf.dsw.classycraft.app.gui.swing.view.MainFrame;
 
@@ -18,6 +19,7 @@ public class RemoveItemAction extends AbstractClassyAction {
     public void actionPerformed(ActionEvent e) {
         ClassyTreeItem selectedNode = MainFrame.getInstance().getClassyTree().getSelectedNode();
         MainFrame.getInstance().getClassyTree().removeItem(selectedNode);
+        ApplicationFramework.getInstance().getClassyRepository().printTree();
         System.out.println("RemoveItemAction has been performed.");
     }
 

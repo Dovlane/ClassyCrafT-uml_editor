@@ -20,7 +20,8 @@ public class ClassyNodeFactory {
                 MainFrame.getInstance().getMessageGenerator().generateMessage(
                         "ProjectExplorer can only contain Projects.", MessageType.ERROR);
             }
-        } else if (parent instanceof Project) {
+        }
+        else if (parent instanceof Project) {
             if (type == ClassyNodeType.PACKAGE) {
                 ((Project) parent).increaseCounter();
                 String newPackageName = "Package" + ((Project) parent).getNmbOfCreatedPackages();
@@ -33,7 +34,8 @@ public class ClassyNodeFactory {
                 MainFrame.getInstance().getMessageGenerator().generateMessage(
                         "Project can only contain Packages.", MessageType.ERROR);
             }
-        } else if (parent instanceof Package) {
+        }
+        else if (parent instanceof Package) {
             if (type == ClassyNodeType.PACKAGE){
                 ((Package) parent).increasePackageCounter();
                 String newPackageName = "Package" + ((Package) parent).getNmbOfCreatedPackages();
@@ -54,6 +56,10 @@ public class ClassyNodeFactory {
                 MainFrame.getInstance().getMessageGenerator().generateMessage(
                         "Package can only contain Diagrams and other Packages.", MessageType.ERROR);
             }
+        }
+        else if (parent instanceof Diagram) {
+            MainFrame.getInstance().getMessageGenerator().generateMessage(
+                    "Diagram can only contain Diagram Elements.", MessageType.ERROR);
         }
         return null;
     }

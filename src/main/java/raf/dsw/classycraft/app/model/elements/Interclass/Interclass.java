@@ -1,8 +1,6 @@
 package raf.dsw.classycraft.app.model.elements.Interclass;
 
-import raf.dsw.classycraft.app.gui.swing.view.DiagramView;
 import raf.dsw.classycraft.app.model.ClassyRepository.Diagram;
-import raf.dsw.classycraft.app.model.compositePattern.ClassyNode;
 import raf.dsw.classycraft.app.model.elements.Modifiers.AccessModifiers;
 import raf.dsw.classycraft.app.model.elements.DiagramElement;
 
@@ -11,9 +9,10 @@ import java.awt.*;
 public abstract class Interclass extends DiagramElement {
 
     protected AccessModifiers visibility;
-    protected Point point;
+    protected Point location;
     protected int boxWidth;
     protected int boxHeight;
+
 
     public Interclass(String name, Diagram parent) {
         super(name, parent);
@@ -24,7 +23,7 @@ public abstract class Interclass extends DiagramElement {
         this.visibility = visibility;
         this.boxWidth = 200;
         this.boxHeight = 100;
-        this.point = point;
+        this.location = point;
     }
 
 
@@ -37,12 +36,12 @@ public abstract class Interclass extends DiagramElement {
         this.visibility = visibility;
     }
 
-    public Point getPoint() {
-        return point;
+    public Point getLocation() {
+        return location;
     }
 
-    public void setPoint(Point point) {
-        this.point = point;
+    public void setLocation(Point location) {
+        this.location = location;
     }
 
     public int getBoxWidth() {
@@ -60,4 +59,5 @@ public abstract class Interclass extends DiagramElement {
     public void setBoxHeight(int boxHeight) {
         this.boxHeight = boxHeight;
     }
+
 }

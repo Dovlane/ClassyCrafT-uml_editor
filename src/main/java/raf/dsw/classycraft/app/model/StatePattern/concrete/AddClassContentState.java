@@ -1,47 +1,25 @@
 package raf.dsw.classycraft.app.model.StatePattern.concrete;
 
+import raf.dsw.classycraft.app.gui.swing.view.DiagramView;
 import raf.dsw.classycraft.app.model.StatePattern.State;
+
+import java.awt.*;
 
 public class AddClassContentState implements State {
 
-    // Methods for other states
     @Override
-    public void addClassElement() { }
+    public void mousePressed(Point location, DiagramView diagramView) {
+        System.out.println("Adding Class Content!");
+    }
 
     @Override
-    public void addInterfaceElement() { }
-
-    @Override
-    public void addEnumElement() { }
-
-    @Override
-    public void addAggregation() { }
-
-    @Override
-    public void addComposition() { }
-
-    @Override
-    public void addDependency() { }
-
-    @Override
-    public void addGeneralization() { }
-
-    // Methods for AddClassContentState
-    @Override
-    public void addMethod() {
+    public void mouseReleased(Point location, DiagramView diagramView) {
 
     }
 
     @Override
-    public void addAttribute() {
+    public void mouseDragged(Point startLocation, Point currentLocation, DiagramView diagramView) {
 
     }
-
-    // Methods for other states
-    @Override
-    public void removeElement() { }
-
-    @Override
-    public void selectElement() { }
 
 }

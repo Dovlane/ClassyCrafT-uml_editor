@@ -3,6 +3,7 @@ package raf.dsw.classycraft.app.model.ClassyRepository;
 import raf.dsw.classycraft.app.core.ApplicationFramework;
 import raf.dsw.classycraft.app.model.compositePattern.ClassyNode;
 import raf.dsw.classycraft.app.model.compositePattern.ClassyNodeComposite;
+import raf.dsw.classycraft.app.model.elements.DiagramElement;
 import raf.dsw.classycraft.app.model.observerPattern.IListener;
 import raf.dsw.classycraft.app.model.observerPattern.IPublisher;
 
@@ -18,7 +19,7 @@ public class Diagram extends ClassyNodeComposite implements IPublisher {
         ApplicationFramework.getInstance().getClassyRepository().addDiagramView(this);
 
         // If the diagram within the currently displayed package
-        // is removed, it should notify the PackageView about it.
+        // is added, it should notify the PackageView about it.
         if (parent == Package.getDisplayedPackage()) {
 
             // null is equivalent to updatePackageView
@@ -28,8 +29,15 @@ public class Diagram extends ClassyNodeComposite implements IPublisher {
     }
 
     @Override
-    public void addChild(ClassyNode child) {
-        ;
+    public boolean addChild(ClassyNode child) {
+        if (child instanceof DiagramElement) {
+            if (!getChildren().contains(child)) {
+                getChildren().add(child);
+                notifyAllSubscribers(null);
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override

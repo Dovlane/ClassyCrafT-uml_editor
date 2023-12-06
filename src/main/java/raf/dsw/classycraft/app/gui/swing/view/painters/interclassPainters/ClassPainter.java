@@ -3,6 +3,7 @@ package raf.dsw.classycraft.app.gui.swing.view.painters.interclassPainters;
 import raf.dsw.classycraft.app.model.elements.ClassContent.Attribute;
 import raf.dsw.classycraft.app.model.elements.ClassContent.ClassContent;
 import raf.dsw.classycraft.app.model.elements.ClassContent.Method;
+
 import raf.dsw.classycraft.app.model.elements.Interclass.ClassElement;
 import raf.dsw.classycraft.app.model.elements.Modifiers.NonAccessModifiers;
 
@@ -12,7 +13,9 @@ import java.awt.font.TextAttribute;
 import java.util.HashMap;
 import java.util.Map;
 
+
 public class ClassPainter extends InterclassPainter {
+
     public ClassPainter(ClassElement diagramElement) {
         super(diagramElement);
     }

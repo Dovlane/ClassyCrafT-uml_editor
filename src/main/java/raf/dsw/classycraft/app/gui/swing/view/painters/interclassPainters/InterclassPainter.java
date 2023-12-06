@@ -1,7 +1,6 @@
 package raf.dsw.classycraft.app.gui.swing.view.painters.interclassPainters;
 
 import raf.dsw.classycraft.app.gui.swing.view.painters.ElementPainter;
-import raf.dsw.classycraft.app.model.elements.ClassContent.ClassContent;
 import raf.dsw.classycraft.app.model.elements.Interclass.Interclass;
 
 import java.awt.*;
@@ -9,7 +8,6 @@ import java.util.*;
 import java.awt.font.FontRenderContext;
 import java.awt.font.LineMetrics;
 import java.awt.font.TextAttribute;
-import java.util.List;
 
 public class InterclassPainter extends ElementPainter {
 
@@ -153,11 +151,11 @@ public class InterclassPainter extends ElementPainter {
     }
 
     protected double getX() {
-        return ((Interclass) diagramElement).getPoint().getX();
+        return ((Interclass) diagramElement).getLocation().getX();
     }
 
     protected double getY() {
-        return ((Interclass) diagramElement).getPoint().getY();
+        return ((Interclass) diagramElement).getLocation().getY();
     }
 
     private Interclass getInterclasElement() { return (Interclass) diagramElement; }

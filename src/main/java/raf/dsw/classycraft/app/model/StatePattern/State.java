@@ -1,26 +1,13 @@
 package raf.dsw.classycraft.app.model.StatePattern;
 
+import raf.dsw.classycraft.app.gui.swing.view.DiagramView;
+
+import java.awt.*;
+
 public interface State {
 
-    // Methods for AddInterclassState
-    void addClassElement();
-    void addInterfaceElement();
-    void addEnumElement();
-
-    // Methods for AddConnectionState
-    void addAggregation();
-    void addComposition();
-    void addDependency();
-    void addGeneralization();
-
-    // Methods for AddClassContentState
-    void addMethod();
-    void addAttribute();
-
-    // Methods for RemoveElementState
-    void removeElement();
-
-    // Methods for SelectElementState
-    void selectElement();
+    void mousePressed(Point location, DiagramView diagramView);
+    void mouseReleased(Point location, DiagramView diagramView);
+    void mouseDragged(Point startLocation, Point currentLocation, DiagramView diagramView);
 
 }

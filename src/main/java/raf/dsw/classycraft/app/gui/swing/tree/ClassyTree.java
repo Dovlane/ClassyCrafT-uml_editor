@@ -11,16 +11,18 @@ import raf.dsw.classycraft.app.model.compositePattern.ClassyNodeLeaf;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreePath;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class ClassyTree implements IClassyTree {
 
+    private ClassyTreeItem root;
     private ClassyTreeView treeView;
 
     @Override
     public ClassyTreeView generateTree(ProjectExplorer projectExplorer) {
-        ClassyTreeItem root = new ClassyTreeItem(projectExplorer);
+        root = new ClassyTreeItem(projectExplorer);
         treeView = new ClassyTreeView(new DefaultTreeModel(root));
         return treeView;
     }
@@ -41,20 +43,32 @@ public class ClassyTree implements IClassyTree {
         }
 
         ClassyNode child = createChild(parent.getClassyNode(), type);
-        if (child != null) {
-
-            // Add child to both JTree and Model
-            parent.add(new ClassyTreeItem(child));
-            ((ClassyNodeComposite) parent.getClassyNode()).addChild(child);
-
-            // Refresh GUI
-            treeView.expandPath(treeView.getSelectionPath());
-            SwingUtilities.updateComponentTreeUI(treeView);
-        }
+        attachChild(parent, child);
     }
 
-    private ClassyNode createChild(ClassyNode parent, ClassyNodeType type) {
-        return ClassyNodeFactory.createClassyNode(parent, type);
+    @Override
+    public void attachChild(ClassyTreeItem parent, ClassyNode child) {
+
+        if (parent == null) {
+            MainFrame.getInstance().getMessageGenerator().generateMessage(
+                    "Parent Node must be selected.", MessageType.ERROR);
+            return;
+        }
+
+        // Add child to both Model and JTree
+        boolean success = ((ClassyNodeComposite) parent.getClassyNode()).addChild(child);
+        if (success) {
+
+            // It should be added first to model because
+            // JTree does not override equal by value.
+            // Instead, it uses default equal implementation.
+            parent.add(new ClassyTreeItem(child));
+
+            // Refresh GUI - Classy Tree
+            treeView.expandPath(new TreePath(parent.getPath()));
+            SwingUtilities.updateComponentTreeUI(treeView);
+        }
+
     }
 
     @Override
@@ -134,7 +148,16 @@ public class ClassyTree implements IClassyTree {
         return (ClassyTreeItem) treeView.getLastSelectedPathComponent();
     }
 
+    private ClassyNode createChild(ClassyNode parent, ClassyNodeType type) {
+        return ClassyNodeFactory.createClassyNode(parent, type);
+    }
+
+    public ClassyTreeItem getRoot() {
+        return root;
+    }
+
     public ClassyTreeView getTreeView() {
         return treeView;
     }
+
 }
