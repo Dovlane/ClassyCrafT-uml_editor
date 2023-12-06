@@ -154,7 +154,11 @@ public class PackageView extends JSplitPane implements IListener {
     public void update(Object notification) {
 
         if (notification instanceof Diagram) {
-            removeDiagramView((Diagram) notification);
+            if (getDiagramView((Diagram) notification) != null) {
+                removeDiagramView((Diagram) notification);
+            } else {
+                addDiagramView((Diagram) notification);
+            }
         }
 
         // If Package is passed it means that the displayed
@@ -234,6 +238,15 @@ public class PackageView extends JSplitPane implements IListener {
     public void addDiagramView(Diagram diagram) {
         DiagramView diagramView = new DiagramView(diagram);
         diagramViewList.add(diagramView);
+    }
+
+    public DiagramView getDiagramView(Diagram diagram) {
+        for (DiagramView diagramView: diagramViewList) {
+            if (diagramView.getDiagram().equals(diagram)) {
+                return diagramView;
+            }
+        }
+        return null;
     }
 
     public void removeDiagramView(Diagram diagram) {

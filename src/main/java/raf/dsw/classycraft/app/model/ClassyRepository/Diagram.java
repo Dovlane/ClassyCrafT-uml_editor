@@ -1,6 +1,5 @@
 package raf.dsw.classycraft.app.model.ClassyRepository;
 
-import raf.dsw.classycraft.app.core.ApplicationFramework;
 import raf.dsw.classycraft.app.model.compositePattern.ClassyNode;
 import raf.dsw.classycraft.app.model.compositePattern.ClassyNodeComposite;
 import raf.dsw.classycraft.app.model.elements.DiagramElement;
@@ -16,16 +15,6 @@ public class Diagram extends ClassyNodeComposite implements IPublisher {
 
     public Diagram(String name, ClassyNode parent) {
         super(name, parent);
-        ApplicationFramework.getInstance().getClassyRepository().getPackageView().addDiagramView(this);
-
-        // If the diagram within the currently displayed package
-        // is added, it should notify the PackageView about it.
-        if (parent == Package.getDisplayedPackage()) {
-
-            // null is equivalent to updatePackageView
-            Package.getDisplayedPackage().notifyAllSubscribers(null);
-
-        }
     }
 
     @Override
