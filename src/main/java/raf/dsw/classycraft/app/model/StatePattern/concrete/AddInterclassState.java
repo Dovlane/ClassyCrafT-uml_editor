@@ -19,10 +19,8 @@ public class AddInterclassState implements State {
     @Override
     public void mousePressed(Point location, DiagramView diagramView) {
         Diagram currentDiagram = diagramView.getDiagram();
-        ClassElement newClass = new ClassElement("Test Class", currentDiagram, new Point(200, 200), AccessModifiers.PUBLIC);
-
-        ElementPainter painter = new ClassPainter(newClass);
-        diagramView.addPainter(painter);
+        ClassElement newClass1 = new ClassElement("Test Class1", currentDiagram, new Point(200, 200), AccessModifiers.PUBLIC);
+        ClassElement newClass2 = new ClassElement("Test Class2", currentDiagram, new Point(50, 50), AccessModifiers.PUBLIC);
 
         ClassyTreeItem classyTreeDiagram =
                 MainFrame.getInstance().getClassyTree().getRoot().getTreeItemFromClassyNode(currentDiagram);
@@ -31,7 +29,14 @@ public class AddInterclassState implements State {
                     "Diagram cannot be found in ClassyTree.", MessageType.ERROR);
             return;
         }
-        MainFrame.getInstance().getClassyTree().attachChild(classyTreeDiagram, newClass);
+        if (MainFrame.getInstance().getClassyTree().attachChild(classyTreeDiagram, newClass1)) {
+            ElementPainter painter1 = new ClassPainter(newClass1);
+            diagramView.addPainter(painter1);
+        }
+        if (MainFrame.getInstance().getClassyTree().attachChild(classyTreeDiagram, newClass2)) {
+            ElementPainter painter2 = new ClassPainter(newClass2);
+            diagramView.addPainter(painter2);
+        }
 
         // Debug
         ApplicationFramework.getInstance().getClassyRepository().printTree();
