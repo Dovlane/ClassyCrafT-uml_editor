@@ -107,25 +107,25 @@ public class PackageView extends JSplitPane implements IListener {
     // PERFORM ALL STATE ACTIONS
     public void mousePressed(DiagramView diagramView, Point location) {
         System.out.println("PackageView - mousePressed:");
-        System.out.println("\tDiagramView pressed: " + diagramView);
-        System.out.println("\tmousePressed location: " + location);
+//        System.out.println("\tDiagramView pressed: " + diagramView);
+//        System.out.println("\tmousePressed location: " + location);
 
         stateManager.getCurrentState().mousePressed(location, diagramView);
     }
 
     public void mouseReleased(DiagramView diagramView, Point location) {
         System.out.println("PackageView - mouseReleased:");
-        System.out.println("\tDiagramView released: " + diagramView);
-        System.out.println("\tmouseReleased location: " + location);
+//        System.out.println("\tDiagramView released: " + diagramView);
+//        System.out.println("\tmouseReleased location: " + location);
 
         stateManager.getCurrentState().mouseReleased(location, diagramView);
     }
 
     public void mouseDragged(DiagramView diagramView, Point startLocation, Point currentLocation) {
         System.out.println("PackageView - mouseDragged:");
-        System.out.println("\tDiagramView dragged: " + diagramView);
-        System.out.println("\tmouseDragged startLocation: " + startLocation);
-        System.out.println("\tmouseDragged currentLocation: " + currentLocation);
+//        System.out.println("\tDiagramView dragged: " + diagramView);
+//        System.out.println("\tmouseDragged startLocation: " + startLocation);
+//        System.out.println("\tmouseDragged currentLocation: " + currentLocation);
 
         stateManager.getCurrentState().mouseDragged(startLocation, currentLocation, diagramView);
     }
@@ -260,6 +260,10 @@ public class PackageView extends JSplitPane implements IListener {
 
     public List<DiagramView> getDiagramViewList() {
         return diagramViewList;
+    }
+
+    public StateManager getStateManager() {
+        return stateManager;
     }
 
 }
