@@ -8,6 +8,7 @@ import java.awt.font.FontRenderContext;
 import java.awt.font.LineMetrics;
 
 public class InterclassPainter extends ElementPainter {
+
     protected int x, y;
     protected int boxWidth, boxHeight;
     public InterclassPainter(Interclass diagramElement) {

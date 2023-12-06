@@ -1,6 +1,7 @@
 package raf.dsw.classycraft.app.gui.swing.view;
 
 import raf.dsw.classycraft.app.gui.swing.view.painters.ElementPainter;
+import raf.dsw.classycraft.app.gui.swing.view.painters.Lasso;
 import raf.dsw.classycraft.app.model.ClassyRepository.Diagram;
 import raf.dsw.classycraft.app.model.observerPattern.IListener;
 
@@ -13,10 +14,14 @@ public class DiagramView extends JPanel implements IListener {
 
     private Diagram diagram;
     private List<ElementPainter> painters;
+    private List<ElementPainter> selectionModel;
+    private Lasso lasso;
+    private boolean selectionFinished;
 
     public DiagramView(Diagram diagram){
         this.diagram = diagram;
         painters = new ArrayList<>();
+        selectionModel = new ArrayList<>();
         diagram.addListener(this);
     }
 
@@ -29,17 +34,57 @@ public class DiagramView extends JPanel implements IListener {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D graphics2D = (Graphics2D) g;
+
+        // Display all ElementPainters
         for (ElementPainter painter: painters) {
             painter.draw(graphics2D, 100, 100);
         }
+
+        // Stand out all selected ElementPainters
+        System.out.println("Selection Finished: " + selectionFinished);
+        if (selectionFinished) {
+            ;
+        }
+
+        // Display lasso if it is necessary
+        if (lasso != null) {
+            // TODO: erase eX and eY once it is possible
+            lasso.draw(graphics2D, -1, -1);
+        }
+
+        // Debug Info
         System.out.println("DiagramView paintComponent is being performed");
     }
 
     public void addPainter(ElementPainter painter) {
-        painters.add(painter);
+        if (!painters.contains(painter)) {
+            painters.add(painter);
+        }
     }
 
-    // Getters
+    public void addSelectedPainter(ElementPainter painter) {
+        if (!selectionModel.contains(painter)) {
+            selectionModel.add(painter);
+        }
+    }
+
+    public void clearSelectionModel() {
+        selectionModel.clear();
+        setSelectionFinished(false);
+        setLasso(null);
+    }
+
+
+    // Getters and setters
+    public void setLasso(Lasso lasso) {
+        this.lasso = lasso;
+        repaint();
+    }
+
+    public void setSelectionFinished(boolean selectionFinished) {
+        this.selectionFinished = selectionFinished;
+    }
+
     public Diagram getDiagram() {
         return diagram;
     }
