@@ -3,12 +3,14 @@ package raf.dsw.classycraft.app.model.elements.Interclass;
 import raf.dsw.classycraft.app.model.ClassyRepository.Diagram;
 import raf.dsw.classycraft.app.model.elements.Modifiers.AccessModifiers;
 import raf.dsw.classycraft.app.model.elements.DiagramElement;
+import raf.dsw.classycraft.app.model.elements.Modifiers.NonAccessModifiers;
 
 import java.awt.*;
 
 public abstract class Interclass extends DiagramElement {
 
     protected AccessModifiers visibility;
+    protected NonAccessModifiers nonAccessModifiers;
     protected Point location;
     protected int boxWidth;
     protected int boxHeight;
@@ -18,12 +20,13 @@ public abstract class Interclass extends DiagramElement {
         super(name, parent);
     }
 
-    public Interclass(String name, Diagram parent, Point point, AccessModifiers visibility) {
+    public Interclass(String name, Diagram parent, Point point, AccessModifiers visibility, NonAccessModifiers nonAccessModifiers) {
         super(name, parent);
         this.visibility = visibility;
         this.boxWidth = 200;
         this.boxHeight = 100;
         this.location = point;
+        this.nonAccessModifiers = nonAccessModifiers;
     }
 
 
