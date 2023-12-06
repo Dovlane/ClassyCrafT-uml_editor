@@ -1,12 +1,12 @@
 package raf.dsw.classycraft.app.gui.swing.view.painters.interclassPainters;
 
 import raf.dsw.classycraft.app.model.elements.ClassContent.Attribute;
+import raf.dsw.classycraft.app.model.elements.ClassContent.ClassContent;
 import raf.dsw.classycraft.app.model.elements.ClassContent.Method;
 import raf.dsw.classycraft.app.model.elements.Interclass.ClassElement;
 import raf.dsw.classycraft.app.model.elements.Modifiers.NonAccessModifiers;
 
 import java.awt.*;
-import java.awt.font.FontRenderContext;
 import java.awt.font.LineMetrics;
 import java.awt.font.TextAttribute;
 import java.util.HashMap;
@@ -19,22 +19,18 @@ public class ClassPainter extends InterclassPainter {
 
     @Override
     public void draw(Graphics2D graphics2D) {
-
-
+        adjustBoxHeight(graphics2D, getClassElement().getClassContent().size());
+        adjustBoxWidth(graphics2D, getMaxContentStringLength());
         super.draw(graphics2D);
 
         float y = lineBelowInterclassNameGetY(graphics2D);
         for (Attribute attribute : getClassElement().getClassAttributes()) {
-            int size = 10;
             String attributeString = attribute.toString();
-            graphics2D.setFont(new Font("Arial", Font.PLAIN, size));
+            graphics2D.setFont(getInterclassContentFont());
             if (attribute.getNonAccessModifiers() == NonAccessModifiers.STATIC) {
-                Map<TextAttribute, Integer> fontAttributes = new HashMap<TextAttribute, Integer>();
-                fontAttributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
-                graphics2D.setFont(new Font(graphics2D.getFont().getName(), graphics2D.getFont().getStyle(), size).deriveFont(fontAttributes));
+                graphics2D.setFont(getStaticInterclassContentFont());
             }
 
-            LineMetrics metrics = setFontSizeAndFlagAndGetMetrics(graphics2D, attributeString);
             float messageHeight = (float) graphics2D.getFont().getStringBounds(attributeString, graphics2D.getFontRenderContext()).getHeight();
 
             y += messageHeight;
@@ -47,19 +43,27 @@ public class ClassPainter extends InterclassPainter {
         for (Method method : getClassElement().getClassMethods()) {
             int size = 10;
             String methodString = method.toString();
-            graphics2D.setFont(new Font("Arial", Font.PLAIN, size));
+            graphics2D.setFont(getInterclassContentFont());
             if (method.getNonAccessModifiers() == NonAccessModifiers.STATIC) {
-                Map<TextAttribute, Integer> fontAttributes = new HashMap<TextAttribute, Integer>();
-                fontAttributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
-                graphics2D.setFont(new Font(graphics2D.getFont().getName(), graphics2D.getFont().getStyle(), size).deriveFont(fontAttributes));
+                graphics2D.setFont(getStaticInterclassContentFont());
             }
-            LineMetrics metrics = setFontSizeAndFlagAndGetMetrics(graphics2D, methodString);
             float messageHeight = (float) graphics2D.getFont().getStringBounds(methodString, graphics2D.getFontRenderContext()).getHeight();
 
             y += messageHeight;
             graphics2D.drawString(methodString, (int) getX(), y);
         }
     }
+
+    private String getMaxContentStringLength() {
+        String maxStringLength = "";
+        for (ClassContent classContent : getClassElement().getClassContent()) {
+            if (maxStringLength.length() < classContent.toString().length())
+                maxStringLength = classContent.toString();
+        }
+        return maxStringLength;
+    }
+
+
     private ClassElement getClassElement() { return (ClassElement)diagramElement; }
 
 }

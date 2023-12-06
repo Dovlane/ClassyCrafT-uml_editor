@@ -50,7 +50,6 @@ public class ClassElement extends Interclass {
         return methods;
     }
 
-
     public void setClassContent(List<ClassContent> classContent) {
         this.classContent = classContent;
     }

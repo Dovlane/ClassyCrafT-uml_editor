@@ -2,6 +2,7 @@ package raf.dsw.classycraft.app.model.elements.Interclass;
 
 import raf.dsw.classycraft.app.model.ClassyRepository.Diagram;
 import raf.dsw.classycraft.app.model.compositePattern.ClassyNode;
+import raf.dsw.classycraft.app.model.elements.ClassContent.ClassContent;
 import raf.dsw.classycraft.app.model.elements.ClassContent.EnumLiteral;
 import raf.dsw.classycraft.app.model.elements.Modifiers.AccessModifiers;
 

@@ -1,7 +1,7 @@
 package raf.dsw.classycraft.app.model.elements.Interclass;
 
 import raf.dsw.classycraft.app.model.ClassyRepository.Diagram;
-import raf.dsw.classycraft.app.model.compositePattern.ClassyNode;
+import raf.dsw.classycraft.app.model.elements.ClassContent.ClassContent;
 import raf.dsw.classycraft.app.model.elements.ClassContent.Method;
 import raf.dsw.classycraft.app.model.elements.Modifiers.AccessModifiers;
 
@@ -32,5 +32,6 @@ public class InterfaceElement extends Interclass {
     public void setMethods(List<Method> methods) {
         this.methods = methods;
     }
+
 
 }

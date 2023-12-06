@@ -17,7 +17,7 @@ public class ConnectionPainter extends ElementPainter {
     }
 
     @Override
-    public boolean elementAt(int eX, int eY) {
+    public boolean elementAt(Point location) {
         return false;
     }
 }
