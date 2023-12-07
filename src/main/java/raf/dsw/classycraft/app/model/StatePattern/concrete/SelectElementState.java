@@ -12,41 +12,28 @@ import java.awt.*;
 
 public class SelectElementState implements State {
 
-    private boolean inLasso;
-    private Point previousLocation;
-    private ElementPainter clickedElementPainter;
-
     @Override
     public void mousePressed(Point location, DiagramView diagramView) {
         System.out.println("mousePressed inside SelectElementState");
 
-        previousLocation = location;
-
-        // Check if clicked happen on an ElementPainter
-        inLasso = false;
-        clickedElementPainter = null;
-        for (ElementPainter painter: diagramView.getPainters()) {
-            if (painter.elementAt(location)) {
-                clickedElementPainter = painter;
-
-                // Check if ElementPainter is inside the Lasso
-                inLasso = diagramView.getSelectionModel().contains(clickedElementPainter);
-            }
-        }
-
-        // Remove Lasso selection if the clickedElementPainter is NOT inside it
-        if (!inLasso) {
-            diagramView.clearSelectionModel();
-        }
-        diagramView.updateSelectionModel(location);
+        diagramView.updateSelectionModel(new LassoPainter(location, location));
     }
 
     @Override
     public void mouseReleased(Point location, DiagramView diagramView) {
         System.out.println("mouseReleased inside SelectElementState");
-        diagramView.setLasso(null);
+
+        diagramView.updateSelectionModel(null);
     }
 
+    @Override
+    public void mouseDragged(Point startLocation, Point currentLocation, DiagramView diagramView) {
+        System.out.println("mouseDragged inside SelectElementState");
+
+        diagramView.updateSelectionModel(new LassoPainter(startLocation, currentLocation));
+    }
+
+    /*
     @Override
     public void mouseDragged(Point startLocation, Point currentLocation, DiagramView diagramView) {
         System.out.println("From " + startLocation + " to " + currentLocation);
@@ -73,5 +60,6 @@ public class SelectElementState implements State {
             }
         }
     }
+     */
 
 }

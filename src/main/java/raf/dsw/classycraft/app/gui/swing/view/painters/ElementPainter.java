@@ -18,6 +18,10 @@ public abstract class ElementPainter {
 
     public abstract boolean elementAt(Point location);
 
+    public abstract Point getUpperLeft();
+
+    public abstract Point getBottomRight();
+
     public DiagramElement getDiagramElement() {
         return diagramElement;
     }

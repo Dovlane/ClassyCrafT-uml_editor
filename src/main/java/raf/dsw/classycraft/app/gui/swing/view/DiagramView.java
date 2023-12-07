@@ -124,30 +124,37 @@ public class DiagramView extends JPanel implements IListener {
         }
     }
 
-    public void updateSelectionModel(Point location) {
-        for (ElementPainter painter: painters) {
-            if (painter.elementAt(location)) {
-                addSelectedPainter(painter);
+    public void updateSelectionModel(LassoPainter lasso) {
+
+        // Create upper-left and bottom-right corner
+        setLasso(lasso);
+
+        // Add all painters which intersects with Lasso
+        if (lasso != null) {
+            clearSelectionModel();
+            for (ElementPainter painter: painters) {
+                if (lassoPainter.intersectsWith(painter)) {
+                    addSelectedPainter(painter);
+                }
             }
         }
+
+        // Refresh DiagramView
+        repaint();
     }
 
     public void addSelectedPainter(ElementPainter painter) {
-        if (!selectionModel.contains(painter)) {
+        if (painter != null && !selectionModel.contains(painter)) {
             selectionModel.add(painter);
         }
     }
 
     public void clearSelectionModel() {
         selectionModel.clear();
-        setLasso(null);
     }
 
-
-    // Getters and setters
     public void setLasso(LassoPainter lassoPainter) {
         this.lassoPainter = lassoPainter;
-        repaint();
     }
 
     public Diagram getDiagram() {
@@ -162,14 +169,21 @@ public class DiagramView extends JPanel implements IListener {
         return selectionModel;
     }
 
-    public DiagramElement getElementAt(Point location) {
-        DiagramElement diagramElement = null;
+    public ElementPainter getPainterAt(Point location) {
         for (ElementPainter elementPainter : getPainters()) {
             if (elementPainter.elementAt(location)) {
-                return elementPainter.getDiagramElement();
+                return elementPainter;
             }
         }
-        return diagramElement;
+        return null;
+    }
+
+    public DiagramElement getElementAt(Point location) {
+        ElementPainter elementPainter = getPainterAt(location);
+        if (elementPainter != null) {
+            return elementPainter.getDiagramElement();
+        }
+        return null;
     }
 
     @Override

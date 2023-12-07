@@ -25,4 +25,16 @@ public class ConnectionPainter extends ElementPainter {
     public boolean elementAt(Point location) {
         return false;
     }
+
+    @Override
+    public Point getUpperLeft() {
+        // TODO: Find boundary for connection
+        return null;
+    }
+
+    @Override
+    public Point getBottomRight() {
+        // TODO: Find boundary for connection
+        return null;
+    }
 }

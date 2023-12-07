@@ -1,3 +1,0 @@
-[ERROR][2023-12-07 18:11:02.6607862] ProjectExplorer can only contain Projects.
-[ERROR][2023-12-07 18:11:05.4482818] ProjectExplorer cannot be deleted.
-[ERROR][2023-12-07 18:11:10.2359745] Project can only contain Packages.
