@@ -131,26 +131,16 @@ public class DiagramView extends JPanel implements IListener {
 
         // Add all painters which intersects with Lasso
         if (lasso != null) {
-            clearSelectionModel();
+            selectionModel.clear();
             for (ElementPainter painter: painters) {
                 if (lassoPainter.intersectsWith(painter)) {
-                    addSelectedPainter(painter);
+                    selectionModel.add(painter);
                 }
             }
         }
 
         // Refresh DiagramView
         repaint();
-    }
-
-    public void addSelectedPainter(ElementPainter painter) {
-        if (painter != null && !selectionModel.contains(painter)) {
-            selectionModel.add(painter);
-        }
-    }
-
-    public void clearSelectionModel() {
-        selectionModel.clear();
     }
 
     public void setLasso(LassoPainter lassoPainter) {

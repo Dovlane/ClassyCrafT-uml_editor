@@ -27,10 +27,7 @@ public class AddClassContentState implements State {
                 classContentStateDialog.insertData();
                 classContentStateDialog.dispose();
             });
-
         }
-
-
     }
 
     @Override

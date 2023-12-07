@@ -19,6 +19,7 @@ public class LassoPainter extends ElementPainter {
         Point painterUpperLeft = elementPainter.getUpperLeft();
         Point painterBottomRight = elementPainter.getBottomRight();
 
+        // Check if one rectangle is next to the other
         if (lassoBottomRight.x < painterUpperLeft.x || painterBottomRight.x < lassoUpperLeft.x) {
             return false;
         }
