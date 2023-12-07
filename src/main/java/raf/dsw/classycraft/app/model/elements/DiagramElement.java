@@ -18,18 +18,6 @@ public abstract class DiagramElement extends ClassyNodeLeaf implements IPublishe
     }
 
     @Override
-    public void addListener(IListener listener) {
-        if (!listeners.contains(listener))
-            listeners.add(listener);
-    }
-
-    @Override
-    public void removeListener(IListener listener) {
-        if (listeners.contains(listener))
-            listeners.remove(listener);
-    }
-
-    @Override
     public void notifyAllSubscribers(Object notification) {
         for (IListener listener: listeners)
             listener.update(notification);

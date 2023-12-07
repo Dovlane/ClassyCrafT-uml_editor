@@ -2,8 +2,9 @@ package raf.dsw.classycraft.app.model.ClassyRepository;
 
 import raf.dsw.classycraft.app.model.compositePattern.ClassyNode;
 import raf.dsw.classycraft.app.model.compositePattern.ClassyNodeComposite;
+import raf.dsw.classycraft.app.model.observerPattern.IPublisher;
 
-public class ProjectExplorer extends ClassyNodeComposite {
+public class ProjectExplorer extends ClassyNodeComposite implements IPublisher {
 
     private int nmbOfCreatedProjects;
 
@@ -17,6 +18,9 @@ public class ProjectExplorer extends ClassyNodeComposite {
         if (child instanceof Project) {
             if (!getChildren().contains(child)) {
                 getChildren().add(child);
+                Notification notification =
+                        new Notification(child, NotificationType.ADD);
+                notifyAllSubscribers(notification);
                 return true;
             }
         }

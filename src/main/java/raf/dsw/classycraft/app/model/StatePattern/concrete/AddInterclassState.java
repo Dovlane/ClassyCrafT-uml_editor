@@ -65,15 +65,8 @@ public class AddInterclassState implements State {
                         break;
                     }
                 }
-                ElementPainter elementPainter = null;
-                if (interclass[0] instanceof ClassElement)
-                    elementPainter = new ClassPainter((ClassElement) interclass[0]);
-                else if (interclass[0] instanceof InterfaceElement)
-                    elementPainter = new InterfacePainter((InterfaceElement) interclass[0]);
-                else if (interclass[0] instanceof EnumElement)
-                    elementPainter = new EnumPainter((EnumElement) interclass[0]);
-                diagramView.addPainter(elementPainter);
 
+                // Attach a new Interclass object in the whole Model
                 ClassyTreeItem classyTreeDiagram =
                         MainFrame.getInstance().getClassyTree().getRoot().getTreeItemFromClassyNode(currentDiagram);
                 if (classyTreeDiagram ==  null) {

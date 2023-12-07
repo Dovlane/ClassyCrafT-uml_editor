@@ -27,7 +27,7 @@ public abstract class ClassyNodeComposite extends ClassyNode {
     }
 
     public void removeAt(int childIndex) {
-        ClassyNode child = (ClassyNode) getChildAt(childIndex);
+        ClassyNode child = getChildAt(childIndex);
         children.remove(childIndex);
         child.setParent(null);
     }
