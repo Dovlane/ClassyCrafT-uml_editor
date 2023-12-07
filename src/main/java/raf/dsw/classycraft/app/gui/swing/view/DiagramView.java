@@ -105,10 +105,12 @@ public class DiagramView extends JPanel implements IListener {
         if (elementPainter == null) {
             MainFrame.getInstance().getMessageGenerator().generateMessage(
                     "Painter for object " + diagramElement + " does not exist.", MessageType.ERROR);
+            return;
         }
 
         // Add a newly created painter in list of all painters for this DiagramView
         painters.add(elementPainter);
+        elementPainter.getDiagramElement().addListener(this);
     }
 
     public void removePainter(DiagramElement diagramElement) {
