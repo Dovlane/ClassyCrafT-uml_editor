@@ -80,7 +80,7 @@ public class ClassContentStateDialog extends JFrame {
         setVisible(true);
     }
 
-    public void insertRow() {
+    public void insertRow() throws Exception {
         if (classContentStateEnum == ClassContentStateEnum.CLASS_CONTENT) {
             if (jRadioButtonsAttributeOrMethod[0].isSelected())
                 insertRow(jTableMethods);
@@ -112,6 +112,7 @@ public class ClassContentStateDialog extends JFrame {
 
     public void insertData() {
         if (classContentStateEnum == ClassContentStateEnum.CLASS_CONTENT) {
+
             ClassElement selectedClassElement = (ClassElement) selectedDiagramElement;
             selectedClassElement.getClassContent().clear();
             if (!tableIsEmpty(jTableMethods)) {
@@ -150,6 +151,7 @@ public class ClassContentStateDialog extends JFrame {
         }
 
         else if (classContentStateEnum == ClassContentStateEnum.ENUM_CONTENT) {
+
             EnumElement selectedEnumElement = (EnumElement) selectedDiagramElement;
             selectedEnumElement.getEnumLiterals().clear();
             if (!tableIsEmpty(jTableEnumLiterals)) {
@@ -267,7 +269,6 @@ public class ClassContentStateDialog extends JFrame {
 
     private void setImportDataPaneForEnum() {
         importDataJPanel = new JPanel();
-        String[] dataRowStrings = new String[] {"Name: ", "Access modifiers: ", "Non-access modifiers: ", "Type: ", };
 
         importDataJPanel = new JPanel();
         importDataJPanel.setLayout(new BoxLayout(importDataJPanel, BoxLayout.Y_AXIS));
@@ -316,7 +317,6 @@ public class ClassContentStateDialog extends JFrame {
         DefaultTableModel tableModelAttributes = new DefaultTableModel(columnNamesForMethodsAndAttributes, 1);
         jTableAttributes = new JTable(tableModelAttributes);
         setPreferredScrollableViewportSize(jTableAttributes);
-        //jTableAttributes.setPreferredScrollableViewportSize(jTableAttributes.getPreferredSize());
 
         JPanel attributePanel = new JPanel();
         attributePanel.setLayout(new BoxLayout(attributePanel, BoxLayout.Y_AXIS));
@@ -355,21 +355,29 @@ public class ClassContentStateDialog extends JFrame {
         ));
     }
     // Method to insert a new row into the table
-    private void insertRow(JTable table) {
+    private void insertRow(JTable table) throws Exception {
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         Vector<String> data = new Vector<>();
         if (classContentStateEnum == ClassContentStateEnum.CLASS_CONTENT || classContentStateEnum == ClassContentStateEnum.INTERFACE_CONTENT) {
+            if (fieldIsEmpty(getClassContentName())) {
+                throw new Exception("ClassContent name cannot be empty!");
+            }
+            if (fieldIsEmpty(getClassContentType())) {
+                throw new Exception("ClassContent type cannot be empty!");
+            }
             data.add(((JTextField)fieldsForMethodsAndAttributes[0]).getText());
             data.add(accessModifiersJComboBox.getItemAt(accessModifiersJComboBox.getSelectedIndex()).toString());
             data.add(nonAccessModifiersJComboBox.getItemAt(nonAccessModifiersJComboBox.getSelectedIndex()).toString());
             data.add(((JTextField)fieldsForMethodsAndAttributes[3]).getText());
-
         }
         else if (classContentStateEnum == ClassContentStateEnum.ENUM_CONTENT) {
+            if (fieldIsEmpty(getClassContentName())) {
+                System.out.println("getClassContentName" + getClassContentName());
+                throw new Exception("Enum literal name cannot be empty!");
+            }
             data.add(jTextFieldForEnumLiteral.getText());
         }
         if (!rowAlreadyExists(table, data)) {
-            System.out.println("!rowAlreadyExists(table, data): " + !rowAlreadyExists(table, data));
             manageInitialRow(table, false); // Delete the initial row if it exists
             model.addRow(data);
         }
@@ -415,18 +423,10 @@ public class ClassContentStateDialog extends JFrame {
         return true; // Row is empty
     }
 
-//    private void deleteFirstBlankRowIfTableIsNotEmpty(JTable table) {
-//        if (!tableIsEmpty(table)) {
-//            DefaultTableModel model = (DefaultTableModel) table.getModel();
-//
-//            model.removeRow(0);
-//        }
-//    }
 
     private boolean rowAlreadyExists(JTable table, Vector<String> rowData) {
         if (!tableIsEmpty(table)) {
             DefaultTableModel model = (DefaultTableModel) table.getModel();
-            System.out.println("rowData " + rowData);
             for (int row = 0; row < model.getRowCount(); row++) {
                 boolean rowWithSameContent = true;
                 for (int col = 0; col < model.getColumnCount(); col++) {
@@ -438,9 +438,6 @@ public class ClassContentStateDialog extends JFrame {
                 }
                 if (rowWithSameContent)
                     return true;
-//                if (Arrays.deepEquals(existingRowData, rowData)) {
-//                    return true; // Row with the same content already exists
-//                }
             }
         }
         return false; // Row with the same content does not exist
@@ -453,9 +450,32 @@ public class ClassContentStateDialog extends JFrame {
     public JButton getButtonDelete() {
         return buttonDelete;
     }
-
     public JButton getButtonOk() {
         return buttonOk;
+    }
+    private String getClassContentName() {
+        if (classContentStateEnum == ClassContentStateEnum.CLASS_CONTENT ||
+                classContentStateEnum == ClassContentStateEnum.INTERFACE_CONTENT) {
+            JTextField jTextField = (JTextField) fieldsForMethodsAndAttributes[0];
+            return jTextField.getText();
+        }
+        else if (classContentStateEnum == ClassContentStateEnum.ENUM_CONTENT){
+            return jTextFieldForEnumLiteral.getText();
+        }
+        return null;
+    }
+
+    private String getClassContentType() {
+        if (classContentStateEnum == ClassContentStateEnum.CLASS_CONTENT ||
+                classContentStateEnum == ClassContentStateEnum.INTERFACE_CONTENT) {
+            JTextField jTextField = (JTextField) fieldsForMethodsAndAttributes[3];
+            return jTextField.getText();
+        }
+        return null;
+    }
+
+    private boolean fieldIsEmpty(String textFieldString) {
+        return textFieldString == null || textFieldString.equals("");
     }
 
 }

@@ -26,7 +26,7 @@ public class InterclassPainter extends ElementPainter {
         interclassContentFont = new Font(interclassContentFont.getName(), interclassContentFont.getStyle(), interclassContentFont.getSize()).deriveFont(fontAttributes);
         return interclassContentFont;
     }
-    protected static int padding = 5;
+    protected static int padding = 10;
     protected float yBelowInterclassName;
 
     public InterclassPainter(Interclass diagramElement) {
@@ -110,7 +110,7 @@ public class InterclassPainter extends ElementPainter {
     protected void adjustBoxWidth(Graphics2D graphics2D, String stringMaxContentLength) {
         float maxTextWidth = Math.max(getInterclassContentStringWidth(graphics2D, stringMaxContentLength), interclassNameWidth(graphics2D));
         if (maxTextWidth > Interclass.getInitialBoxWidth()) {
-            setBoxWidth(maxTextWidth + padding * 2);
+            setBoxWidth(maxTextWidth + padding);
         }
     }
 
@@ -138,14 +138,14 @@ public class InterclassPainter extends ElementPainter {
         return textHeight;
     }
 
-    private LineMetrics getLineMetrics(Graphics2D graphics2D, String text) {
+    protected final LineMetrics getLineMetrics(Graphics2D graphics2D, String text) {
         FontRenderContext frc = graphics2D.getFontRenderContext();
         LineMetrics metrics = graphics2D.getFont().getLineMetrics(text, frc);
         return metrics;
     }
 
 
-    private void drawInterclassLine(Graphics2D graphics2D, double y) {
+    protected final void drawInterclassLine(Graphics2D graphics2D, double y) {
         graphics2D.setColor(new Color(0, 0, 0));
         graphics2D.drawLine((int)getX(), (int)y, (int) (getX() + getBoxWidth()), (int)yBelowInterclassName);
     }

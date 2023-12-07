@@ -2,6 +2,8 @@ package raf.dsw.classycraft.app.gui.swing.view;
 
 import raf.dsw.classycraft.app.gui.swing.view.painters.ElementPainter;
 import raf.dsw.classycraft.app.gui.swing.view.painters.LassoPainter;
+import raf.dsw.classycraft.app.gui.swing.view.painters.LinePainter;
+import raf.dsw.classycraft.app.gui.swing.view.painters.connectionPainters.AgregationPainter;
 import raf.dsw.classycraft.app.gui.swing.view.painters.interclassPainters.ClassPainter;
 import raf.dsw.classycraft.app.gui.swing.view.painters.interclassPainters.EnumPainter;
 import raf.dsw.classycraft.app.gui.swing.view.painters.interclassPainters.InterfacePainter;
@@ -9,6 +11,7 @@ import raf.dsw.classycraft.app.model.ClassyRepository.Diagram;
 import raf.dsw.classycraft.app.model.ClassyRepository.Notification;
 import raf.dsw.classycraft.app.model.ClassyRepository.NotificationType;
 import raf.dsw.classycraft.app.model.MessageGenerator.MessageType;
+import raf.dsw.classycraft.app.model.elements.Connection.Aggregation;
 import raf.dsw.classycraft.app.model.elements.Connection.Connection;
 import raf.dsw.classycraft.app.model.elements.DiagramElement;
 import raf.dsw.classycraft.app.model.elements.Interclass.ClassElement;
@@ -28,6 +31,7 @@ public class DiagramView extends JPanel implements IListener {
     private final List<ElementPainter> painters;
     private final List<ElementPainter> selectionModel;
     private LassoPainter lassoPainter;
+    private LinePainter linePainter;
 
     public DiagramView(Diagram diagram){
         this.diagram = diagram;
@@ -78,10 +82,30 @@ public class DiagramView extends JPanel implements IListener {
             lassoPainter.draw(graphics2D);
         }
 
+        if (linePainter != null) {
+            linePainter.draw(graphics2D);
+        }
+
         // Debug Info
         System.out.println("DiagramView paintComponent is being performed");
     }
 
+    public void setLinePainter(LinePainter linePainter) {
+        this.linePainter = linePainter;
+        repaint();
+    }
+    public void setLinePainterCoordinates(Point currentPoint) {
+        System.out.println("currentPoint " + currentPoint);
+        if (linePainter != null) {
+            linePainter.setCurrentPoint(currentPoint);
+            repaint();
+        }
+    }
+    public void removeLinePainter() {
+        linePainter = null;
+        System.out.println("painters: " + painters);
+        repaint();
+    }
     public void addPainter(DiagramElement diagramElement) {
 
         // Factory for ElementPainters based on Diagram Element
@@ -98,6 +122,7 @@ public class DiagramView extends JPanel implements IListener {
             }
         }
         else if (diagramElement instanceof Connection) {
+            elementPainter = new AgregationPainter((Aggregation) diagramElement);
             // TODO: add factory for connections
         }
 
