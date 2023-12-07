@@ -9,7 +9,7 @@ public class ClassyRepository implements IClassyRepository {
 
     public ClassyRepository() {
         projectExplorer = new ProjectExplorer("My Project Explorer");
-        packageView = new PackageView();
+        packageView = new PackageView(projectExplorer);
     }
 
     @Override

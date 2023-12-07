@@ -3,13 +3,11 @@ package raf.dsw.classycraft.app.gui.swing.tree;
 import raf.dsw.classycraft.app.gui.swing.tree.model.ClassyTreeItem;
 import raf.dsw.classycraft.app.gui.swing.tree.view.ClassyTreeView;
 import raf.dsw.classycraft.app.gui.swing.view.MainFrame;
-import raf.dsw.classycraft.app.model.ClassyRepository.Package;
 import raf.dsw.classycraft.app.model.MessageGenerator.MessageType;
 import raf.dsw.classycraft.app.model.ClassyRepository.*;
 import raf.dsw.classycraft.app.model.compositePattern.ClassyNode;
 import raf.dsw.classycraft.app.model.compositePattern.ClassyNodeComposite;
 import raf.dsw.classycraft.app.model.compositePattern.ClassyNodeLeaf;
-import raf.dsw.classycraft.app.model.elements.DiagramElement;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultTreeModel;
@@ -60,10 +58,6 @@ public class ClassyTree implements IClassyTree {
         // Add child to both Model and JTree
         boolean success = ((ClassyNodeComposite) parent.getClassyNode()).addChild(child);
         if (success) {
-
-            if (child instanceof Diagram) {
-                Package.getDisplayedPackage().notifyAllSubscribers(child);
-            }
 
             // It should be added first to model because
             // JTree does not override equal by value.

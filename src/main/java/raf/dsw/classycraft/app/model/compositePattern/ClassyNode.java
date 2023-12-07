@@ -1,21 +1,24 @@
 package raf.dsw.classycraft.app.model.compositePattern;
 
 import raf.dsw.classycraft.app.gui.swing.view.MainFrame;
-import raf.dsw.classycraft.app.model.ClassyRepository.Diagram;
-import raf.dsw.classycraft.app.model.ClassyRepository.Package;
-import raf.dsw.classycraft.app.model.ClassyRepository.Project;
-import raf.dsw.classycraft.app.model.ClassyRepository.ProjectExplorer;
+import raf.dsw.classycraft.app.model.ClassyRepository.*;
 import raf.dsw.classycraft.app.model.MessageGenerator.MessageType;
-import raf.dsw.classycraft.app.model.elements.DiagramElement;
+import raf.dsw.classycraft.app.model.observerPattern.IListener;
+import raf.dsw.classycraft.app.model.observerPattern.IPublisher;
 
-public abstract class ClassyNode {
+import java.util.ArrayList;
+import java.util.List;
 
-    private String name;
-    private ClassyNode parent;
+public abstract class ClassyNode implements IPublisher {
+
+    protected String name;
+    protected ClassyNode parent;
+    protected List<IListener> listeners;
 
     public ClassyNode(String name, ClassyNode parent) {
         this.name = name;
         this.parent = parent;
+        listeners = new ArrayList<>();
     }
 
     public void removeSubtree() {
@@ -29,25 +32,11 @@ public abstract class ClassyNode {
 
     public void removeFromParent() {
 
-        // If current Classy Node is displayed, it should
-        // notify the PackageView about its removal.
-        if (this == Package.getDisplayedPackage()) {
-            Package.getDisplayedPackage().notifyAllSubscribers(Package.getDefaultPackage());
-            Package.setDisplayedPackage(Package.getDefaultPackage());
-        }
-
         ClassyNodeComposite parent = (ClassyNodeComposite) getParent();
         if (parent != null) {
-
-            if (this instanceof Diagram) {
-                Package.getDisplayedPackage().notifyAllSubscribers(this);
-            }
-
-            if (this instanceof DiagramElement) {
-                ((Diagram) parent).notifyAllSubscribers(this);
-            }
-
-            // Remove the unwanted item
+            Notification notification =
+                    new Notification(this, NotificationType.REMOVE);
+            parent.notifyAllSubscribers(notification);
             parent.removeAt(this);
         }
     }
@@ -86,21 +75,10 @@ public abstract class ClassyNode {
             this.name = name;
             System.out.println(oldName + " has been renamed to " + name + ".");
 
-            // Check if the Project of the displayed package is renamed
-            if ((this instanceof Project) && (this == Package.getDisplayedPackage().findParentProject())) {
-
-                // null is equivalent to updatePackageView
-                Package.getDisplayedPackage().notifyAllSubscribers(null);
-
-            }
-
-            // Check if the Diagram of the displayed package is renamed
-            if ((this instanceof Diagram) && (getParent() == Package.getDisplayedPackage())) {
-
-                // null is equivalent to updatePackageView
-                Package.getDisplayedPackage().notifyAllSubscribers(null);
-
-            }
+            // Notify PackageView about the potential change in Package Metadata
+            Notification notification =
+                    new Notification(this, NotificationType.SET);
+            parent.notifyAllSubscribers(notification);
 
             return true;
         }
@@ -123,6 +101,34 @@ public abstract class ClassyNode {
 
     public void setParent(ClassyNode parent) {
         this.parent = parent;
+    }
+
+    @Override
+    public void addListener(IListener listener) {
+        if (!listeners.contains(listener))
+            listeners.add(listener);
+    }
+
+    @Override
+    public void removeListener(IListener listener) {
+        listeners.remove(listener);
+    }
+
+    @Override
+    public void notifyAllSubscribers(Object notification) {
+
+        // There will be only 1 listener in the array of
+        // listeners, because there is only one PackageView.
+
+        // Problem with for-each loop is because every time
+        // the update happens the listener should be removed
+        // from the listeners array list.
+        // It raises ConcurrentModificationException.
+
+        // Solution is to only use the first element of the
+        // list which is at the same time the only listener.
+
+        listeners.get(0).update(notification);
     }
 
 }

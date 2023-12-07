@@ -3,6 +3,8 @@ package raf.dsw.classycraft.app.model.StatePattern.concrete;
 import raf.dsw.classycraft.app.gui.swing.view.DiagramView;
 import raf.dsw.classycraft.app.gui.swing.view.dialogs.ClassContentStateDialog;
 import raf.dsw.classycraft.app.model.ClassyRepository.Diagram;
+import raf.dsw.classycraft.app.model.ClassyRepository.Notification;
+import raf.dsw.classycraft.app.model.ClassyRepository.NotificationType;
 import raf.dsw.classycraft.app.model.StatePattern.State;
 import raf.dsw.classycraft.app.model.elements.DiagramElement;
 
@@ -23,8 +25,6 @@ public class AddClassContentState implements State {
             classContentStateDialog.getButtonOk().addActionListener(
                     e -> {
                 classContentStateDialog.insertData();
-                Diagram selectedDiagram = diagramView.getDiagram();
-                selectedDiagram.notifyAllSubscribers(null);
                 classContentStateDialog.dispose();
             });
 

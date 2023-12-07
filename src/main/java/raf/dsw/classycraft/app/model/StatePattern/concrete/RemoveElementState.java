@@ -1,5 +1,6 @@
 package raf.dsw.classycraft.app.model.StatePattern.concrete;
 
+import raf.dsw.classycraft.app.core.ApplicationFramework;
 import raf.dsw.classycraft.app.gui.swing.tree.model.ClassyTreeItem;
 import raf.dsw.classycraft.app.gui.swing.view.DiagramView;
 import raf.dsw.classycraft.app.gui.swing.view.MainFrame;
@@ -41,6 +42,8 @@ public class RemoveElementState implements State {
                 MainFrame.getInstance().getClassyTree().removeItem(treeItemDiagramElement);
             }
 
+            // Debug
+            ApplicationFramework.getInstance().getClassyRepository().printTree();
         }
     }
 

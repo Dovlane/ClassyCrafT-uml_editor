@@ -4,8 +4,9 @@ import raf.dsw.classycraft.app.gui.swing.view.MainFrame;
 import raf.dsw.classycraft.app.model.MessageGenerator.MessageType;
 import raf.dsw.classycraft.app.model.compositePattern.ClassyNode;
 import raf.dsw.classycraft.app.model.compositePattern.ClassyNodeComposite;
+import raf.dsw.classycraft.app.model.observerPattern.IPublisher;
 
-public class Project extends ClassyNodeComposite {
+public class Project extends ClassyNodeComposite implements IPublisher {
 
     private String author;
     private String resourcePath;
@@ -28,6 +29,9 @@ public class Project extends ClassyNodeComposite {
         if (child instanceof Package) {
             if (!getChildren().contains(child)) {
                 getChildren().add(child);
+                Notification notification =
+                        new Notification(child, NotificationType.ADD);
+                notifyAllSubscribers(notification);
                 return true;
             }
         }
@@ -57,10 +61,10 @@ public class Project extends ClassyNodeComposite {
             this.author = author;
             System.out.println(this.author + " has been set as an author of the project " + this.getName() + ".");
 
-            // Check if the Project of the displayed package got a new author
-            if (this == Package.getDisplayedPackage().findParentProject()) {
-                Package.getDisplayedPackage().notifyAllSubscribers(null);
-            }
+            // Notify PackageView about the potential change in Package Metadata
+            Notification notification =
+                    new Notification(this, NotificationType.SET);
+            notifyAllSubscribers(notification);
 
             return true;
         }

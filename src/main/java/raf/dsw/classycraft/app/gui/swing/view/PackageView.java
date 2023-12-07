@@ -1,8 +1,7 @@
 package raf.dsw.classycraft.app.gui.swing.view;
 
-import raf.dsw.classycraft.app.model.ClassyRepository.Diagram;
+import raf.dsw.classycraft.app.model.ClassyRepository.*;
 import raf.dsw.classycraft.app.model.ClassyRepository.Package;
-import raf.dsw.classycraft.app.model.ClassyRepository.Project;
 import raf.dsw.classycraft.app.model.MessageGenerator.MessageType;
 import raf.dsw.classycraft.app.model.StatePattern.StateManager;
 import raf.dsw.classycraft.app.model.observerPattern.IListener;
@@ -24,8 +23,11 @@ public class PackageView extends JSplitPane implements IListener {
     private final JTabbedPane tabbedPane;
     private static JToggleButton selectedButton;
 
-    public PackageView() {
+    public PackageView(ProjectExplorer projectExplorer) {
         super(JSplitPane.VERTICAL_SPLIT);
+
+        // Listen to ProjectExplorer
+        projectExplorer.addListener(this);
 
         // Project Name and Project Author labels
         labelProjectName = new Label();
@@ -56,7 +58,7 @@ public class PackageView extends JSplitPane implements IListener {
         diagramViewList = new ArrayList<>();
         stateManager = new StateManager();
 
-        setCurrentPackage(Package.getDisplayedPackage());
+        setDefaultRightPanel();
     }
 
     private void addButton(JToolBar toolBar, String toolText, boolean startSelected) {
@@ -153,19 +155,62 @@ public class PackageView extends JSplitPane implements IListener {
     @Override
     public void update(Object notification) {
 
-        if (notification instanceof Diagram) {
-            if (getDiagramView((Diagram) notification) != null) {
-                removeDiagramView((Diagram) notification);
-            } else {
-                addDiagramView((Diagram) notification);
+        // Cast notification
+        Notification packageNotification = (Notification) notification;
+
+        // PROJECT has been passed as a notification node
+        if (packageNotification.getNode() instanceof Project) {
+            Project aProject = (Project) packageNotification.getNode();
+            if (packageNotification.getType() == NotificationType.ADD) {
+                aProject.addListener(this);
+                System.out.println("Added PackageView as a listener to newly created Project.");
+            }
+            else if (packageNotification.getType() == NotificationType.REMOVE) {
+                aProject.removeListener(this);
+                System.out.println("Removed PackageView as a listener from deleting Project.");
+            }
+            else {
+                if (currentPackage != null) {
+                    Project currentPackageProject = currentPackage.findParentProject();
+                    if (currentPackageProject.equals(aProject)) {
+                        setPackageMetadata();
+                        System.out.println("Set new Package Metadata.");
+                    }
+                }
             }
         }
 
-        // If Package is passed it means that the displayed
-        // package had been changed.
-        if (notification instanceof Package) {
-            currentPackage.removeListener(this);
-            setCurrentPackage((Package) notification);
+        // PACKAGE has been passed as a notification node
+        if (packageNotification.getNode() instanceof Package) {
+            Package aPackage = (Package) packageNotification.getNode();
+            if (packageNotification.getType() == NotificationType.ADD) {
+                aPackage.addListener(this);
+                System.out.println("Added PackageView as a listener to newly created Package.");
+            }
+            else if (packageNotification.getType() == NotificationType.REMOVE) {
+                aPackage.removeListener(this);
+                if (aPackage.equals(currentPackage)) {
+                    setCurrentPackage(null);
+                }
+                System.out.println("Removed PackageView as a listener from deleting Package.");
+            }
+            else {
+                setCurrentPackage(aPackage);
+                System.out.println("New Package has been set as a current displayed package.");
+            }
+        }
+
+        // Diagram has been passed as a notification node
+        if (packageNotification.getNode() instanceof Diagram) {
+            Diagram aDiagram = (Diagram) packageNotification.getNode();
+            if (packageNotification.getType() == NotificationType.ADD) {
+                addDiagramView(aDiagram);
+                System.out.println("Added PackageView as a listener to newly created Diagram.");
+            }
+            else if (packageNotification.getType() == NotificationType.REMOVE) {
+                removeDiagramView(aDiagram);
+                System.out.println("Removed PackageView as a listener from deleting Diagram.");
+            }
         }
 
         updatePackageView();
@@ -173,14 +218,12 @@ public class PackageView extends JSplitPane implements IListener {
 
     public void setCurrentPackage(Package newPackage) {
         currentPackage = newPackage;
-        currentPackage.addListener(this);
-        updatePackageView();
     }
 
     private void updatePackageView() {
 
         System.out.println("Number of diagramViews " + diagramViewList.size());
-        if (currentPackage == Package.getDefaultPackage()) {
+        if (currentPackage == null) {
             setDefaultRightPanel();
             return;
         }
@@ -240,30 +283,13 @@ public class PackageView extends JSplitPane implements IListener {
         diagramViewList.add(diagramView);
     }
 
-    public DiagramView getDiagramView(Diagram diagram) {
-        for (DiagramView diagramView: diagramViewList) {
-            if (diagramView.getDiagram().equals(diagram)) {
-                return diagramView;
-            }
-        }
-        return null;
-    }
-
     public void removeDiagramView(Diagram diagram) {
         for (int i = 0; i < diagramViewList.size(); i++) {
             if (diagramViewList.get(i).getDiagram().equals(diagram)) {
                 diagramViewList.remove(i);
-                break;
+                return;
             }
         }
-    }
-
-    public List<DiagramView> getDiagramViewList() {
-        return diagramViewList;
-    }
-
-    public StateManager getStateManager() {
-        return stateManager;
     }
 
 }

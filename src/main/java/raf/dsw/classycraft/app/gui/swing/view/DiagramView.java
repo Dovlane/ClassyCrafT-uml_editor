@@ -2,8 +2,19 @@ package raf.dsw.classycraft.app.gui.swing.view;
 
 import raf.dsw.classycraft.app.gui.swing.view.painters.ElementPainter;
 import raf.dsw.classycraft.app.gui.swing.view.painters.LassoPainter;
+import raf.dsw.classycraft.app.gui.swing.view.painters.interclassPainters.ClassPainter;
+import raf.dsw.classycraft.app.gui.swing.view.painters.interclassPainters.EnumPainter;
+import raf.dsw.classycraft.app.gui.swing.view.painters.interclassPainters.InterfacePainter;
 import raf.dsw.classycraft.app.model.ClassyRepository.Diagram;
+import raf.dsw.classycraft.app.model.ClassyRepository.Notification;
+import raf.dsw.classycraft.app.model.ClassyRepository.NotificationType;
+import raf.dsw.classycraft.app.model.MessageGenerator.MessageType;
+import raf.dsw.classycraft.app.model.elements.Connection.Connection;
 import raf.dsw.classycraft.app.model.elements.DiagramElement;
+import raf.dsw.classycraft.app.model.elements.Interclass.ClassElement;
+import raf.dsw.classycraft.app.model.elements.Interclass.EnumElement;
+import raf.dsw.classycraft.app.model.elements.Interclass.Interclass;
+import raf.dsw.classycraft.app.model.elements.Interclass.InterfaceElement;
 import raf.dsw.classycraft.app.model.observerPattern.IListener;
 
 import javax.swing.*;
@@ -13,11 +24,10 @@ import java.util.List;
 
 public class DiagramView extends JPanel implements IListener {
 
-    private Diagram diagram;
-    private List<ElementPainter> painters;
-    private List<ElementPainter> selectionModel;
+    private final Diagram diagram;
+    private final List<ElementPainter> painters;
+    private final List<ElementPainter> selectionModel;
     private LassoPainter lassoPainter;
-    private boolean selectionFinished;
 
     public DiagramView(Diagram diagram){
         this.diagram = diagram;
@@ -29,9 +39,20 @@ public class DiagramView extends JPanel implements IListener {
     @Override
     public void update(Object notification) {
 
-        // Remove selected painter
-        if (notification instanceof DiagramElement) {
-            removePainter((DiagramElement) notification);
+        // Cast notification
+        Notification diagramNotification = (Notification) notification;
+
+        // DiagramElement has been passed as a notification node
+        if (diagramNotification.getNode() instanceof DiagramElement) {
+            DiagramElement aDiagramElement = (DiagramElement) diagramNotification.getNode();
+            if (diagramNotification.getType() == NotificationType.ADD) {
+                addPainter(aDiagramElement);
+                System.out.println("Added a new Painter in DiagramView.");
+            }
+            else if (diagramNotification.getType() == NotificationType.REMOVE) {
+                removePainter(aDiagramElement);
+                System.out.println("Removed Painter from DiagramView.");
+            }
         }
 
         repaint();
@@ -48,10 +69,8 @@ public class DiagramView extends JPanel implements IListener {
         }
 
         // Stand out all selected ElementPainters
-        if (selectionFinished) {
-            for (ElementPainter painter: selectionModel) {
-                painter.drawSelectionBox(graphics2D);
-            }
+        for (ElementPainter painter: selectionModel) {
+            painter.drawSelectionBox(graphics2D);
         }
 
         // Display lasso if it is necessary
@@ -63,10 +82,35 @@ public class DiagramView extends JPanel implements IListener {
         System.out.println("DiagramView paintComponent is being performed");
     }
 
-    public void addPainter(ElementPainter painter) {
-        if (!painters.contains(painter)) {
-            painters.add(painter);
+    public void addPainter(DiagramElement diagramElement) {
+
+        // Factory for ElementPainters based on Diagram Element
+        ElementPainter elementPainter = null;
+        if (diagramElement instanceof Interclass) {
+            if (diagramElement instanceof ClassElement) {
+                elementPainter = new ClassPainter((ClassElement) diagramElement);
+            }
+            else if (diagramElement instanceof InterfaceElement) {
+                elementPainter = new InterfacePainter((InterfaceElement) diagramElement);
+            }
+            else {
+                elementPainter = new EnumPainter((EnumElement) diagramElement);
+            }
         }
+        else if (diagramElement instanceof Connection) {
+            // TODO: add factory for connections
+        }
+
+        // Check for Factory quality
+        if (elementPainter == null) {
+            MainFrame.getInstance().getMessageGenerator().generateMessage(
+                    "Painter for object " + diagramElement + " does not exist.", MessageType.ERROR);
+            return;
+        }
+
+        // Add a newly created painter in list of all painters for this DiagramView
+        painters.add(elementPainter);
+        elementPainter.getDiagramElement().addListener(this);
     }
 
     public void removePainter(DiagramElement diagramElement) {
@@ -75,6 +119,7 @@ public class DiagramView extends JPanel implements IListener {
                 ElementPainter painter = painters.get(i);
                 painters.remove(painter);
                 selectionModel.remove(painter);
+                painter.getDiagramElement().removeListener(this);
             }
         }
     }
@@ -95,7 +140,6 @@ public class DiagramView extends JPanel implements IListener {
 
     public void clearSelectionModel() {
         selectionModel.clear();
-        setSelectionFinished(false);
         setLasso(null);
     }
 
@@ -104,10 +148,6 @@ public class DiagramView extends JPanel implements IListener {
     public void setLasso(LassoPainter lassoPainter) {
         this.lassoPainter = lassoPainter;
         repaint();
-    }
-
-    public void setSelectionFinished(boolean selectionFinished) {
-        this.selectionFinished = selectionFinished;
     }
 
     public Diagram getDiagram() {
@@ -130,6 +170,14 @@ public class DiagramView extends JPanel implements IListener {
             }
         }
         return diagramElement;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (object instanceof DiagramView) {
+            return getDiagram().equals(((DiagramView) object).getDiagram());
+        }
+        return false;
     }
 
 }

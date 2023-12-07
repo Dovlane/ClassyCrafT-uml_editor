@@ -1,6 +1,8 @@
 package raf.dsw.classycraft.app.model.elements.Interclass;
 
 import raf.dsw.classycraft.app.model.ClassyRepository.Diagram;
+import raf.dsw.classycraft.app.model.ClassyRepository.Notification;
+import raf.dsw.classycraft.app.model.ClassyRepository.NotificationType;
 import raf.dsw.classycraft.app.model.elements.ClassContent.EnumLiteral;
 import raf.dsw.classycraft.app.model.elements.Modifiers.AccessModifiers;
 import raf.dsw.classycraft.app.model.elements.Modifiers.NonAccessModifiers;
@@ -29,6 +31,12 @@ public class EnumElement extends Interclass {
         this.enumLiterals = enumLiterals;
     }
 
+    public void addEnumLiteral(EnumLiteral enumLiteral) {
+        getEnumLiterals().add(enumLiteral);
+        Notification notification =
+                new Notification(null, NotificationType.ADD);
+        notifyAllSubscribers(notification);
+    }
 
     @Override
     public String toString() {

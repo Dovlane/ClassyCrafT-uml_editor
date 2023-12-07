@@ -1,6 +1,8 @@
 package raf.dsw.classycraft.app.model.elements.Interclass;
 
 import raf.dsw.classycraft.app.model.ClassyRepository.Diagram;
+import raf.dsw.classycraft.app.model.ClassyRepository.Notification;
+import raf.dsw.classycraft.app.model.ClassyRepository.NotificationType;
 import raf.dsw.classycraft.app.model.elements.ClassContent.Attribute;
 import raf.dsw.classycraft.app.model.elements.ClassContent.ClassContent;
 import raf.dsw.classycraft.app.model.elements.ClassContent.Method;
@@ -30,6 +32,14 @@ public class ClassElement extends Interclass {
     public List<ClassContent> getClassContent() {
         return classContent;
     }
+
+    public void addClassContent(ClassContent classContent) {
+        getClassContent().add(classContent);
+        Notification notification =
+                new Notification(null, NotificationType.ADD);
+        notifyAllSubscribers(notification);
+    }
+
 
     public List<Attribute> getClassAttributes() {
         ArrayList<Attribute> attributes = new ArrayList<>();

@@ -120,7 +120,7 @@ public class ClassContentStateDialog extends JFrame {
                     AccessModifiers accessModifier = AccessModifiers.valueOf(jTableMethods.getValueAt(row, 1).toString());
                     NonAccessModifiers nonAccessModifier = NonAccessModifiers.valueOf(jTableMethods.getValueAt(row, 2).toString());
                     String type = jTableMethods.getValueAt(row, 3).toString();
-                    selectedClassElement.getClassContent().add(new Method(name, accessModifier, nonAccessModifier, type));
+                    selectedClassElement.addClassContent(new Method(name, accessModifier, nonAccessModifier, type));
                 }
             }
 
@@ -130,7 +130,7 @@ public class ClassContentStateDialog extends JFrame {
                     AccessModifiers accessModifier = AccessModifiers.valueOf(jTableAttributes.getValueAt(row, 1).toString());
                     NonAccessModifiers nonAccessModifier = NonAccessModifiers.valueOf(jTableAttributes.getValueAt(row, 2).toString());
                     String type = jTableAttributes.getValueAt(row, 3).toString();
-                    selectedClassElement.getClassContent().add(new Attribute(accessModifier, nonAccessModifier, name, type));
+                    selectedClassElement.addClassContent(new Attribute(accessModifier, nonAccessModifier, name, type));
                 }
             }
         }
@@ -144,7 +144,7 @@ public class ClassContentStateDialog extends JFrame {
                     AccessModifiers accessModifier = AccessModifiers.valueOf(jTableMethods.getValueAt(row, 1).toString());
                     NonAccessModifiers nonAccessModifier = NonAccessModifiers.valueOf(jTableMethods.getValueAt(row, 2).toString());
                     String type = jTableMethods.getValueAt(row, 3).toString();
-                    selecteInterfaceElement.getInterfaceMethods().add(new Method(name, accessModifier, nonAccessModifier, type));
+                    selecteInterfaceElement.addMethod(new Method(name, accessModifier, nonAccessModifier, type));
                 }
             }
         }
@@ -155,7 +155,7 @@ public class ClassContentStateDialog extends JFrame {
             if (!tableIsEmpty(jTableEnumLiterals)) {
                 for (int row = 0; row < jTableEnumLiterals.getRowCount(); row++) {
                     String enumLiteralName = jTableEnumLiterals.getValueAt(row, 0).toString();
-                    selectedEnumElement.getEnumLiterals().add(new EnumLiteral(enumLiteralName));
+                    selectedEnumElement.addEnumLiteral(new EnumLiteral(enumLiteralName));
                 }
             }
         }
