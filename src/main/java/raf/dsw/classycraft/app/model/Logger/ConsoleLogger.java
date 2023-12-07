@@ -1,11 +1,12 @@
 package raf.dsw.classycraft.app.model.Logger;
 
 import raf.dsw.classycraft.app.model.MessageGenerator.Message;
+import raf.dsw.classycraft.app.model.MessageGenerator.MessageGenerator;
 
 public class ConsoleLogger extends Logger {
 
-    public ConsoleLogger() {
-        super();
+    public ConsoleLogger(MessageGenerator messageGenerator) {
+        super(messageGenerator);
     }
 
     @Override
