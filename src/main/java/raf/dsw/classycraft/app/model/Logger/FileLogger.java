@@ -11,6 +11,8 @@ public class FileLogger extends Logger {
     private PrintWriter printWriter;
 
     public FileLogger() {
+        super();
+
         fileWriter = null;
         printWriter = null;
         try {

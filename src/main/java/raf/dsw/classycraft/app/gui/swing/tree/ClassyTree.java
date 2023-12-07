@@ -9,7 +9,6 @@ import raf.dsw.classycraft.app.model.ClassyRepository.*;
 import raf.dsw.classycraft.app.model.compositePattern.ClassyNode;
 import raf.dsw.classycraft.app.model.compositePattern.ClassyNodeComposite;
 import raf.dsw.classycraft.app.model.compositePattern.ClassyNodeLeaf;
-import raf.dsw.classycraft.app.model.elements.DiagramElement;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultTreeModel;
