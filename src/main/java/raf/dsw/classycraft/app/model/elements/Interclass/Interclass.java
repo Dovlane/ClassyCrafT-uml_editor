@@ -8,7 +8,8 @@ import raf.dsw.classycraft.app.model.elements.Modifiers.NonAccessModifiers;
 import java.awt.*;
 
 public abstract class Interclass extends DiagramElement {
-
+    private static int initialBoxWidth = 200;
+    private static int initialBoxHeight = 100;
     protected AccessModifiers visibility;
     protected NonAccessModifiers nonAccessModifiers;
     protected Point location;
@@ -63,4 +64,11 @@ public abstract class Interclass extends DiagramElement {
         this.boxHeight = boxHeight;
     }
 
+    public static int getInitialBoxWidth() {
+        return initialBoxWidth;
+    }
+
+    public static int getInitialBoxHeight() {
+        return initialBoxHeight;
+    }
 }

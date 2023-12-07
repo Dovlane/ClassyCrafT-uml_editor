@@ -122,4 +122,14 @@ public class DiagramView extends JPanel implements IListener {
         return selectionModel;
     }
 
+    public DiagramElement getElementAt(Point location) {
+        DiagramElement diagramElement = null;
+        for (ElementPainter elementPainter : getPainters()) {
+            if (elementPainter.elementAt(location)) {
+                return elementPainter.getDiagramElement();
+            }
+        }
+        return diagramElement;
+    }
+
 }

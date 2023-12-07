@@ -47,6 +47,7 @@ public class InterclassStateDialog extends JFrame {
             interclassRadioButtons.add(jRadioButton);
             centerJPanel.add(jRadioButton);
         }
+        interclassRadioButtons.get(0).setSelected(true);
 
         JPanel bottomPanel = new JPanel();
         bottomPanel.setLayout( new GridLayout(0, 2));
@@ -62,6 +63,7 @@ public class InterclassStateDialog extends JFrame {
             accessModifiersRadioButtons.add(jRadioButton);
             bottomLeftPanel.add(jRadioButton);
         }
+        accessModifiersRadioButtons.get(0).setSelected(true);
         bottomRightPanel.add(new Label("Choose non-access modifier"));
         ButtonGroup nonAccessModifiersButtonGroup = new ButtonGroup();
         for (NonAccessModifiers nonAccessModifiers : NonAccessModifiers.values()) {
@@ -70,6 +72,7 @@ public class InterclassStateDialog extends JFrame {
             nonAccessModifiersRadioButtons.add(jRadioButton);
             bottomRightPanel.add(jRadioButton);
         }
+        nonAccessModifiersRadioButtons.get(0).setSelected(true);
         bottomPanel.add(bottomLeftPanel);
         bottomPanel.add(bottomRightPanel);
 

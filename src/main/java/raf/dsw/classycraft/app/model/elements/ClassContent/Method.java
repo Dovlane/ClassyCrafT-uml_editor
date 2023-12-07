@@ -15,6 +15,7 @@ public class Method extends ClassContent {
         this.accessModifiers = accessModifiers;
         this.nonAccessModifiers = nonAccessModifiers;
         this.name = name;
+        this.type = type;
     }
 
 

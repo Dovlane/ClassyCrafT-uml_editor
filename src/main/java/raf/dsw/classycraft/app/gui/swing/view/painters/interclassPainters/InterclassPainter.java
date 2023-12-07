@@ -101,15 +101,15 @@ public class InterclassPainter extends ElementPainter {
         float y = lineBelowInterclassNameGetY(graphics2D);
         float interclassContentHeight = getInterclassContentStringHeight(graphics2D);
         float max_y = y  + numOfInterclassElements * interclassContentHeight;
-
-        if (max_y >= getY() + getBoxHeight()) {
+        float newBoxHeight = (float)(max_y + padding - getY());
+        if (newBoxHeight > Interclass.getInitialBoxHeight()) {
             setBoxHeight(max_y + padding - getY());
         }
     }
 
     protected void adjustBoxWidth(Graphics2D graphics2D, String stringMaxContentLength) {
         float maxTextWidth = Math.max(getInterclassContentStringWidth(graphics2D, stringMaxContentLength), interclassNameWidth(graphics2D));
-        if (maxTextWidth >= getBoxWidth()) {
+        if (maxTextWidth > Interclass.getInitialBoxWidth()) {
             setBoxWidth(maxTextWidth + padding * 2);
         }
     }
