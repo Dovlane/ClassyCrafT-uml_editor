@@ -1,0 +1,2 @@
+[ERROR][2023-12-07 16:27:19.6777583] ProjectExplorer can only contain Projects.
+[ERROR][2023-12-07 16:27:48.2983347] ProjectExplorer can only contain Projects.

@@ -78,7 +78,7 @@ public abstract class ClassyNode implements IPublisher {
             // Notify PackageView about the potential change in Package Metadata
             Notification notification =
                     new Notification(this, NotificationType.SET);
-            notifyAllSubscribers(notification);
+            parent.notifyAllSubscribers(notification);
 
             return true;
         }
