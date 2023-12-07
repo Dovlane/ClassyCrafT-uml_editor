@@ -11,10 +11,11 @@ import java.util.List;
 
 public class Diagram extends ClassyNodeComposite implements IPublisher {
 
-    List<IListener> listeners = new ArrayList<>();
+    List<IListener> listeners;
 
     public Diagram(String name, ClassyNode parent) {
         super(name, parent);
+        listeners = new ArrayList<>();
     }
 
     @Override

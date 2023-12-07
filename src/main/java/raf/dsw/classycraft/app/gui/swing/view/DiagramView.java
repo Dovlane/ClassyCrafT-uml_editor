@@ -13,11 +13,10 @@ import java.util.List;
 
 public class DiagramView extends JPanel implements IListener {
 
-    private Diagram diagram;
-    private List<ElementPainter> painters;
-    private List<ElementPainter> selectionModel;
+    private final Diagram diagram;
+    private final List<ElementPainter> painters;
+    private final List<ElementPainter> selectionModel;
     private LassoPainter lassoPainter;
-    private boolean selectionFinished;
 
     public DiagramView(Diagram diagram){
         this.diagram = diagram;
@@ -48,10 +47,8 @@ public class DiagramView extends JPanel implements IListener {
         }
 
         // Stand out all selected ElementPainters
-        if (selectionFinished) {
-            for (ElementPainter painter: selectionModel) {
-                painter.drawSelectionBox(graphics2D);
-            }
+        for (ElementPainter painter: selectionModel) {
+            painter.drawSelectionBox(graphics2D);
         }
 
         // Display lasso if it is necessary
@@ -67,6 +64,7 @@ public class DiagramView extends JPanel implements IListener {
         if (!painters.contains(painter)) {
             painters.add(painter);
         }
+        painter.getDiagramElement().addListener(this);
     }
 
     public void removePainter(DiagramElement diagramElement) {
@@ -75,6 +73,7 @@ public class DiagramView extends JPanel implements IListener {
                 ElementPainter painter = painters.get(i);
                 painters.remove(painter);
                 selectionModel.remove(painter);
+                painter.getDiagramElement().removeListener(this);
             }
         }
     }
@@ -95,7 +94,6 @@ public class DiagramView extends JPanel implements IListener {
 
     public void clearSelectionModel() {
         selectionModel.clear();
-        setSelectionFinished(false);
         setLasso(null);
     }
 
@@ -104,10 +102,6 @@ public class DiagramView extends JPanel implements IListener {
     public void setLasso(LassoPainter lassoPainter) {
         this.lassoPainter = lassoPainter;
         repaint();
-    }
-
-    public void setSelectionFinished(boolean selectionFinished) {
-        this.selectionFinished = selectionFinished;
     }
 
     public Diagram getDiagram() {

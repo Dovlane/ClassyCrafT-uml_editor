@@ -15,7 +15,6 @@ public abstract class Interclass extends DiagramElement {
     protected int boxWidth;
     protected int boxHeight;
 
-
     public Interclass(String name, Diagram parent) {
         super(name, parent);
     }
@@ -29,22 +28,18 @@ public abstract class Interclass extends DiagramElement {
         this.nonAccessModifiers = nonAccessModifiers;
     }
 
-
     // Getters and Setters
-    public AccessModifiers getVisibility() {
-        return visibility;
+    public void updateAbsoluteLocation(Point location) {
+        this.location = location;
+        notifyAllSubscribers(null);
     }
 
-    public void setVisibility(AccessModifiers visibility) {
-        this.visibility = visibility;
+    public void translate(Point t) {
+        updateAbsoluteLocation(new Point(location.x + t.x, location.y + t.y));
     }
 
     public Point getLocation() {
         return location;
-    }
-
-    public void setLocation(Point location) {
-        this.location = location;
     }
 
     public int getBoxWidth() {

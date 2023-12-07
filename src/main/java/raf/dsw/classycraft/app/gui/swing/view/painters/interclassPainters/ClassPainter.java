@@ -8,10 +8,6 @@ import raf.dsw.classycraft.app.model.elements.Interclass.ClassElement;
 import raf.dsw.classycraft.app.model.elements.Modifiers.NonAccessModifiers;
 
 import java.awt.*;
-import java.awt.font.LineMetrics;
-import java.awt.font.TextAttribute;
-import java.util.HashMap;
-import java.util.Map;
 
 
 public class ClassPainter extends InterclassPainter {

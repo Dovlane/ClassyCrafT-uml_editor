@@ -1,0 +1,2 @@
+[ERROR][2023-12-07 09:47:30.6515792] Diagram can only contain Diagram Elements.
+[ERROR][2023-12-07 09:47:34.8385777] Diagram can only contain Diagram Elements.

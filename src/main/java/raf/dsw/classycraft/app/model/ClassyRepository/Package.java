@@ -10,7 +10,7 @@ import java.util.List;
 
 public class Package extends ClassyNodeComposite implements IPublisher {
 
-    List<IListener> listeners = new ArrayList<>();
+    List<IListener> listeners;
     private int nmbOfCreatedPackages;
     private int nmbOfCreatedDiagrams;
     private static Package defaultPackage;
@@ -18,6 +18,7 @@ public class Package extends ClassyNodeComposite implements IPublisher {
 
     public Package(String name, ClassyNode parent) {
         super(name, parent);
+        listeners = new ArrayList<>();
         nmbOfCreatedPackages = 0;
         nmbOfCreatedDiagrams = 0;
     }

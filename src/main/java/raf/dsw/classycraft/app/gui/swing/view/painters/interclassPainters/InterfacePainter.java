@@ -8,6 +8,7 @@ import raf.dsw.classycraft.app.model.elements.Modifiers.NonAccessModifiers;
 import java.awt.*;
 
 public class InterfacePainter extends InterclassPainter {
+    
     public InterfacePainter(InterfaceElement diagramElement) {
         super(diagramElement);
     }
@@ -55,6 +56,7 @@ public class InterfacePainter extends InterclassPainter {
         }
         return maxStringLength;
     }
+
     @Override
     protected float lineBelowInterclassNameGetY(Graphics2D graphics2D) {
         return super.lineBelowInterclassNameGetY(graphics2D) + getInterclassHeaderStringHeight(graphics2D);
