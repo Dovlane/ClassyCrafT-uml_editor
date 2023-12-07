@@ -53,4 +53,10 @@ public class Package extends ClassyNodeComposite implements IPublisher {
         return nmbOfCreatedDiagrams;
     }
 
+    public void display() {
+        Notification notification =
+                new Notification(this, NotificationType.SET);
+        notifyAllSubscribers(notification);
+    }
+
 }

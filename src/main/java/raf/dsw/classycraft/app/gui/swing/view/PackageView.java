@@ -47,6 +47,7 @@ public class PackageView extends JSplitPane implements IListener {
         addButton(toolBar, "AI", true);
         addButton(toolBar, "AC", false);
         addButton(toolBar, "ACC", false);
+        addButton(toolBar, "M", false);
         addButton(toolBar, "R", false);
         addButton(toolBar, "S", false);
 
@@ -82,6 +83,7 @@ public class PackageView extends JSplitPane implements IListener {
                             case "AI" -> startAddInterclassState();
                             case "AC" -> startAddConnectionState();
                             case "ACC" -> startAddClassContentState();
+                            case "M" -> startMoveState();
                             case "R" -> startRemoveElementState();
                             case "S" -> startSelectElementState();
                             default -> MainFrame.getInstance().getMessageGenerator().generateMessage(
@@ -142,6 +144,9 @@ public class PackageView extends JSplitPane implements IListener {
     }
     public void startAddClassContentState() {
         stateManager.setAddClassContentState();
+    }
+    public void startMoveState() {
+        stateManager.setMoveState();
     }
     public void startRemoveElementState() {
         stateManager.setRemoveElementState();

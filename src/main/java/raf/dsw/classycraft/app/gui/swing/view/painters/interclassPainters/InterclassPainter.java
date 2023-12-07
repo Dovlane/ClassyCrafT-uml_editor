@@ -160,6 +160,16 @@ public class InterclassPainter extends ElementPainter {
         return (insideX && insideY);
     }
 
+    public Point getUpperLeft() {
+        return new Point((int) getX(), (int) getY());
+    }
+
+    public Point getBottomRight() {
+        int x = (int) getX() + (int) getBoxWidth();
+        int y = (int) getY() + (int) getBoxHeight();
+        return new Point(x, y);
+    }
+
     protected double getX() {
         return ((Interclass) diagramElement).getLocation().getX();
     }

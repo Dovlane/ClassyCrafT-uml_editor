@@ -23,15 +23,7 @@ public class LinePainter extends ElementPainter {
 
     }
 
-    @Override
-    public boolean elementAt(Point location) {
-        return false;
-    }
 
-    @Override
-    public DiagramElement getDiagramElement() {
-        return super.getDiagramElement();
-    }
 
     public void draw(Graphics2D graphics2D) {
         Stroke previousStroke = graphics2D.getStroke();
@@ -41,6 +33,16 @@ public class LinePainter extends ElementPainter {
         graphics2D.drawLine((int)getStartingPoint().getX(), (int)getStartingPoint().getY(), (int) getCurrentPoint().getX(), (int) getCurrentPoint().getY());
         graphics2D.setStroke(previousStroke);
         graphics2D.setColor(lastColor);
+    }
+
+    @Override
+    public boolean elementAt(Point location) {
+        return false;
+    }
+
+    @Override
+    public DiagramElement getDiagramElement() {
+        return super.getDiagramElement();
     }
 
     private Interclass getInterclass() {return (Interclass) diagramElement;}

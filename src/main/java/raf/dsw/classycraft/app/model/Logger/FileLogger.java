@@ -1,6 +1,7 @@
 package raf.dsw.classycraft.app.model.Logger;
 
 import raf.dsw.classycraft.app.model.MessageGenerator.Message;
+import raf.dsw.classycraft.app.model.MessageGenerator.MessageGenerator;
 
 import java.io.IOException;
 import java.io.FileWriter;
@@ -10,8 +11,8 @@ public class FileLogger extends Logger {
     private FileWriter fileWriter;
     private PrintWriter printWriter;
 
-    public FileLogger() {
-        super();
+    public FileLogger(MessageGenerator messageGenerator) {
+        super(messageGenerator);
 
         fileWriter = null;
         printWriter = null;

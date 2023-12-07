@@ -5,19 +5,21 @@ import raf.dsw.classycraft.app.model.StatePattern.concrete.*;
 public class StateManager {
 
     private State currentState;
-    private AddInterclassState addInterclassState;
-    private AddConnectionState addConnectionState;
-    private AddClassContentState addClassContentState;
-    private RemoveElementState removeElementState;
-    private SelectElementState selectElementState;
+    private final AddInterclassState addInterclassState;
+    private final AddConnectionState addConnectionState;
+    private final AddClassContentState addClassContentState;
+    private final MoveState moveState;
+    private final RemoveElementState removeElementState;
+    private final SelectElementState selectElementState;
 
     public StateManager() {
 
         // Init states
         addInterclassState = new AddInterclassState();
         addConnectionState = new AddConnectionState();
-        removeElementState = new RemoveElementState();
         addClassContentState = new AddClassContentState();
+        moveState = new MoveState();
+        removeElementState = new RemoveElementState();
         selectElementState = new SelectElementState();
 
         // Set default state for currentState
@@ -36,6 +38,10 @@ public class StateManager {
 
     public void setAddClassContentState() {
         currentState = addClassContentState;
+    }
+
+    public void setMoveState() {
+        currentState = moveState;
     }
 
     public void setRemoveElementState() {

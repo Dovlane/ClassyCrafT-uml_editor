@@ -93,4 +93,11 @@ public class ConnectionPainter extends ElementPainter {
         return Math.abs((int)(currentPointFrom.getY() - currentPointTo.getY()));
     }
 
+    public Point getCurrentPointFrom() {
+        return currentPointFrom;
+    }
+
+    public Point getCurrentPointTo() {
+        return currentPointTo;
+    }
 }

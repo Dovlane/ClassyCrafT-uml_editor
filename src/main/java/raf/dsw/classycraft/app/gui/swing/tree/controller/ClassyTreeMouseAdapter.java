@@ -3,8 +3,6 @@ package raf.dsw.classycraft.app.gui.swing.tree.controller;
 import raf.dsw.classycraft.app.gui.swing.tree.model.ClassyTreeItem;
 import raf.dsw.classycraft.app.gui.swing.view.MainFrame;
 import raf.dsw.classycraft.app.model.ClassyRepository.Package;
-import raf.dsw.classycraft.app.model.ClassyRepository.Notification;
-import raf.dsw.classycraft.app.model.ClassyRepository.NotificationType;
 
 import javax.swing.*;
 
@@ -30,9 +28,7 @@ public class ClassyTreeMouseAdapter extends MouseAdapter {
             ClassyTreeItem treeItemSelected = (ClassyTreeItem) path.getLastPathComponent();
             if (treeItemSelected.getClassyNode() instanceof Package) {
                 Package chosenPackage = (Package) treeItemSelected.getClassyNode();
-                Notification notification =
-                        new Notification(chosenPackage, NotificationType.SET);
-                chosenPackage.notifyAllSubscribers(notification);
+                chosenPackage.display();
             }
         }
     }
