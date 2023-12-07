@@ -1,6 +1,8 @@
 package raf.dsw.classycraft.app.model.elements.Interclass;
 
 import raf.dsw.classycraft.app.model.ClassyRepository.Diagram;
+import raf.dsw.classycraft.app.model.ClassyRepository.Notification;
+import raf.dsw.classycraft.app.model.ClassyRepository.NotificationType;
 import raf.dsw.classycraft.app.model.elements.Modifiers.AccessModifiers;
 import raf.dsw.classycraft.app.model.elements.DiagramElement;
 import raf.dsw.classycraft.app.model.elements.Modifiers.NonAccessModifiers;
@@ -31,7 +33,9 @@ public abstract class Interclass extends DiagramElement {
     // Getters and Setters
     public void updateAbsoluteLocation(Point location) {
         this.location = location;
-        notifyAllSubscribers(null);
+        Notification notification =
+                new Notification(null, NotificationType.ADD);
+        notifyAllSubscribers(notification);
     }
 
     public void translate(Point t) {
