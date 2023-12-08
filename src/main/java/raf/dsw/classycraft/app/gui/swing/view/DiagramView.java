@@ -18,6 +18,7 @@ import raf.dsw.classycraft.app.model.elements.Interclass.ClassElement;
 import raf.dsw.classycraft.app.model.elements.Interclass.EnumElement;
 import raf.dsw.classycraft.app.model.elements.Interclass.Interclass;
 import raf.dsw.classycraft.app.model.elements.Interclass.InterfaceElement;
+import raf.dsw.classycraft.app.model.elements.LineElement;
 import raf.dsw.classycraft.app.model.observerPattern.IListener;
 
 import javax.swing.*;
@@ -31,7 +32,7 @@ public class DiagramView extends JPanel implements IListener {
     private final List<ElementPainter> painters;
     private final List<ElementPainter> selectionModel;
     private LassoPainter lassoPainter;
-    private LinePainter linePainter;
+//    private LinePainter linePainter;
 
     public DiagramView(Diagram diagram){
         this.diagram = diagram;
@@ -82,30 +83,10 @@ public class DiagramView extends JPanel implements IListener {
             lassoPainter.draw(graphics2D);
         }
 
-        if (linePainter != null) {
-            linePainter.draw(graphics2D);
-        }
-
         // Debug Info
         System.out.println("DiagramView paintComponent is being performed");
     }
 
-    public void setLinePainter(LinePainter linePainter) {
-        this.linePainter = linePainter;
-        repaint();
-    }
-    public void setLinePainterCoordinates(Point currentPoint) {
-        System.out.println("currentPoint " + currentPoint);
-        if (linePainter != null) {
-            linePainter.setCurrentPoint(currentPoint);
-            repaint();
-        }
-    }
-    public void removeLinePainter() {
-        linePainter = null;
-        System.out.println("painters: " + painters);
-        repaint();
-    }
     public void addPainter(DiagramElement diagramElement) {
 
         // Factory for ElementPainters based on Diagram Element
@@ -125,6 +106,9 @@ public class DiagramView extends JPanel implements IListener {
             elementPainter = new AgregationPainter((Aggregation) diagramElement);
             // TODO: add factory for connections
         }
+        else if (diagramElement instanceof LineElement) {
+            elementPainter = new LinePainter((LineElement) diagramElement);
+        }
 
         // Check for Factory quality
         if (elementPainter == null) {
@@ -139,12 +123,14 @@ public class DiagramView extends JPanel implements IListener {
     }
 
     public void removePainter(DiagramElement diagramElement) {
+        System.out.println("Usao u removePainter");
         for (int i = 0; i < painters.size(); i++) {
             if (painters.get(i).getDiagramElement().equals(diagramElement)) {
                 ElementPainter painter = painters.get(i);
                 painters.remove(painter);
                 selectionModel.remove(painter);
                 painter.getDiagramElement().removeListener(this);
+                System.out.println("Usao u if");
             }
         }
     }

@@ -102,10 +102,6 @@ public abstract class Interclass extends DiagramElement {
         }
 
         return points;
-//        int halfWidth = width / 2;
-//        int halfHeight = height / 2;
-//
-//        return new Point[] {new Point(locationX, locationY + halfHeight), new Point(locationX + halfWidth, locationY), new Point(locationX + width, locationY + halfHeight), new Point(locationX + halfWidth, locationY + height)};
     }
 
     public AccessModifiers getVisibility() {
@@ -113,7 +109,6 @@ public abstract class Interclass extends DiagramElement {
     }
 
     public Point getBestStartingPoint(Point endPoint) {
-        System.out.println("getBestStartingPoint");
         Point[] potentialStartingPoints = getConnectionAttachingPoints();
         Point bestStartingPoint = potentialStartingPoints[0];
         double minDistance = Point.distance(bestStartingPoint.getX(), bestStartingPoint.getY(), endPoint.getX(), endPoint.getY());

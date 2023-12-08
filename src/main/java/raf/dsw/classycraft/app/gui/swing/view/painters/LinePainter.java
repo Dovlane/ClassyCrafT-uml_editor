@@ -2,22 +2,15 @@ package raf.dsw.classycraft.app.gui.swing.view.painters;
 
 import raf.dsw.classycraft.app.model.elements.DiagramElement;
 import raf.dsw.classycraft.app.model.elements.Interclass.Interclass;
+import raf.dsw.classycraft.app.model.elements.LineElement;
 
+import javax.sound.sampled.Line;
 import java.awt.*;
 
 public class LinePainter extends ElementPainter {
-    private Point currentPoint;
-
-    public LinePainter(DiagramElement diagramElement) {
+    public LinePainter(LineElement diagramElement) {
         super(diagramElement);
-        currentPoint = ((Interclass)diagramElement).getLocation();
     }
-
-    public LinePainter(Interclass diagramElement, Point b) {
-        super(diagramElement);
-        currentPoint = b;
-    }
-
     @Override
     public void drawSelectionBox(Graphics2D graphics2D) {
 
@@ -45,15 +38,12 @@ public class LinePainter extends ElementPainter {
         return super.getDiagramElement();
     }
 
-    private Interclass getInterclass() {return (Interclass) diagramElement;}
+    private LineElement getLineElement() {return (LineElement) diagramElement;}
+
+    private Interclass getInterclass() {return getLineElement().getInterclassElement();}
+
+    private Point getCurrentPoint() {return  getLineElement().getCurrentPoint(); }
 
     private Point getStartingPoint() {return getInterclass().getBestStartingPoint(getCurrentPoint()); }
-    private Point getCurrentPoint() {
-        return currentPoint;
-    }
-    public void setCurrentPoint(Point currentPoint) {
-        this.currentPoint = currentPoint;
-    }
-
 
 }
