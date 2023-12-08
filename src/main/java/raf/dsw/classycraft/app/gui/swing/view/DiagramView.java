@@ -18,6 +18,7 @@ import raf.dsw.classycraft.app.model.elements.Interclass.ClassElement;
 import raf.dsw.classycraft.app.model.elements.Interclass.EnumElement;
 import raf.dsw.classycraft.app.model.elements.Interclass.Interclass;
 import raf.dsw.classycraft.app.model.elements.Interclass.InterfaceElement;
+import raf.dsw.classycraft.app.model.elements.LassoElement;
 import raf.dsw.classycraft.app.model.elements.LineElement;
 import raf.dsw.classycraft.app.model.observerPattern.IListener;
 
@@ -31,8 +32,6 @@ public class DiagramView extends JPanel implements IListener {
     private final Diagram diagram;
     private final List<ElementPainter> painters;
     private final List<ElementPainter> selectionModel;
-    private LassoPainter lassoPainter;
-//    private LinePainter linePainter;
 
     public DiagramView(Diagram diagram){
         this.diagram = diagram;
@@ -67,6 +66,7 @@ public class DiagramView extends JPanel implements IListener {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D graphics2D = (Graphics2D) g;
+        updateSelectionModel();
 
         // Display all ElementPainters
         for (ElementPainter painter: painters) {
@@ -76,11 +76,6 @@ public class DiagramView extends JPanel implements IListener {
         // Stand out all selected ElementPainters
         for (ElementPainter painter: selectionModel) {
             painter.drawSelectionBox(graphics2D);
-        }
-
-        // Display lasso if it is necessary
-        if (lassoPainter != null) {
-            lassoPainter.draw(graphics2D);
         }
 
         // Debug Info
@@ -109,6 +104,9 @@ public class DiagramView extends JPanel implements IListener {
         else if (diagramElement instanceof LineElement) {
             elementPainter = new LinePainter((LineElement) diagramElement);
         }
+        else if (diagramElement instanceof LassoElement) {
+            elementPainter = new LassoPainter((LassoElement) diagramElement);
+        }
 
         // Check for Factory quality
         if (elementPainter == null) {
@@ -135,27 +133,36 @@ public class DiagramView extends JPanel implements IListener {
         }
     }
 
-    public void updateSelectionModel(LassoPainter lasso) {
+    public void updateSelectionModel() {
 
         // Create upper-left and bottom-right corner
-        setLasso(lasso);
+        LassoPainter lassoPainter = getLassoPainter();
 
-        // Add all painters which intersects with Lasso
-        if (lasso != null) {
+        if (lassoPainter != null) {
             selectionModel.clear();
-            for (ElementPainter painter: painters) {
+            for (ElementPainter painter : painters) {
                 if (lassoPainter.intersectsWith(painter)) {
                     selectionModel.add(painter);
                 }
             }
         }
-
-        // Refresh DiagramView
-        repaint();
+//        // Refresh DiagramView
+//        repaint();
     }
 
-    public void setLasso(LassoPainter lassoPainter) {
-        this.lassoPainter = lassoPainter;
+//    public void setLasso(LassoPainter lassoPainter) {
+//        this.lassoPainter = lassoPainter;
+//    }
+
+    private LassoPainter getLassoPainter() {
+        LassoPainter lassoPainter = null;
+        for (ElementPainter painter : painters) {
+            if (painter instanceof LassoPainter) {
+                lassoPainter = (LassoPainter) painter;
+                break;
+            }
+        }
+        return lassoPainter;
     }
 
     public Diagram getDiagram() {

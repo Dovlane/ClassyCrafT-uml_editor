@@ -16,14 +16,13 @@ import java.awt.*;
 public class AddConnectionState implements State {
     DiagramElement selectedDiagramElementFrom;
     LineElement lineElement;
+
     public void mousePressed(Point location, DiagramView diagramView) {
         selectedDiagramElementFrom = diagramView.getElementAt(location);
         Diagram currentDiagram = diagramView.getDiagram();
 
         if (selectedDiagramElementFrom != null && selectedDiagramElementFrom instanceof Interclass) {
-            //diagramView.setLinePainter(new LinePainter((LineElement) selectedDiagramElementFrom));
             lineElement = new LineElement("temporary line", currentDiagram, (Interclass) selectedDiagramElementFrom);
-
             ClassyTreeItem classyTreeDiagram =
                     MainFrame.getInstance().getClassyTree().getRoot().getTreeItemFromClassyNode(currentDiagram);
             if (classyTreeDiagram == null) {

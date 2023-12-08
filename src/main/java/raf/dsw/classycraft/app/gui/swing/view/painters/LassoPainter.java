@@ -2,20 +2,15 @@ package raf.dsw.classycraft.app.gui.swing.view.painters;
 
 import raf.dsw.classycraft.app.gui.swing.view.painters.connectionPainters.ConnectionPainter;
 import raf.dsw.classycraft.app.gui.swing.view.painters.interclassPainters.InterclassPainter;
-import raf.dsw.classycraft.app.model.elements.Connection.Connection;
-import raf.dsw.classycraft.app.model.elements.Interclass.Interclass;
+import raf.dsw.classycraft.app.model.elements.LassoElement;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 
 public class LassoPainter extends ElementPainter {
 
-    private Point lassoUpperLeft;
-    private Point lassoBottomRight;
-
-    public LassoPainter(Point first, Point second) {
-        super(null);
-        setCorners(first, second);
+    public LassoPainter(LassoElement lassoElement) {
+        super(lassoElement);
     }
 
     public boolean intersectsWith(ElementPainter elementPainter) {
@@ -25,12 +20,12 @@ public class LassoPainter extends ElementPainter {
             Point painterBottomRight = interclassPainter.getBottomRight();
 
             // Check if one rectangle is next to the other
-            if (lassoBottomRight.x < painterUpperLeft.x || painterBottomRight.x < lassoUpperLeft.x) {
+            if (getLassoBottomRight().x < painterUpperLeft.x || painterBottomRight.x < getLassoUpperLeft().x) {
                 return false;
             }
 
             // Check if one rectangle is above the other
-            if (lassoBottomRight.y < painterUpperLeft.y || painterBottomRight.y < lassoUpperLeft.y) {
+            if (getLassoBottomRight().y < painterUpperLeft.y || painterBottomRight.y < getLassoUpperLeft().y) {
                 return false;
             }
         }
@@ -46,12 +41,14 @@ public class LassoPainter extends ElementPainter {
 
     @Override
     public void draw(Graphics2D graphics2D) {
-        int boxWidth = lassoBottomRight.x - lassoUpperLeft.x;
-        int boxHeight = lassoBottomRight.y - lassoUpperLeft.y;
+        int boxWidth = getWidth();
+        int boxHeight = getHeight();
+        Color lastColor = graphics2D.getColor();
         graphics2D.setColor(new Color(0, 0, 1f));
-        graphics2D.drawRect(lassoUpperLeft.x, lassoUpperLeft.y, boxWidth, boxHeight);
+        graphics2D.drawRect(getLassoUpperLeft().x, getLassoUpperLeft().y, boxWidth, boxHeight);
         graphics2D.setColor(new Color(0f, 0f, 1f, 0.4f));
-        graphics2D.fillRect(lassoUpperLeft.x, lassoUpperLeft.y, boxWidth, boxHeight);
+        graphics2D.fillRect(getLassoUpperLeft().x, getLassoUpperLeft().y, boxWidth, boxHeight);
+        graphics2D.setColor(lastColor);
     }
 
     @Override
@@ -64,26 +61,22 @@ public class LassoPainter extends ElementPainter {
         return false;
     }
 
-    private void setCorners(Point first, Point second) {
-        lassoUpperLeft = new Point(
-                Math.min(first.x, second.x),
-                Math.min(first.y, second.y)
-        );
-        lassoBottomRight = new Point(
-                Math.max(first.x, second.x),
-                Math.max(first.y, second.y)
-        );
-    }
+    private LassoElement getLassoElement() {return (LassoElement) diagramElement;}
+
+    private Point getLassoUpperLeft() { return getLassoElement().getLassoUpperLeft(); }
+
+    private Point getLassoBottomRight() { return getLassoElement().getLassoBottomRight(); }
+
     private int getWidth() {
-        return lassoBottomRight.x - lassoUpperLeft.x;
+        return getLassoBottomRight().x - getLassoUpperLeft().x;
     }
 
     private int getHeight() {
-        return lassoBottomRight.y - lassoUpperLeft.y;
+        return getLassoBottomRight().y - getLassoUpperLeft().y;
     }
 
     private Rectangle getLassoRectangle() {
-        return new Rectangle(lassoUpperLeft.x, lassoUpperLeft.y, getWidth(), getHeight());
+        return new Rectangle(getLassoUpperLeft().x, getLassoUpperLeft().y, getWidth(), getHeight());
     }
 
     public static boolean connectionIntersectsLasso(ConnectionPainter connectionPainter, Rectangle  r) {
@@ -94,7 +87,7 @@ public class LassoPainter extends ElementPainter {
         int y0 = (int)from.getY();
         int x1 = (int)to.getX();
         int y1 = (int)to.getY();
-        // use the Rectangle2D.intersectsLine() method.
+
         boolean intersection = r.intersectsLine(x0, y0, x1, y1);
         if (intersection) {
             return true;
