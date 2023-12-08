@@ -5,9 +5,11 @@ import raf.dsw.classycraft.app.model.elements.ClassContent.ClassContent;
 import raf.dsw.classycraft.app.model.elements.ClassContent.Method;
 
 import raf.dsw.classycraft.app.model.elements.Interclass.ClassElement;
+import raf.dsw.classycraft.app.model.elements.Interclass.Interclass;
 import raf.dsw.classycraft.app.model.elements.Modifiers.NonAccessModifiers;
 
 import java.awt.*;
+import java.awt.font.LineMetrics;
 
 
 public class ClassPainter extends InterclassPainter {
@@ -36,11 +38,10 @@ public class ClassPainter extends InterclassPainter {
             graphics2D.drawString(attributeString, (int) getX(), y);
         }
 
-        y += padding;
+        y += 5;
         graphics2D.drawLine((int) getX(), (int) y, (int) (getX() + getBoxWidth()), (int) y);
 
         for (Method method : getClassElement().getClassMethods()) {
-            int size = 10;
             String methodString = method.toString();
             graphics2D.setFont(getInterclassContentFont());
             if (method.getNonAccessModifiers() == NonAccessModifiers.STATIC) {
@@ -53,6 +54,7 @@ public class ClassPainter extends InterclassPainter {
         }
     }
 
+
     private String getMaxContentStringLength() {
         String maxStringLength = "";
         for (ClassContent classContent : getClassElement().getClassContent()) {
@@ -62,6 +64,26 @@ public class ClassPainter extends InterclassPainter {
         return maxStringLength;
     }
 
+    @Override
+    protected void drawInterclassName(Graphics2D graphics2D, float x, float y) {
+        float boxWidth = (float)getBoxWidth();
+        String interclassName = ((Interclass)diagramElement).getName();
+        if (getClassElement().getNonAccessModifiers() == NonAccessModifiers.ABSTRACT) {
+            graphics2D.setFont(abstractInterclassNameFont);
+        } else {
+            graphics2D.setFont(interclassNameFont);
+        }
+        LineMetrics metrics = getLineMetrics(graphics2D, interclassName);
+        float messageWidth = (float)graphics2D.getFont().getStringBounds(interclassName, graphics2D.getFontRenderContext()).getWidth();
+        float messageHeight = (float)graphics2D.getFont().getStringBounds(interclassName, graphics2D.getFontRenderContext()).getHeight();
+
+        float descent = metrics.getDescent( );
+        float x_text = x + (boxWidth - messageWidth) / 2;
+        float y_text = y + messageHeight;
+        graphics2D.drawString(interclassName, x_text, y_text);
+        yBelowInterclassName = y + messageHeight + descent;
+        drawInterclassLine(graphics2D, yBelowInterclassName);
+    }
 
     private ClassElement getClassElement() { return (ClassElement)diagramElement; }
 

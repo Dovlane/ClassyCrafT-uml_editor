@@ -8,6 +8,7 @@ import raf.dsw.classycraft.app.model.ClassyRepository.NotificationType;
 import raf.dsw.classycraft.app.model.StatePattern.State;
 import raf.dsw.classycraft.app.model.elements.DiagramElement;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,13 +23,24 @@ public class AddClassContentState implements State {
         if (diagramElementAt != null) {
             ClassContentStateDialog classContentStateDialog = new ClassContentStateDialog(diagramElementAt);
 
-            classContentStateDialog.getButtonAdd().addActionListener(e -> classContentStateDialog.insertRow());
+            classContentStateDialog.getButtonAdd().addActionListener(
+                    e -> {
+                        try {
+                            classContentStateDialog.insertRow();
+                        }
+                        catch (Exception exception) {
+                            JOptionPane.showMessageDialog(classContentStateDialog,
+                                    exception.getMessage(),
+                                    "Error",
+                                    JOptionPane.ERROR_MESSAGE);
+                        }
+                    });
             classContentStateDialog.getButtonDelete().addActionListener(e -> classContentStateDialog.deleteRow());
             classContentStateDialog.getButtonOk().addActionListener(
-                    e -> {
-                classContentStateDialog.insertData();
-                classContentStateDialog.dispose();
-            });
+                    e ->  {classContentStateDialog.insertData();
+                    classContentStateDialog.dispose();
+                    });
+
         }
     }
 

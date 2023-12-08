@@ -20,6 +20,11 @@ public abstract class Connection extends DiagramElement {
         this.to = to;
     }
 
+    @Override
+    public String getName() {
+        return from.getName() +
+                 "-" + to.getName();
+    }
 
     // Getters and Setters
     public Interclass getFrom() {
