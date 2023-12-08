@@ -8,12 +8,10 @@ import raf.dsw.classycraft.app.model.ClassyRepository.Diagram;
 import raf.dsw.classycraft.app.model.MessageGenerator.MessageType;
 import raf.dsw.classycraft.app.model.StatePattern.State;
 import raf.dsw.classycraft.app.model.elements.DiagramElement;
-import raf.dsw.classycraft.app.model.elements.Interclass.ClassElement;
 import raf.dsw.classycraft.app.model.elements.Modifiers.AccessModifiers;
-import raf.dsw.classycraft.app.model.elements.Interclass.EnumElement;
-import raf.dsw.classycraft.app.model.elements.Interclass.Interclass;
-import raf.dsw.classycraft.app.model.elements.Interclass.InterfaceElement;
 import raf.dsw.classycraft.app.model.elements.Modifiers.NonAccessModifiers;
+import raf.dsw.classycraft.app.model.abstractFactoryForClassyNodes.ElementInterclassType;
+import raf.dsw.classycraft.app.model.abstractFactoryForClassyNodes.InfoForCreatingInterclass;
 
 import javax.swing.*;
 import java.awt.*;
@@ -31,7 +29,7 @@ public class AddInterclassState implements State {
         }
         interclassStateDialog = new InterclassStateDialog();
         interclassStateDialog.setVisible(true);
-        final Interclass[] interclass = {null};
+        final InfoForCreatingInterclass[] infoForCreatingInterclass = {null};
         Diagram currentDiagram = diagramView.getDiagram();
 
         interclassStateDialog.getButtonOk().addActionListener(
@@ -61,16 +59,17 @@ public class AddInterclassState implements State {
             }
             for (JRadioButton jRadioButton : interclassStateDialog.getInterclassRadioButtons()){
                 if (jRadioButton.isSelected()) {
+                    ElementInterclassType elementInterclassType = null;
                     if (jRadioButton.getText().equals("Class")) {
-                        interclass[0] = new ClassElement(interclassName, currentDiagram, location, accessModifier, nonAccessModifier);
+                        elementInterclassType = ElementInterclassType.CLASS;
                     }
                     else if (jRadioButton.getText().equals("Interface")) {
-                        interclass[0] = new InterfaceElement(interclassName, currentDiagram, location, accessModifier, nonAccessModifier);
-                        System.out.println("interface");
+                        elementInterclassType = ElementInterclassType.INTERFACE;
                     }
                     else if (jRadioButton.getText().equals("Enum")) {
-                        interclass[0] = new EnumElement(interclassName, currentDiagram, location, accessModifier, nonAccessModifier);
+                        elementInterclassType = ElementInterclassType.ENUM;
                     }
+                    infoForCreatingInterclass[0] = new InfoForCreatingInterclass(interclassName, currentDiagram, location, accessModifier, nonAccessModifier, elementInterclassType);
                     break;
                 }
             }
@@ -83,8 +82,8 @@ public class AddInterclassState implements State {
                         "Diagram cannot be found in ClassyTree.", MessageType.ERROR);
                 return;
             }
-            MainFrame.getInstance().getClassyTree().attachChild(classyTreeDiagram, interclass[0]);
-
+//            MainFrame.getInstance().getClassyTree().attachChild(classyTreeDiagram, interclass[0]);
+            MainFrame.getInstance().getClassyTree().addChild(infoForCreatingInterclass[0]);
             interclassStateDialog.dispose();
         });
     }

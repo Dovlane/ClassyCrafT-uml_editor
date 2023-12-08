@@ -17,11 +17,6 @@ public class ClassElement extends Interclass {
 
     private List<ClassContent> classContent;
 
-    public ClassElement(String name, Diagram parent) {
-        super(name, parent);
-        classContent = new ArrayList<>();
-    }
-
     public ClassElement(String name, Diagram parent, Point point, AccessModifiers visibility, NonAccessModifiers nonAccessModifiers) {
         super(name, parent, point, visibility, nonAccessModifiers);
         classContent = new ArrayList<>();

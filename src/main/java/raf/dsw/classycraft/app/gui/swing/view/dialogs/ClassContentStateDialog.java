@@ -39,6 +39,7 @@ public class ClassContentStateDialog extends JFrame {
     private JComboBox<AccessModifiers> accessModifiersJComboBox = new JComboBox<>(AccessModifiers.values());
     private JComboBox<NonAccessModifiers> nonAccessModifiersJComboBox = new JComboBox<>(NonAccessModifiers.values());
     private DiagramElement selectedDiagramElement;
+
     public ClassContentStateDialog(DiagramElement elementDiagram) {
         super("Add Class Content");
 

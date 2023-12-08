@@ -7,7 +7,7 @@ import raf.dsw.classycraft.app.model.MessageGenerator.MessageType;
 import raf.dsw.classycraft.app.model.ClassyRepository.*;
 import raf.dsw.classycraft.app.model.compositePattern.ClassyNode;
 import raf.dsw.classycraft.app.model.compositePattern.ClassyNodeComposite;
-import raf.dsw.classycraft.app.model.compositePattern.ClassyNodeLeaf;
+import raf.dsw.classycraft.app.model.abstractFactoryForClassyNodes.*;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultTreeModel;
@@ -19,16 +19,34 @@ public class ClassyTree implements IClassyTree {
 
     private ClassyTreeItem root;
     private ClassyTreeView treeView;
+    private AbstractClassyCraftManufacturer abstractClassyCraftManufacturer;
 
     @Override
     public ClassyTreeView generateTree(ProjectExplorer projectExplorer) {
         root = new ClassyTreeItem(projectExplorer);
         treeView = new ClassyTreeView(new DefaultTreeModel(root));
+        abstractClassyCraftManufacturer = new ClassyCraftManufacturer();
         return treeView;
     }
 
     @Override
-    public boolean addChild(ClassyTreeItem parent, ClassyNodeType type) {
+    public boolean addChild(InfoForCreatingClassyNode infoForCreatingClassyNode) {
+//    public boolean addChild(ClassyTreeItem parent, ClassyNodeType type) {
+        Object parent;
+        if (infoForCreatingClassyNode instanceof InfoForCreatingConnection) {
+            InfoForCreatingConnection infoForCreatingConnection = (InfoForCreatingConnection) infoForCreatingClassyNode;
+            parent = infoForCreatingConnection.getParent();
+        }
+        else if (infoForCreatingClassyNode instanceof InfoForCreatingClassyNodeCompositeNodes) {
+            InfoForCreatingClassyNodeCompositeNodes infoForCreatingClassyNodeCompositeNodes = (InfoForCreatingClassyNodeCompositeNodes) infoForCreatingClassyNode;
+            System.out.println("InfoForCreatingClassyNodeCompositeNodes");
+            System.out.println(" infoForCreatingClassyNodeCompositeNodes.getParent()" +  infoForCreatingClassyNodeCompositeNodes.getParent());
+            parent = infoForCreatingClassyNodeCompositeNodes.getParent();
+        }
+        else {
+            InfoForCreatingInterclass infoForCreatingInterclass = (InfoForCreatingInterclass) infoForCreatingClassyNode;
+            parent = infoForCreatingInterclass.getParent();
+        }
 
         if (parent == null) {
             MainFrame.getInstance().getMessageGenerator().generateMessage(
@@ -36,14 +54,39 @@ public class ClassyTree implements IClassyTree {
             return false;
         }
 
-        if (parent.getClassyNode() instanceof ClassyNodeLeaf) {
-            MainFrame.getInstance().getMessageGenerator().generateMessage(
-                    "Leaf Node cannot contain any other node.", MessageType.ERROR);
-            return false;
+//        if (parent.getClassyNode() instanceof ClassyNodeLeaf) {
+//            MainFrame.getInstance().getMessageGenerator().generateMessage(
+//                    "Leaf Node cannot contain any other node.", MessageType.ERROR);
+//            return false;
+//        }
+        ClassyNode child;
+        //Creating Diagram, Package or Project
+        if (infoForCreatingClassyNode instanceof InfoForCreatingClassyNodeCompositeNodes) {
+            child = abstractClassyCraftManufacturer.createClassyNode((InfoForCreatingClassyNodeCompositeNodes) infoForCreatingClassyNode);
+        }
+        else {
+            //Creating DiagramElement
+            if (infoForCreatingClassyNode instanceof InfoForCreatingInterclass) {
+                child = abstractClassyCraftManufacturer.createInterclass((InfoForCreatingInterclass) infoForCreatingClassyNode);
+            } else {
+                child = abstractClassyCraftManufacturer.createConnection((InfoForCreatingConnection) infoForCreatingClassyNode);
+            }
         }
 
-        ClassyNode child = createChild(parent.getClassyNode(), type);
-        return attachChild(parent, child);
+        ClassyTreeItem parentTreeItem;
+
+        // if parent is classyNode it means that we are adding DiagramElement
+        if (parent instanceof ClassyNode) {
+            parentTreeItem =
+                    MainFrame.getInstance().getClassyTree().getRoot().getTreeItemFromClassyNode((ClassyNode) parent);
+        }
+        else {
+            parentTreeItem = (ClassyTreeItem) parent;
+        }
+
+
+//        ClassyNode child = createChild(parent.getClassyNode(), type);
+        return attachChild(parentTreeItem, child);
     }
 
     @Override
@@ -148,9 +191,9 @@ public class ClassyTree implements IClassyTree {
         return (ClassyTreeItem) treeView.getLastSelectedPathComponent();
     }
 
-    private ClassyNode createChild(ClassyNode parent, ClassyNodeType type) {
-        return ClassyNodeFactory.createClassyNode(parent, type);
-    }
+//    private ClassyNode createChild(ClassyNode parent, ClassyNodeType type) {
+//        return ClassyNodeFactory.createClassyNode(parent, type);
+//    }
 
     public ClassyTreeItem getRoot() {
         return root;

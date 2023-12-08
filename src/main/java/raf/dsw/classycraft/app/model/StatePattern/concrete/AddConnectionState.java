@@ -6,10 +6,11 @@ import raf.dsw.classycraft.app.gui.swing.view.MainFrame;
 import raf.dsw.classycraft.app.model.ClassyRepository.Diagram;
 import raf.dsw.classycraft.app.model.MessageGenerator.MessageType;
 import raf.dsw.classycraft.app.model.StatePattern.State;
-import raf.dsw.classycraft.app.model.elements.Connection.Aggregation;
 import raf.dsw.classycraft.app.model.elements.DiagramElement;
 import raf.dsw.classycraft.app.model.elements.Interclass.Interclass;
 import raf.dsw.classycraft.app.model.elements.LineElement;
+import raf.dsw.classycraft.app.model.abstractFactoryForClassyNodes.ElementConnectionType;
+import raf.dsw.classycraft.app.model.abstractFactoryForClassyNodes.InfoForCreatingConnection;
 
 import java.awt.*;
 
@@ -26,7 +27,6 @@ public class AddConnectionState implements State {
 
         if (selectedDiagramElementFrom != null && selectedDiagramElementFrom instanceof Interclass) {
             lineElement = new LineElement("temporary line", currentDiagram, (Interclass) selectedDiagramElementFrom);
-
             ClassyTreeItem classyTreeDiagram =
                     MainFrame.getInstance().getClassyTree().getRoot().getTreeItemFromClassyNode(currentDiagram);
             if (classyTreeDiagram == null) {
@@ -46,8 +46,9 @@ public class AddConnectionState implements State {
 
         DiagramElement selectedDiagramElementTo = diagramView.getElementAt(location);
         Diagram currentDiagram = diagramView.getDiagram();
-        if (selectedDiagramElementTo instanceof Interclass) {
-            Aggregation aggregation = new Aggregation("aggregation", currentDiagram, (Interclass) selectedDiagramElementFrom, (Interclass)selectedDiagramElementTo);
+        if (selectedDiagramElementTo != null && selectedDiagramElementTo instanceof Interclass) {
+            ElementConnectionType elementConnectionType = ElementConnectionType.AGGREGATION;
+            InfoForCreatingConnection infoForCreatingConnection = new InfoForCreatingConnection("aggrg", currentDiagram, (Interclass) selectedDiagramElementFrom, (Interclass)selectedDiagramElementTo, elementConnectionType);
             ClassyTreeItem classyTreeDiagram =
                     MainFrame.getInstance().getClassyTree().getRoot().getTreeItemFromClassyNode(currentDiagram);
             if (classyTreeDiagram == null) {
@@ -55,7 +56,7 @@ public class AddConnectionState implements State {
                         "Diagram cannot be found in ClassyTree.", MessageType.ERROR);
                 return;
             }
-            MainFrame.getInstance().getClassyTree().attachChild(classyTreeDiagram, aggregation);
+            MainFrame.getInstance().getClassyTree().addChild(infoForCreatingConnection);
         }
 
         // Remove the clicked one from painters

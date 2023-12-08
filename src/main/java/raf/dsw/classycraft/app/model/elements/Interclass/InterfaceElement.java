@@ -16,11 +16,6 @@ public class InterfaceElement extends Interclass {
 
     private List<Method> methods;
 
-    public InterfaceElement(String name, Diagram parent) {
-        super(name, parent);
-        methods = new ArrayList<>();
-    }
-
     public InterfaceElement(String name, Diagram parent, Point point, AccessModifiers visibility, NonAccessModifiers nonAccessModifiers) {
         super(name, parent, point, visibility, nonAccessModifiers);
         methods = new ArrayList<>();

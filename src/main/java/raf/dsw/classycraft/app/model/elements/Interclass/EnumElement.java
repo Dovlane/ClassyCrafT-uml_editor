@@ -13,10 +13,7 @@ import java.util.ArrayList;
 
 public class EnumElement extends Interclass {
     private List<EnumLiteral> enumLiterals;
-    public EnumElement(String name, Diagram parent) {
-        super(name, parent);
-        enumLiterals = new ArrayList<>();
-    }
+
 
     public EnumElement(String name, Diagram parent, Point point, AccessModifiers visibility, NonAccessModifiers nonAccessModifiers) {
         super(name, parent, point, visibility, nonAccessModifiers);
