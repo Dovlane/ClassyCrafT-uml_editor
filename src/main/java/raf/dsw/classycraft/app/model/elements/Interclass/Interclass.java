@@ -19,9 +19,7 @@ public abstract class Interclass extends DiagramElement {
     protected int boxWidth;
     protected int boxHeight;
 
-    public Interclass(String name, Diagram parent) {
-        super(name, parent);
-    }
+
 
     public Interclass(String name, Diagram parent, Point point, AccessModifiers visibility, NonAccessModifiers nonAccessModifiers) {
         super(name, parent);

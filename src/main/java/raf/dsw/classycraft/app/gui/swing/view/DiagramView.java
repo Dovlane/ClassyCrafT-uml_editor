@@ -146,13 +146,8 @@ public class DiagramView extends JPanel implements IListener {
                 }
             }
         }
-//        // Refresh DiagramView
-//        repaint();
     }
 
-//    public void setLasso(LassoPainter lassoPainter) {
-//        this.lassoPainter = lassoPainter;
-//    }
 
     private LassoPainter getLassoPainter() {
         LassoPainter lassoPainter = null;

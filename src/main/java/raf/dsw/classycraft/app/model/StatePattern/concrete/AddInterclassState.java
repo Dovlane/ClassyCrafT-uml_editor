@@ -101,23 +101,6 @@ public class AddInterclassState implements State {
 
     }
 
-//    @Override
-//    public void addListener(IListener listener) {
-//        if (!listeners.contains(listener))
-//            listeners.add(listener);
-//    }
-//
-//    @Override
-//    public void removeListener(IListener listener) {
-//
-//    }
-//
-//    @Override
-//    public void notifyAllSubscribers(Object notification) {
-//
-//    }
-
-
     public InterclassStateDialog getInterclassStateDialog() {
         return interclassStateDialog;
     }
