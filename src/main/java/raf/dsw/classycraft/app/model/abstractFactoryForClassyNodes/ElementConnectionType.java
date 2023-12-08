@@ -1,4 +1,4 @@
-package raf.dsw.classycraft.app.model.elements.abstractFactoryElements;
+package raf.dsw.classycraft.app.model.abstractFactoryForClassyNodes;
 
 public enum ElementConnectionType {
     AGGREGATION, COMPOSITION, DEPENDENDCY, GENERALISATION

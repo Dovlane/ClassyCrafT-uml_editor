@@ -1,23 +1,19 @@
-package raf.dsw.classycraft.app.model.elements.abstractFactoryElements;
+package raf.dsw.classycraft.app.model.abstractFactoryForClassyNodes;
 
 import raf.dsw.classycraft.app.model.ClassyRepository.Diagram;
 import raf.dsw.classycraft.app.model.elements.Interclass.Interclass;
-import raf.dsw.classycraft.app.model.elements.Modifiers.AccessModifiers;
-import raf.dsw.classycraft.app.model.elements.Modifiers.NonAccessModifiers;
 
-import java.awt.*;
-
-public class InfoForCreatingConnection {
+public class InfoForCreatingConnection extends InfoForCreatingClassyNode {
     private String name;
-    private Diagram parent;
     private Interclass from;
+    private Diagram parent;
     private Interclass to;
     private ElementConnectionType elementConnectionType;
 
     public InfoForCreatingConnection(String name, Diagram parent, Interclass from, Interclass to, ElementConnectionType elementConnectionType) {
         this.name = name;
-        this.parent = parent;
         this.from = from;
+        this.parent = parent;
         this.to = to;
         this.elementConnectionType = elementConnectionType;
     }
