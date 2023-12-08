@@ -4,7 +4,6 @@ import raf.dsw.classycraft.app.gui.swing.view.painters.ElementPainter;
 import raf.dsw.classycraft.app.model.elements.Interclass.Interclass;
 
 import java.awt.*;
-import java.awt.geom.AffineTransform;
 import java.util.*;
 import java.awt.font.FontRenderContext;
 import java.awt.font.LineMetrics;
@@ -40,11 +39,6 @@ public class InterclassPainter extends ElementPainter {
         drawInterclassName(graphics2D, (float) getX(), (float) getY());
     }
 
-    @Override
-    public void draw(Graphics2D graphics2D, AffineTransform transform) {
-
-    }
-
     private void drawBox(Graphics2D graphics2D) {
         double x = getX();
         double y = getY();
@@ -64,7 +58,7 @@ public class InterclassPainter extends ElementPainter {
 
     protected void drawInterclassName(Graphics2D graphics2D, float x, float y) {
         float boxWidth = (float)getBoxWidth();
-        String interclassName = ((Interclass)diagramElement).getName();
+        String interclassName = diagramElement.getName();
         graphics2D.setFont(interclassNameFont);
         LineMetrics metrics = getLineMetrics(graphics2D, interclassName);
         float messageWidth = (float)graphics2D.getFont().getStringBounds(interclassName, graphics2D.getFontRenderContext()).getWidth();

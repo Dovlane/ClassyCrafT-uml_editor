@@ -2,16 +2,11 @@ package raf.dsw.classycraft.app.model.StatePattern.concrete;
 
 import raf.dsw.classycraft.app.gui.swing.view.DiagramView;
 import raf.dsw.classycraft.app.gui.swing.view.dialogs.ClassContentStateDialog;
-import raf.dsw.classycraft.app.model.ClassyRepository.Diagram;
-import raf.dsw.classycraft.app.model.ClassyRepository.Notification;
-import raf.dsw.classycraft.app.model.ClassyRepository.NotificationType;
 import raf.dsw.classycraft.app.model.StatePattern.State;
 import raf.dsw.classycraft.app.model.elements.DiagramElement;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class AddClassContentState implements State {
 
@@ -57,7 +52,7 @@ public class AddClassContentState implements State {
     }
 
     @Override
-    public void mouseWheelMoved(DiagramView diagramView, int wheelRotation) {
+    public void mouseWheelMoved(int wheelRotation, Point location, DiagramView diagramView) {
         System.out.println("mouseWheelMoved inside of AddClassContentState");
 
     }

@@ -1,12 +1,14 @@
 package raf.dsw.classycraft.app.gui.swing.view;
 
 import raf.dsw.classycraft.app.core.ApplicationFramework;
+import raf.dsw.classycraft.app.model.MessageGenerator.MessageType;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
+import java.awt.geom.NoninvertibleTransformException;
 
 public class TabbedPaneMouseAdapter extends MouseAdapter {
 
@@ -30,7 +32,7 @@ public class TabbedPaneMouseAdapter extends MouseAdapter {
         if (mouseEventInsideTab(tabbedPane, e)) {
             System.out.println("Mouse is pressed in tab");
             mouseState = MouseState.MOUSE_PRESSED;
-            startLocation = getLocationOfMouseOnDiagramView(e);
+            startLocation = getOptimalLocation(tabbedPane, e);
             ApplicationFramework.getInstance().getClassyRepository().getPackageView()
                     .mousePressed(diagramViewSelected, startLocation);
         }
@@ -43,9 +45,6 @@ public class TabbedPaneMouseAdapter extends MouseAdapter {
     public void mouseReleased(MouseEvent e) {
         super.mouseReleased(e);
         JTabbedPane tabbedPane = (JTabbedPane) e.getComponent();
-
-        if (tabbedPaneIsEmpty(tabbedPane))
-            return;
 
         Point location = getOptimalLocation(tabbedPane, e);
         if (location != null) {
@@ -101,8 +100,10 @@ public class TabbedPaneMouseAdapter extends MouseAdapter {
         diagramViewSelected = (DiagramView) tabbedPane.getComponentAt(tabbedPane.getSelectedIndex());
         if (mouseEventInsideTab(tabbedPane, e)) {
             System.out.println("MouseWheel moved in tab");
+
+            Point location = getOptimalLocation(tabbedPane, e);
             ApplicationFramework.getInstance().getClassyRepository().getPackageView()
-                    .mouseWheelMoved(diagramViewSelected, e.getWheelRotation());
+                    .mouseWheelMoved(e.getWheelRotation(), location, diagramViewSelected);
         }
         else {
             System.out.println("MouseWheel moved outside of tab");
@@ -112,8 +113,7 @@ public class TabbedPaneMouseAdapter extends MouseAdapter {
     private Point getLocationOfMouseOnDiagramView(MouseEvent e) {
         int xCoorOfMouseOnDiagramView = e.getX() - diagramViewSelected.getX();
         int yCoorOfMouseOnDiagramView = e.getY() - diagramViewSelected.getY();
-        Point locationOfMouseOnDiagramView = new Point(xCoorOfMouseOnDiagramView, yCoorOfMouseOnDiagramView);
-        return locationOfMouseOnDiagramView;
+        return new Point(xCoorOfMouseOnDiagramView, yCoorOfMouseOnDiagramView);
     }
 
     private boolean mouseEventInsideTab(JTabbedPane tabbedPane, MouseEvent e) {
@@ -127,13 +127,24 @@ public class TabbedPaneMouseAdapter extends MouseAdapter {
     }
 
     private Point getOptimalLocation(JTabbedPane tabbedPane, MouseEvent e) {
-        if (tabbedPane.getTabCount() > 0) {
+        if (!tabbedPaneIsEmpty(tabbedPane)) {
+
+            // Find optimal unscaled location
             Point location = getLocationOfMouseOnDiagramView(e);
             double width = diagramViewSelected.getWidth();
             double height = diagramViewSelected.getHeight();
             location.x = (int) Math.min(Math.max(1, location.x), width - 1);
             location.y = (int) Math.min(Math.max(1, location.y), height - 1);
-            return location;
+
+            // Scale location back to the World Coordinate system
+            try {
+                diagramViewSelected.getTransform().inverseTransform(location, location);
+                return location;
+            }
+            catch (NoninvertibleTransformException exception) {
+                MainFrame.getInstance().getMessageGenerator().generateMessage(
+                        "Current AffineTransform does not have an inverse.", MessageType.ERROR);
+            }
         }
         return null;
     }

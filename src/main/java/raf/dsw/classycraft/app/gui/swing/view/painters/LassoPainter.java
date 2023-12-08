@@ -4,7 +4,6 @@ import raf.dsw.classycraft.app.gui.swing.view.painters.connectionPainters.Connec
 import raf.dsw.classycraft.app.gui.swing.view.painters.interclassPainters.InterclassPainter;
 
 import java.awt.*;
-import java.awt.geom.AffineTransform;
 
 public class LassoPainter extends ElementPainter {
 
@@ -50,22 +49,6 @@ public class LassoPainter extends ElementPainter {
         graphics2D.drawRect(lassoUpperLeft.x, lassoUpperLeft.y, boxWidth, boxHeight);
         graphics2D.setColor(new Color(0f, 0f, 1f, 0.4f));
         graphics2D.fillRect(lassoUpperLeft.x, lassoUpperLeft.y, boxWidth, boxHeight);
-    }
-
-    @Override
-    public void draw(Graphics2D graphics2D, AffineTransform transform) {
-        int boxWidth = lassoBottomRight.x - lassoUpperLeft.x;
-        int boxHeight = lassoBottomRight.y - lassoUpperLeft.y;
-        graphics2D.setColor(new Color(0, 0, 1f));
-        graphics2D.drawRect(
-                lassoUpperLeft.x,
-                lassoUpperLeft.y,
-                boxWidth, boxHeight);
-        graphics2D.setColor(new Color(0f, 0f, 1f, 0.4f));
-        graphics2D.fillRect(
-                lassoUpperLeft.x,
-                lassoUpperLeft.y,
-                boxWidth, boxHeight);
     }
 
     @Override

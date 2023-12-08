@@ -17,8 +17,6 @@ import raf.dsw.classycraft.app.model.elements.Modifiers.NonAccessModifiers;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class AddInterclassState implements State {
 
@@ -104,7 +102,7 @@ public class AddInterclassState implements State {
     }
 
     @Override
-    public void mouseWheelMoved(DiagramView diagramView, int wheelRotation) {
+    public void mouseWheelMoved(int wheelRotation, Point location, DiagramView diagramView) {
         System.out.println("mouseWheelMoved inside of AddInterclassState");
 
     }

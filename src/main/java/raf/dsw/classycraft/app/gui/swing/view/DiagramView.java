@@ -24,7 +24,6 @@ import raf.dsw.classycraft.app.model.observerPattern.IListener;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.NoninvertibleTransformException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,13 +86,7 @@ public class DiagramView extends JPanel implements IListener {
 
         // Display lasso if it is necessary
         if (lassoPainter != null) {
-            try {
-                lassoPainter.draw(graphics2D, transform.createInverse());
-            }
-            catch (NoninvertibleTransformException e) {
-                MainFrame.getInstance().getMessageGenerator().generateMessage(
-                        "Current AffineTransform does not have an inverse.", MessageType.ERROR);
-            }
+            lassoPainter.draw(graphics2D);
         }
 
         // Debug Info
@@ -200,28 +193,19 @@ public class DiagramView extends JPanel implements IListener {
         return null;
     }
 
-    public void zoom(int wheelRotation) {
+    public void zoom(int wheelRotation, Point location) {
+        zoomFactor = (wheelRotation >= 0) ? (wheelRotation > 0) ? 0.9 : 1 : 1.1;
+        AffineTransform previousTransform = new AffineTransform(transform);
         transform.setToIdentity();
-        if (wheelRotation > 0) {
-            zoomIn();
-        }
-        else if (wheelRotation < 0) {
-            zoomOut();
-        }
-        else {
-            System.out.println("MouseWheel has moved at all.");
-        }
+        transform.translate(location.x, location.y);
+        transform.scale(zoomFactor, zoomFactor);
+        transform.translate(-location.x, -location.y);
+        transform.concatenate(previousTransform);
         repaint();
     }
 
-    private void zoomIn() {
-        zoomFactor += 0.1;
-        transform.scale(zoomFactor, zoomFactor);
-    }
-
-    private void zoomOut() {
-        zoomFactor -= 0.1;
-        transform.scale(zoomFactor, zoomFactor);
+    public AffineTransform getTransform() {
+        return transform;
     }
 
     @Override

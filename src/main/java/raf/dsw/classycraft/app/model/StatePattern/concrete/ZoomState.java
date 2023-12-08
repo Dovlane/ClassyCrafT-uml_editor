@@ -27,10 +27,10 @@ public class ZoomState implements State {
     }
 
     @Override
-    public void mouseWheelMoved(DiagramView diagramView, int wheelRotation) {
+    public void mouseWheelMoved(int wheelRotation, Point location, DiagramView diagramView) {
         System.out.println("mouseWheelMoved inside of ZoomState");
 
-        diagramView.zoom(wheelRotation);
+        diagramView.zoom(wheelRotation, location);
     }
 
 }

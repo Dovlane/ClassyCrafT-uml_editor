@@ -4,7 +4,6 @@ import raf.dsw.classycraft.app.gui.swing.view.painters.ElementPainter;
 import raf.dsw.classycraft.app.model.elements.Connection.Connection;
 
 import java.awt.*;
-import java.awt.geom.AffineTransform;
 
 public class ConnectionPainter extends ElementPainter {
     private Point currentPointFrom;
@@ -26,11 +25,6 @@ public class ConnectionPainter extends ElementPainter {
         graphics2D.setStroke(new BasicStroke(2));
         graphics2D.drawLine(xFrom, yFrom, xTo, yTo);
         graphics2D.setStroke(previousStroke);
-    }
-
-    @Override
-    public void draw(Graphics2D graphics2D, AffineTransform transform) {
-
     }
 
     @Override

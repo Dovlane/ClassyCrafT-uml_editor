@@ -14,7 +14,7 @@ import raf.dsw.classycraft.app.model.elements.LineElement;
 import java.awt.*;
 
 public class AddConnectionState implements State {
-    
+
     DiagramElement selectedDiagramElementFrom;
     LineElement lineElement;
 
@@ -25,7 +25,6 @@ public class AddConnectionState implements State {
         Diagram currentDiagram = diagramView.getDiagram();
 
         if (selectedDiagramElementFrom != null && selectedDiagramElementFrom instanceof Interclass) {
-            //diagramView.setLinePainter(new LinePainter((LineElement) selectedDiagramElementFrom));
             lineElement = new LineElement("temporary line", currentDiagram, (Interclass) selectedDiagramElementFrom);
 
             ClassyTreeItem classyTreeDiagram =
@@ -73,7 +72,7 @@ public class AddConnectionState implements State {
     }
 
     @Override
-    public void mouseWheelMoved(DiagramView diagramView, int wheelRotation) {
+    public void mouseWheelMoved(int wheelRotation, Point location, DiagramView diagramView) {
         System.out.println("mouseWheelMoved inside of AddConnectionState");
 
     }

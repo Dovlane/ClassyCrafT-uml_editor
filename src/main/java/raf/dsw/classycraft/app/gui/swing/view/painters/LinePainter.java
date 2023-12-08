@@ -1,23 +1,23 @@
 package raf.dsw.classycraft.app.gui.swing.view.painters;
 
-import raf.dsw.classycraft.app.model.elements.DiagramElement;
 import raf.dsw.classycraft.app.model.elements.Interclass.Interclass;
 import raf.dsw.classycraft.app.model.elements.LineElement;
 
-import javax.sound.sampled.Line;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 
 public class LinePainter extends ElementPainter {
+
     public LinePainter(LineElement diagramElement) {
         super(diagramElement);
     }
+
     @Override
     public void drawSelectionBox(Graphics2D graphics2D) {
 
     }
 
-
-
+    @Override
     public void draw(Graphics2D graphics2D) {
         Stroke previousStroke = graphics2D.getStroke();
         Color lastColor = graphics2D.getColor();
@@ -31,11 +31,6 @@ public class LinePainter extends ElementPainter {
     @Override
     public boolean elementAt(Point location) {
         return false;
-    }
-
-    @Override
-    public DiagramElement getDiagramElement() {
-        return super.getDiagramElement();
     }
 
     private LineElement getLineElement() {return (LineElement) diagramElement;}
