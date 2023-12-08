@@ -71,7 +71,7 @@ public class DiagramView extends JPanel implements IListener {
         Graphics2D graphics2D = (Graphics2D) g;
 
         // Apply zoom transformation
-        graphics2D.setTransform(transform);
+        graphics2D.transform(transform);
 
         // Display all ElementPainters
         for (ElementPainter painter: painters) {
