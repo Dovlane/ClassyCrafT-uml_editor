@@ -3,6 +3,7 @@ package raf.dsw.classycraft.app.gui.swing.view.painters;
 import raf.dsw.classycraft.app.model.elements.DiagramElement;
 
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 
 public abstract class ElementPainter {
 
@@ -13,6 +14,7 @@ public abstract class ElementPainter {
     }
 
     public abstract void draw(Graphics2D graphics2D);
+    public abstract void draw(Graphics2D graphics2D, AffineTransform transform);
 
     public abstract void drawSelectionBox(Graphics2D graphics2D);
 

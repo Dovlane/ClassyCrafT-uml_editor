@@ -9,6 +9,7 @@ public class StateManager {
     private final AddConnectionState addConnectionState;
     private final AddClassContentState addClassContentState;
     private final MoveState moveState;
+    private final ZoomState zoomState;
     private final RemoveElementState removeElementState;
     private final SelectElementState selectElementState;
 
@@ -19,6 +20,7 @@ public class StateManager {
         addConnectionState = new AddConnectionState();
         addClassContentState = new AddClassContentState();
         moveState = new MoveState();
+        zoomState = new ZoomState();
         removeElementState = new RemoveElementState();
         selectElementState = new SelectElementState();
 
@@ -42,6 +44,10 @@ public class StateManager {
 
     public void setMoveState() {
         currentState = moveState;
+    }
+
+    public void setZoomState() {
+        currentState = zoomState;
     }
 
     public void setRemoveElementState() {

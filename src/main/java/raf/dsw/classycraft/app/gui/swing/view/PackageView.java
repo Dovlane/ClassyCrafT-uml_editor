@@ -40,6 +40,7 @@ public class PackageView extends JSplitPane implements IListener {
         TabbedPaneMouseAdapter tabbedPaneMouseAdapter = new TabbedPaneMouseAdapter();
         tabbedPane.addMouseListener(tabbedPaneMouseAdapter);
         tabbedPane.addMouseMotionListener(tabbedPaneMouseAdapter);
+        tabbedPane.addMouseWheelListener(tabbedPaneMouseAdapter);
 
         // Toolbar
         JToolBar toolBar = new JToolBar(JToolBar.VERTICAL);
@@ -48,6 +49,7 @@ public class PackageView extends JSplitPane implements IListener {
         addButton(toolBar, "AC", false);
         addButton(toolBar, "ACC", false);
         addButton(toolBar, "M", false);
+        addButton(toolBar, "Z", false);
         addButton(toolBar, "R", false);
         addButton(toolBar, "S", false);
 
@@ -84,6 +86,7 @@ public class PackageView extends JSplitPane implements IListener {
                             case "AC" -> startAddConnectionState();
                             case "ACC" -> startAddClassContentState();
                             case "M" -> startMoveState();
+                            case "Z" -> startZoomState();
                             case "R" -> startRemoveElementState();
                             case "S" -> startSelectElementState();
                             default -> MainFrame.getInstance().getMessageGenerator().generateMessage(
@@ -134,6 +137,12 @@ public class PackageView extends JSplitPane implements IListener {
         stateManager.getCurrentState().mouseDragged(startLocation, currentLocation, diagramView);
     }
 
+    public void mouseWheelMoved(DiagramView diagramView, int wheelRotation) {
+        System.out.println("PackageView - mouseWheelMoved:");
+
+        stateManager.getCurrentState().mouseWheelMoved(diagramView, wheelRotation);
+    }
+
 
     // START STATES
     public void startAddInterclassState() {
@@ -147,6 +156,9 @@ public class PackageView extends JSplitPane implements IListener {
     }
     public void startMoveState() {
         stateManager.setMoveState();
+    }
+    public void startZoomState() {
+        stateManager.setZoomState();
     }
     public void startRemoveElementState() {
         stateManager.setRemoveElementState();

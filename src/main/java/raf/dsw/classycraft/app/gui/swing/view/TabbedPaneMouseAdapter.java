@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
 
 public class TabbedPaneMouseAdapter extends MouseAdapter {
 
@@ -85,10 +86,28 @@ public class TabbedPaneMouseAdapter extends MouseAdapter {
         }
 
         Point currentLocation = getOptimalLocation(tabbedPane, e);
-        ApplicationFramework.getInstance().getClassyRepository().getPackageView().
-                mouseDragged(diagramViewSelected, startLocation, currentLocation);
+        ApplicationFramework.getInstance().getClassyRepository().getPackageView()
+                .mouseDragged(diagramViewSelected, startLocation, currentLocation);
     }
 
+    @Override
+    public void mouseWheelMoved(MouseWheelEvent e) {
+        super.mouseWheelMoved(e);
+        JTabbedPane tabbedPane = (JTabbedPane) e.getComponent();
+
+        if (tabbedPaneIsEmpty(tabbedPane))
+            return;
+
+        diagramViewSelected = (DiagramView) tabbedPane.getComponentAt(tabbedPane.getSelectedIndex());
+        if (mouseEventInsideTab(tabbedPane, e)) {
+            System.out.println("MouseWheel moved in tab");
+            ApplicationFramework.getInstance().getClassyRepository().getPackageView()
+                    .mouseWheelMoved(diagramViewSelected, e.getWheelRotation());
+        }
+        else {
+            System.out.println("MouseWheel moved outside of tab");
+        }
+    }
 
     private Point getLocationOfMouseOnDiagramView(MouseEvent e) {
         int xCoorOfMouseOnDiagramView = e.getX() - diagramViewSelected.getX();

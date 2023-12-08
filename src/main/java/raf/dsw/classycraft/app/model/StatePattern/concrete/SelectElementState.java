@@ -29,4 +29,10 @@ public class SelectElementState implements State {
         diagramView.updateSelectionModel(new LassoPainter(startLocation, currentLocation));
     }
 
+    @Override
+    public void mouseWheelMoved(DiagramView diagramView, int wheelRotation) {
+        System.out.println("mouseWheelMoved inside of SelectElementState");
+
+    }
+
 }

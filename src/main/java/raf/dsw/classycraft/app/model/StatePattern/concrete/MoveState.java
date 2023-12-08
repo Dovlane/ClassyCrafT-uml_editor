@@ -2,7 +2,6 @@ package raf.dsw.classycraft.app.model.StatePattern.concrete;
 
 import raf.dsw.classycraft.app.gui.swing.view.DiagramView;
 import raf.dsw.classycraft.app.gui.swing.view.painters.ElementPainter;
-import raf.dsw.classycraft.app.gui.swing.view.painters.LassoPainter;
 import raf.dsw.classycraft.app.gui.swing.view.painters.interclassPainters.InterclassPainter;
 import raf.dsw.classycraft.app.model.StatePattern.State;
 import raf.dsw.classycraft.app.model.elements.DiagramElement;
@@ -63,4 +62,11 @@ public class MoveState implements State {
             ;
         }
     }
+
+    @Override
+    public void mouseWheelMoved(DiagramView diagramView, int wheelRotation) {
+        System.out.println("mouseWheelMoved inside of MoveState");
+
+    }
+
 }

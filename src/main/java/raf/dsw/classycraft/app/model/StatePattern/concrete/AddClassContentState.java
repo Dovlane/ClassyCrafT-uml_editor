@@ -16,6 +16,8 @@ public class AddClassContentState implements State {
 
     @Override
     public void mousePressed(Point location, DiagramView diagramView) {
+        System.out.println("mousePressed inside of AddClassContentState");
+
         DiagramElement diagramElementAt = diagramView.getElementAt(location);
         if (diagramElementAt != null) {
             ClassContentStateDialog classContentStateDialog = new ClassContentStateDialog(diagramElementAt);
@@ -32,11 +34,19 @@ public class AddClassContentState implements State {
 
     @Override
     public void mouseReleased(Point location, DiagramView diagramView) {
+        System.out.println("mouseReleased inside of AddClassContentState");
 
     }
 
     @Override
     public void mouseDragged(Point startLocation, Point currentLocation, DiagramView diagramView) {
+        System.out.println("mouseDragged inside of AddClassContentState");
+
+    }
+
+    @Override
+    public void mouseWheelMoved(DiagramView diagramView, int wheelRotation) {
+        System.out.println("mouseWheelMoved inside of AddClassContentState");
 
     }
 

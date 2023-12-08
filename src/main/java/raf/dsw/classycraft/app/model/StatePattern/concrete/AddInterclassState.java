@@ -25,6 +25,8 @@ public class AddInterclassState implements State {
     private InterclassStateDialog interclassStateDialog;
     @Override
     public void mousePressed(Point location, DiagramView diagramView) {
+        System.out.println("mousePressed inside of AddInterclassState");
+
         DiagramElement diagramElementAt = diagramView.getElementAt(location);
         if (diagramElementAt != null) {
             return;
@@ -79,36 +81,25 @@ public class AddInterclassState implements State {
                 interclassStateDialog.dispose();
             }
         });
-
-        System.out.println("Creating Interclass!");
     }
 
     @Override
     public void mouseReleased(Point location, DiagramView diagramView) {
+        System.out.println("mouseReleased inside of AddInterclassState");
 
     }
 
     @Override
     public void mouseDragged(Point startLocation, Point currentLocation, DiagramView diagramView) {
+        System.out.println("mouseDragged inside of AddInterclassState");
 
     }
 
-//    @Override
-//    public void addListener(IListener listener) {
-//        if (!listeners.contains(listener))
-//            listeners.add(listener);
-//    }
-//
-//    @Override
-//    public void removeListener(IListener listener) {
-//
-//    }
-//
-//    @Override
-//    public void notifyAllSubscribers(Object notification) {
-//
-//    }
+    @Override
+    public void mouseWheelMoved(DiagramView diagramView, int wheelRotation) {
+        System.out.println("mouseWheelMoved inside of AddInterclassState");
 
+    }
 
     public InterclassStateDialog getInterclassStateDialog() {
         return interclassStateDialog;

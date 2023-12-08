@@ -4,6 +4,7 @@ import raf.dsw.classycraft.app.gui.swing.view.painters.ElementPainter;
 import raf.dsw.classycraft.app.model.elements.Connection.Connection;
 
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 
 public class ConnectionPainter extends ElementPainter {
 
@@ -13,6 +14,11 @@ public class ConnectionPainter extends ElementPainter {
 
     @Override
     public void draw(Graphics2D graphics2D) {
+
+    }
+
+    @Override
+    public void draw(Graphics2D graphics2D, AffineTransform transform) {
 
     }
 

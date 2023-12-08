@@ -14,7 +14,7 @@ public class RemoveElementState implements State {
 
     @Override
     public void mousePressed(Point location, DiagramView diagramView) {
-        System.out.println("Removing Element!");
+        System.out.println("mousePressed inside RemoveElementState");
 
         // Find the DiagramElement which was clicked
         boolean inSelectionModel = false;
@@ -49,11 +49,19 @@ public class RemoveElementState implements State {
 
     @Override
     public void mouseReleased(Point location, DiagramView diagramView) {
+        System.out.println("mouseReleased inside RemoveElementState");
 
     }
 
     @Override
     public void mouseDragged(Point startLocation, Point currentLocation, DiagramView diagramView) {
+        System.out.println("mouseDragged inside RemoveElementState");
+
+    }
+
+    @Override
+    public void mouseWheelMoved(DiagramView diagramView, int wheelRotation) {
+        System.out.println("mouseWheelMoved inside of RemoveElementState");
 
     }
 
