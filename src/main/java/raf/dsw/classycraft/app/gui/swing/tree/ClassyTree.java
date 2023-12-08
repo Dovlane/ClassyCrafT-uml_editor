@@ -8,6 +8,8 @@ import raf.dsw.classycraft.app.model.ClassyRepository.*;
 import raf.dsw.classycraft.app.model.compositePattern.ClassyNode;
 import raf.dsw.classycraft.app.model.compositePattern.ClassyNodeComposite;
 import raf.dsw.classycraft.app.model.abstractFactoryForClassyNodes.*;
+import raf.dsw.classycraft.app.model.elements.LassoElement;
+import raf.dsw.classycraft.app.model.elements.LineElement;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultTreeModel;
@@ -102,9 +104,7 @@ public class ClassyTree implements IClassyTree {
         boolean success = ((ClassyNodeComposite) parent.getClassyNode()).addChild(child);
         if (success) {
 
-            // It should be added first to model because
-            // JTree does not override equal by value.
-            // Instead, it uses default equal implementation.
+            // Update JTree
             parent.add(new ClassyTreeItem(child));
 
             // Refresh GUI - Classy Tree

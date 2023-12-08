@@ -193,7 +193,7 @@ public class DiagramView extends JPanel implements IListener {
     }
 
     public void zoom(int wheelRotation, Point location) {
-        zoomFactor = (wheelRotation >= 0) ? (wheelRotation > 0) ? 0.9 : 1 : 1.1;
+        zoomFactor = (wheelRotation >= 0) ? (wheelRotation > 0) ? 0.95 : 1 : 1.05;
         AffineTransform previousTransform = new AffineTransform(transform);
         transform.transform(location, location);
         transform.setToIdentity();

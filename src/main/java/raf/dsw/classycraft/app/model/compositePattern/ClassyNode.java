@@ -1,8 +1,11 @@
 package raf.dsw.classycraft.app.model.compositePattern;
 
+import raf.dsw.classycraft.app.gui.swing.tree.model.ClassyTreeItem;
 import raf.dsw.classycraft.app.gui.swing.view.MainFrame;
 import raf.dsw.classycraft.app.model.ClassyRepository.*;
 import raf.dsw.classycraft.app.model.MessageGenerator.MessageType;
+import raf.dsw.classycraft.app.model.elements.Connection.Connection;
+import raf.dsw.classycraft.app.model.elements.Interclass.Interclass;
 import raf.dsw.classycraft.app.model.observerPattern.IListener;
 import raf.dsw.classycraft.app.model.observerPattern.IPublisher;
 
@@ -34,10 +37,39 @@ public abstract class ClassyNode implements IPublisher {
 
         ClassyNodeComposite parent = (ClassyNodeComposite) getParent();
         if (parent != null) {
+
+            // If Interclass element is removed than all its connections should be removed
+            if (this instanceof Interclass) {
+
+                // Create a list of all connections that should be removed
+                // Avoid ConcurrentModificationException
+                List<Integer> connectionsForRemoval = new ArrayList<>();
+                for (ClassyNode child: parent.getChildren()) {
+                    if (child instanceof Connection) {
+                        Connection connection = (Connection) child;
+                        if (connection.getFrom().equals(this) || connection.getTo().equals(this)) {
+                            Notification notification = new Notification(child, NotificationType.REMOVE);
+                            parent.notifyAllSubscribers(notification);
+                            connectionsForRemoval.add(parent.getIndex(child));
+                        }
+                    }
+                }
+
+                // Actually remove all obsolete connections
+                for (int connectionIndex: connectionsForRemoval) {
+                    ClassyTreeItem treeItemDiagramElement =
+                            MainFrame.getInstance().getClassyTree().getRoot().getTreeItemFromClassyNode(parent.getChildAt(connectionIndex));
+                    MainFrame.getInstance().getClassyTree().removeItem(treeItemDiagramElement);
+                }
+
+            }
+
+            // Notify about the child removal
             Notification notification =
                     new Notification(this, NotificationType.REMOVE);
             parent.notifyAllSubscribers(notification);
             parent.removeAt(this);
+
         }
     }
 

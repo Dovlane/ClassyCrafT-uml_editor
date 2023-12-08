@@ -19,6 +19,7 @@ import raf.dsw.classycraft.app.model.elements.Modifiers.NonAccessModifiers;
 import java.awt.*;
 
 public class ClassyCraftManufacturer extends AbstractClassyCraftManufacturer {
+
     @Override
     public Interclass createInterclass(InfoForCreatingInterclass infoForCreatingInterclass) {
         String name = infoForCreatingInterclass.getName();
@@ -57,6 +58,7 @@ public class ClassyCraftManufacturer extends AbstractClassyCraftManufacturer {
     }
 
 
+    @Override
     public ClassyNode createClassyNode (InfoForCreatingClassyNodeCompositeNodes infoForCreatingClassyNodeCompositeNodes) {
         ClassyNode parent = infoForCreatingClassyNodeCompositeNodes.getParent().getClassyNode();
         ClassyNodeType type = infoForCreatingClassyNodeCompositeNodes.getType();

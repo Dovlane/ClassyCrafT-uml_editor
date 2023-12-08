@@ -11,7 +11,6 @@ public class ZoomState implements State {
     public void mousePressed(Point location, DiagramView diagramView) {
         System.out.println("mousePressed inside of ZoomState");
 
-        System.out.println(location.x + " " + location.y);
     }
 
     @Override
