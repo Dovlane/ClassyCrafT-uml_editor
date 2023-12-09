@@ -2,40 +2,17 @@ package raf.dsw.classycraft.app.gui.swing.view.painters;
 
 import raf.dsw.classycraft.app.gui.swing.view.painters.connectionPainters.ConnectionPainter;
 import raf.dsw.classycraft.app.gui.swing.view.painters.interclassPainters.InterclassPainter;
-import raf.dsw.classycraft.app.model.elements.LassoElement;
 
 import java.awt.*;
 
 public class LassoPainter extends ElementPainter {
 
-    public LassoPainter(LassoElement lassoElement) {
-        super(lassoElement);
-    }
+    private Point lassoUpperLeft;
+    private Point lassoBottomRight;
 
-    public boolean intersectsWith(ElementPainter elementPainter) {
-        if (elementPainter instanceof InterclassPainter) {
-            InterclassPainter interclassPainter = (InterclassPainter) elementPainter;
-            Point painterUpperLeft = interclassPainter.getUpperLeft();
-            Point painterBottomRight = interclassPainter.getBottomRight();
-
-            // Check if one rectangle is next to the other
-            if (getLassoBottomRight().x < painterUpperLeft.x || painterBottomRight.x < getLassoUpperLeft().x) {
-                return false;
-            }
-
-            // Check if one rectangle is above the other
-            if (getLassoBottomRight().y < painterUpperLeft.y || painterBottomRight.y < getLassoUpperLeft().y) {
-                return false;
-            }
-        }
-        else if (elementPainter instanceof  ConnectionPainter) {
-            ConnectionPainter connectionPainter = (ConnectionPainter) elementPainter;
-            Rectangle lassoRectangle = getLassoRectangle();
-            if (!connectionIntersectsLasso(connectionPainter, lassoRectangle))
-                return false;
-        }
-        // Rectangles overlap
-        return true;
+    public LassoPainter(Point firstPoint, Point secondPoint) {
+        super(null);
+        setCorners(firstPoint, secondPoint);
     }
 
     @Override
@@ -44,9 +21,9 @@ public class LassoPainter extends ElementPainter {
         int boxHeight = getHeight();
         Color lastColor = graphics2D.getColor();
         graphics2D.setColor(new Color(0, 0, 1f));
-        graphics2D.drawRect(getLassoUpperLeft().x, getLassoUpperLeft().y, boxWidth, boxHeight);
+        graphics2D.drawRect(lassoUpperLeft.x, lassoUpperLeft.y, boxWidth, boxHeight);
         graphics2D.setColor(new Color(0f, 0f, 1f, 0.4f));
-        graphics2D.fillRect(getLassoUpperLeft().x, getLassoUpperLeft().y, boxWidth, boxHeight);
+        graphics2D.fillRect(lassoUpperLeft.x, lassoUpperLeft.y, boxWidth, boxHeight);
         graphics2D.setColor(lastColor);
     }
 
@@ -60,39 +37,63 @@ public class LassoPainter extends ElementPainter {
         return false;
     }
 
-    private LassoElement getLassoElement() {return (LassoElement) diagramElement;}
+    public boolean intersectsWith(ElementPainter elementPainter) {
+        if (elementPainter instanceof InterclassPainter) {
 
-    private Point getLassoUpperLeft() { return getLassoElement().getLassoUpperLeft(); }
+            InterclassPainter interclassPainter = (InterclassPainter) elementPainter;
+            Point painterUpperLeft = interclassPainter.getUpperLeft();
+            Point painterBottomRight = interclassPainter.getBottomRight();
 
-    private Point getLassoBottomRight() { return getLassoElement().getLassoBottomRight(); }
+            // Check if one rectangle is next to the other
+            if (lassoBottomRight.x < painterUpperLeft.x || painterBottomRight.x < lassoUpperLeft.x) {
+                return false;
+            }
 
-    private int getWidth() {
-        return getLassoBottomRight().x - getLassoUpperLeft().x;
+            // Check if one rectangle is above the other
+            if (lassoBottomRight.y < painterUpperLeft.y || painterBottomRight.y < lassoUpperLeft.y) {
+                return false;
+            }
+        }
+        else if (elementPainter instanceof  ConnectionPainter) {
+
+            ConnectionPainter connectionPainter = (ConnectionPainter) elementPainter;
+            Point from = connectionPainter.getCurrentPointFrom();
+            Point to = connectionPainter.getCurrentPointTo();
+            int x0 = (int) from.getX();
+            int y0 = (int) from.getY();
+            int x1 = (int) to.getX();
+            int y1 = (int) to.getY();
+
+            Rectangle lassoRectangle = getLassoRectangle();
+            return lassoRectangle.intersectsLine(x0, y0, x1, y1);
+        }
+
+        // Rectangles overlap
+        return true;
     }
 
-    private int getHeight() {
-        return getLassoBottomRight().y - getLassoUpperLeft().y;
+    private void setCorners(Point firstPoint, Point secondPoint) {
+        lassoUpperLeft = new Point(
+                Math.min(firstPoint.x, secondPoint.x),
+                Math.min(firstPoint.y, secondPoint.y)
+        );
+        lassoBottomRight = new Point(
+                Math.max(firstPoint.x, secondPoint.x),
+                Math.max(firstPoint.y, secondPoint.y)
+        );
     }
 
     private Rectangle getLassoRectangle() {
-        return new Rectangle(getLassoUpperLeft().x, getLassoUpperLeft().y, getWidth(), getHeight());
+        return new Rectangle(lassoUpperLeft.x, lassoUpperLeft.y, getWidth(), getHeight());
     }
 
-    public static boolean connectionIntersectsLasso(ConnectionPainter connectionPainter, Rectangle  r) {
-
-        Point from = connectionPainter.getCurrentPointFrom();
-        Point to = connectionPainter.getCurrentPointTo();
-        int x0 = (int)from.getX();
-        int y0 = (int)from.getY();
-        int x1 = (int)to.getX();
-        int y1 = (int)to.getY();
-
-        boolean intersection = r.intersectsLine(x0, y0, x1, y1);
-        if (intersection) {
-            return true;
-        }
-        
-        return false;
+    private int getWidth() {
+        return lassoBottomRight.x - lassoUpperLeft.x;
     }
+
+    private int getHeight() {
+        return lassoBottomRight.y - lassoUpperLeft.y;
+    }
+
 }
 

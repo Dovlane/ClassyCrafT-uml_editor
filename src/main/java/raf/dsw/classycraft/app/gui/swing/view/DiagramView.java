@@ -18,7 +18,6 @@ import raf.dsw.classycraft.app.model.elements.Interclass.ClassElement;
 import raf.dsw.classycraft.app.model.elements.Interclass.EnumElement;
 import raf.dsw.classycraft.app.model.elements.Interclass.Interclass;
 import raf.dsw.classycraft.app.model.elements.Interclass.InterfaceElement;
-import raf.dsw.classycraft.app.model.elements.LassoElement;
 import raf.dsw.classycraft.app.model.elements.LineElement;
 import raf.dsw.classycraft.app.model.observerPattern.IListener;
 
@@ -33,6 +32,7 @@ public class DiagramView extends JPanel implements IListener {
     private final Diagram diagram;
     private final List<ElementPainter> painters;
     private final List<ElementPainter> selectionModel;
+    private LassoPainter lassoPainter;
     private double zoomFactor = 1.0;
     private AffineTransform transform = new AffineTransform();
 
@@ -79,9 +79,13 @@ public class DiagramView extends JPanel implements IListener {
         }
 
         // Stand out all selected ElementPainters
-        updateSelectionModel();
         for (ElementPainter painter: selectionModel) {
             painter.drawSelectionBox(graphics2D);
+        }
+
+        // Draw Lasso
+        if (lassoPainter != null) {
+            lassoPainter.draw(graphics2D);
         }
 
         // Debug Info
@@ -110,9 +114,6 @@ public class DiagramView extends JPanel implements IListener {
         else if (diagramElement instanceof LineElement) {
             elementPainter = new LinePainter((LineElement) diagramElement);
         }
-        else if (diagramElement instanceof LassoElement) {
-            elementPainter = new LassoPainter((LassoElement) diagramElement);
-        }
 
         // Check for Factory quality
         if (elementPainter == null) {
@@ -137,11 +138,12 @@ public class DiagramView extends JPanel implements IListener {
         }
     }
 
-    public void updateSelectionModel() {
+    public void updateSelectionModel(LassoPainter lassoPainter) {
 
         // Create upper-left and bottom-right corner
-        LassoPainter lassoPainter = getLassoPainter();
+        setLassoPainter(lassoPainter);
 
+        // Fill the selection model with new painters
         if (lassoPainter != null) {
             selectionModel.clear();
             for (ElementPainter painter : painters) {
@@ -150,17 +152,20 @@ public class DiagramView extends JPanel implements IListener {
                 }
             }
         }
+
+        repaint();
     }
 
-    private LassoPainter getLassoPainter() {
-        LassoPainter lassoPainter = null;
-        for (ElementPainter painter : painters) {
-            if (painter instanceof LassoPainter) {
-                lassoPainter = (LassoPainter) painter;
-                break;
-            }
-        }
-        return lassoPainter;
+    public void zoom(int wheelRotation, Point location) {
+        zoomFactor = (wheelRotation >= 0) ? (wheelRotation > 0) ? 0.95 : 1 : 1.05;
+        AffineTransform previousTransform = new AffineTransform(transform);
+        transform.transform(location, location);
+        transform.setToIdentity();
+        transform.translate(location.x, location.y);
+        transform.scale(zoomFactor, zoomFactor);
+        transform.translate(-location.x, -location.y);
+        transform.concatenate(previousTransform);
+        repaint();
     }
 
     public Diagram getDiagram() {
@@ -175,13 +180,12 @@ public class DiagramView extends JPanel implements IListener {
         return selectionModel;
     }
 
-    public ElementPainter getPainterAt(Point location) {
-        for (ElementPainter elementPainter : getPainters()) {
-            if (elementPainter.elementAt(location)) {
-                return elementPainter;
-            }
-        }
-        return null;
+    private LassoPainter getLassoPainter() {
+        return lassoPainter;
+    }
+
+    public void setLassoPainter(LassoPainter lassoPainter) {
+        this.lassoPainter = lassoPainter;
     }
 
     public DiagramElement getElementAt(Point location) {
@@ -192,16 +196,13 @@ public class DiagramView extends JPanel implements IListener {
         return null;
     }
 
-    public void zoom(int wheelRotation, Point location) {
-        zoomFactor = (wheelRotation >= 0) ? (wheelRotation > 0) ? 0.95 : 1 : 1.05;
-        AffineTransform previousTransform = new AffineTransform(transform);
-        transform.transform(location, location);
-        transform.setToIdentity();
-        transform.translate(location.x, location.y);
-        transform.scale(zoomFactor, zoomFactor);
-        transform.translate(-location.x, -location.y);
-        transform.concatenate(previousTransform);
-        repaint();
+    public ElementPainter getPainterAt(Point location) {
+        for (ElementPainter elementPainter : getPainters()) {
+            if (elementPainter.elementAt(location)) {
+                return elementPainter;
+            }
+        }
+        return null;
     }
 
     public AffineTransform getTransform() {

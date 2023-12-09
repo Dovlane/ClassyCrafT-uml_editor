@@ -8,8 +8,6 @@ import raf.dsw.classycraft.app.model.ClassyRepository.*;
 import raf.dsw.classycraft.app.model.compositePattern.ClassyNode;
 import raf.dsw.classycraft.app.model.compositePattern.ClassyNodeComposite;
 import raf.dsw.classycraft.app.model.abstractFactoryForClassyNodes.*;
-import raf.dsw.classycraft.app.model.elements.LassoElement;
-import raf.dsw.classycraft.app.model.elements.LineElement;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultTreeModel;
