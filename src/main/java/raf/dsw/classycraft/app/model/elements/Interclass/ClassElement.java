@@ -5,6 +5,7 @@ import raf.dsw.classycraft.app.model.ClassyRepository.Notification;
 import raf.dsw.classycraft.app.model.ClassyRepository.NotificationType;
 import raf.dsw.classycraft.app.model.elements.ClassContent.Attribute;
 import raf.dsw.classycraft.app.model.elements.ClassContent.ClassContent;
+import raf.dsw.classycraft.app.model.elements.ClassContent.EnumLiteral;
 import raf.dsw.classycraft.app.model.elements.ClassContent.Method;
 import raf.dsw.classycraft.app.model.elements.Modifiers.AccessModifiers;
 import raf.dsw.classycraft.app.model.elements.Modifiers.NonAccessModifiers;
@@ -22,10 +23,18 @@ public class ClassElement extends Interclass {
         classContent = new ArrayList<>();
     }
 
-
-    // Getters and Setters
-    public List<ClassContent> getClassContent() {
-        return classContent;
+    // Create a Deep Copy Constructor
+    public ClassElement(ClassElement classElement) {
+        super(classElement);
+        classContent = new ArrayList<>();
+        for (ClassContent aClassContent: classElement.getClassContent()) {
+            if (aClassContent instanceof Method) {
+                addClassContent(new Method((Method) aClassContent));
+            }
+            else if (aClassContent instanceof Attribute) {
+                addClassContent(new Attribute((Attribute) aClassContent));
+            }
+        }
     }
 
     public void addClassContent(ClassContent classContent) {
@@ -35,6 +44,11 @@ public class ClassElement extends Interclass {
         notifyAllSubscribers(notification);
     }
 
+
+    // Getters and Setters
+    public List<ClassContent> getClassContent() {
+        return classContent;
+    }
 
     public List<Attribute> getClassAttributes() {
         ArrayList<Attribute> attributes = new ArrayList<>();

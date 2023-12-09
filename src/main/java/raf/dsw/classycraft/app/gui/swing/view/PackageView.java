@@ -10,6 +10,7 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,13 +46,14 @@ public class PackageView extends JSplitPane implements IListener {
         // Toolbar
         JToolBar toolBar = new JToolBar(JToolBar.VERTICAL);
         toolBar.setLayout(new GridLayout(0, 1));
-        addButton(toolBar, "AI", true);
-        addButton(toolBar, "AC", false);
-        addButton(toolBar, "ACC", false);
-        addButton(toolBar, "M", false);
-        addButton(toolBar, "Z", false);
-        addButton(toolBar, "R", false);
-        addButton(toolBar, "S", false);
+        addButton(toolBar, "AddInterclass", true);
+        addButton(toolBar, "AddConnection", false);
+        addButton(toolBar, "AddClassContent", false);
+        addButton(toolBar, "Move", false);
+        addButton(toolBar, "Zoom", false);
+        addButton(toolBar, "RemoveElement", false);
+        addButton(toolBar, "Select", false);
+        addButton(toolBar, "DuplicateElement", false);
 
         // Merge TabbedPane and ToolBar
         JSplitPane drawingPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, tabbedPane, toolBar);
@@ -65,8 +67,11 @@ public class PackageView extends JSplitPane implements IListener {
     }
 
     private void addButton(JToolBar toolBar, String toolText, boolean startSelected) {
-        JToggleButton button = new JToggleButton(toolText);
+
+        URL imageURL = getClass().getResource("/images/" + toolText + ".png");
+        JToggleButton button = new JToggleButton(new ImageIcon(imageURL));
         button.setFocusPainted(false); // Remove focus border
+
         button.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
@@ -80,15 +85,16 @@ public class PackageView extends JSplitPane implements IListener {
                         selectedButton.setBorder(BorderFactory.createEmptyBorder());
 
                         // Change the state of application
-                        String buttonName = button.getText();
-                        switch (buttonName) {
-                            case "AI" -> startAddInterclassState();
-                            case "AC" -> startAddConnectionState();
-                            case "ACC" -> startAddClassContentState();
-                            case "M" -> startMoveState();
-                            case "Z" -> startZoomState();
-                            case "R" -> startRemoveElementState();
-                            case "S" -> startSelectElementState();
+                        int index = toolBar.getComponentIndex(button);
+                        switch (index) {
+                            case 0 -> startAddInterclassState();
+                            case 1 -> startAddConnectionState();
+                            case 2 -> startAddClassContentState();
+                            case 3 -> startMoveState();
+                            case 4 -> startZoomState();
+                            case 5 -> startRemoveElementState();
+                            case 6 -> startSelectElementState();
+                            case 7 -> startDuplicateElementState();
                             default -> MainFrame.getInstance().getMessageGenerator().generateMessage(
                                     "Something is wrong with the names of the buttons and the states.", MessageType.ERROR);
                         }
@@ -158,6 +164,9 @@ public class PackageView extends JSplitPane implements IListener {
     }
     public void startSelectElementState() {
         stateManager.setSelectElementState();
+    }
+    public void startDuplicateElementState() {
+        stateManager.setDuplicateElementState();
     }
 
 

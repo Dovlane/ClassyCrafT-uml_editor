@@ -43,22 +43,20 @@ public abstract class ClassyNode implements IPublisher {
 
                 // Create a list of all connections that should be removed
                 // Avoid ConcurrentModificationException
-                List<Integer> connectionsForRemoval = new ArrayList<>();
+                List<ClassyNode> connectionsForRemoval = new ArrayList<>();
                 for (ClassyNode child: parent.getChildren()) {
                     if (child instanceof Connection) {
                         Connection connection = (Connection) child;
                         if (connection.getFrom().equals(this) || connection.getTo().equals(this)) {
-                            Notification notification = new Notification(child, NotificationType.REMOVE);
-                            parent.notifyAllSubscribers(notification);
-                            connectionsForRemoval.add(parent.getIndex(child));
+                            connectionsForRemoval.add(child);
                         }
                     }
                 }
 
                 // Actually remove all obsolete connections
-                for (int connectionIndex: connectionsForRemoval) {
+                for (ClassyNode child: connectionsForRemoval) {
                     ClassyTreeItem treeItemDiagramElement =
-                            MainFrame.getInstance().getClassyTree().getRoot().getTreeItemFromClassyNode(parent.getChildAt(connectionIndex));
+                            MainFrame.getInstance().getClassyTree().getRoot().getTreeItemFromClassyNode(child);
                     MainFrame.getInstance().getClassyTree().removeItem(treeItemDiagramElement);
                 }
 
