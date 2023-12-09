@@ -18,7 +18,6 @@ import raf.dsw.classycraft.app.model.elements.Interclass.ClassElement;
 import raf.dsw.classycraft.app.model.elements.Interclass.EnumElement;
 import raf.dsw.classycraft.app.model.elements.Interclass.Interclass;
 import raf.dsw.classycraft.app.model.elements.Interclass.InterfaceElement;
-import raf.dsw.classycraft.app.model.elements.LineElement;
 import raf.dsw.classycraft.app.model.observerPattern.IListener;
 
 import javax.swing.*;
@@ -33,6 +32,7 @@ public class DiagramView extends JPanel implements IListener {
     private final List<ElementPainter> painters;
     private final List<ElementPainter> selectionModel;
     private LassoPainter lassoPainter;
+    private LinePainter linePainter;
     private double zoomFactor = 1.0;
     private AffineTransform transform = new AffineTransform();
 
@@ -88,6 +88,12 @@ public class DiagramView extends JPanel implements IListener {
             lassoPainter.draw(graphics2D);
         }
 
+        // Draw temporary line for connections
+        if (linePainter != null) {
+            System.out.println("IIIIIIIIIIIIISCRTAAAAAAAAAAAVAM SEEEEEEEEEEEEEEEE");
+            linePainter.draw(graphics2D);
+        }
+
         // Debug Info
         System.out.println("DiagramView paintComponent is being performed");
     }
@@ -110,9 +116,6 @@ public class DiagramView extends JPanel implements IListener {
         else if (diagramElement instanceof Connection) {
             elementPainter = new AgregationPainter((Aggregation) diagramElement);
             // TODO: add factory for connections
-        }
-        else if (diagramElement instanceof LineElement) {
-            elementPainter = new LinePainter((LineElement) diagramElement);
         }
 
         // Check for Factory quality
@@ -156,6 +159,11 @@ public class DiagramView extends JPanel implements IListener {
         repaint();
     }
 
+    public void updateLinePainter (LinePainter linePainter) {
+        setLinePainter(linePainter);
+        repaint();
+    }
+
     public void zoom(int wheelRotation, Point location) {
         zoomFactor = (wheelRotation >= 0) ? (wheelRotation > 0) ? 0.95 : 1 : 1.05;
         AffineTransform previousTransform = new AffineTransform(transform);
@@ -196,6 +204,10 @@ public class DiagramView extends JPanel implements IListener {
         this.lassoPainter = lassoPainter;
     }
 
+    public void setLinePainter(LinePainter linePainter) {
+        this.linePainter = linePainter;
+        System.out.println("SETOVAO SAM LINE PAINTER!!!!");
+    }
     public DiagramElement getElementAt(Point location) {
         ElementPainter elementPainter = getPainterAt(location);
         if (elementPainter != null) {
