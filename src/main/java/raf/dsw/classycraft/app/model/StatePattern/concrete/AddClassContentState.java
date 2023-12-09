@@ -46,8 +46,9 @@ public class AddClassContentState implements State {
     }
 
     @Override
-    public void mouseDragged(Point startLocation, Point currentLocation, DiagramView diagramView) {
-        System.out.println("mouseDragged inside of AddClassContentState");
+    public void mouseDragged(Point startLocation, Point currentLocationOptimal, Point currentLocation, DiagramView diagramView) {
+        System.out.println("mouseDragged inside of AddClassContentState from " + startLocation + " to " + currentLocation);
+        System.out.println("Optimal location: " + currentLocationOptimal);
 
     }
 

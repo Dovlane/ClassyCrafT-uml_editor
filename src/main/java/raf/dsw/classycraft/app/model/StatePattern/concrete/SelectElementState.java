@@ -23,10 +23,11 @@ public class SelectElementState implements State {
     }
 
     @Override
-    public void mouseDragged(Point startLocation, Point currentLocation, DiagramView diagramView) {
-        System.out.println("mouseDragged inside SelectElementState");
+    public void mouseDragged(Point startLocation, Point currentLocationOptimal, Point currentLocation, DiagramView diagramView) {
+        System.out.println("mouseDragged inside of SelectElementState from " + startLocation + " to " + currentLocation);
+        System.out.println("Optimal location: " + currentLocationOptimal);
 
-        diagramView.updateSelectionModel(new LassoPainter(startLocation, currentLocation));
+        diagramView.updateSelectionModel(new LassoPainter(startLocation, currentLocationOptimal));
     }
 
     @Override

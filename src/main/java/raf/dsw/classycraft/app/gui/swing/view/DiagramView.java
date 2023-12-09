@@ -168,6 +168,18 @@ public class DiagramView extends JPanel implements IListener {
         repaint();
     }
 
+    public void move(Point previousLocation, Point currentLocation) {
+        AffineTransform previousTransform = new AffineTransform(transform);
+        transform.setToIdentity();
+        transform.transform(previousLocation, previousLocation);
+        transform.transform(currentLocation, currentLocation);
+        int dx = currentLocation.x - previousLocation.x;
+        int dy = currentLocation.y - previousLocation.y;
+        transform.translate(dx, dy);
+        transform.concatenate(previousTransform);
+        repaint();
+    }
+
     public Diagram getDiagram() {
         return diagram;
     }
@@ -178,10 +190,6 @@ public class DiagramView extends JPanel implements IListener {
 
     public List<ElementPainter> getSelectionModel() {
         return selectionModel;
-    }
-
-    private LassoPainter getLassoPainter() {
-        return lassoPainter;
     }
 
     public void setLassoPainter(LassoPainter lassoPainter) {

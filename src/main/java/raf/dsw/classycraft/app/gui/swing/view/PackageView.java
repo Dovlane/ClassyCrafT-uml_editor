@@ -124,10 +124,10 @@ public class PackageView extends JSplitPane implements IListener {
         stateManager.getCurrentState().mouseReleased(location, diagramView);
     }
 
-    public void mouseDragged(DiagramView diagramView, Point startLocation, Point currentLocation) {
+    public void mouseDragged(DiagramView diagramView, Point startLocation, Point currentLocationOptimal, Point currentLocation) {
         System.out.println("PackageView - mouseDragged:");
 
-        stateManager.getCurrentState().mouseDragged(startLocation, currentLocation, diagramView);
+        stateManager.getCurrentState().mouseDragged(startLocation, currentLocationOptimal, currentLocation, diagramView);
     }
 
     public void mouseWheelMoved(int wheelRotation, Point location, DiagramView diagramView) {

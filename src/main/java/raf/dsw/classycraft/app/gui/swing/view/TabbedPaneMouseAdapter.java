@@ -32,7 +32,7 @@ public class TabbedPaneMouseAdapter extends MouseAdapter {
         if (mouseEventInsideTab(tabbedPane, e)) {
             System.out.println("Mouse is pressed in tab");
             mouseState = MouseState.MOUSE_PRESSED;
-            startLocation = getOptimalLocation(tabbedPane, e);
+            startLocation = getOptimalLocation(tabbedPane, e, true);
             ApplicationFramework.getInstance().getClassyRepository().getPackageView()
                     .mousePressed(diagramViewSelected, startLocation);
         }
@@ -46,7 +46,7 @@ public class TabbedPaneMouseAdapter extends MouseAdapter {
         super.mouseReleased(e);
         JTabbedPane tabbedPane = (JTabbedPane) e.getComponent();
 
-        Point location = getOptimalLocation(tabbedPane, e);
+        Point location = getOptimalLocation(tabbedPane, e, true);
         if (location != null) {
 
             if (mouseState == MouseState.MOUSE_DRAGGED) {
@@ -84,9 +84,10 @@ public class TabbedPaneMouseAdapter extends MouseAdapter {
             System.out.println("Mouse is still dragging");
         }
 
-        Point currentLocation = getOptimalLocation(tabbedPane, e);
+        Point currentLocation = getOptimalLocation(tabbedPane, e, false);
+        Point currentLocationOptimal = getOptimalLocation(tabbedPane, e, true);
         ApplicationFramework.getInstance().getClassyRepository().getPackageView()
-                .mouseDragged(diagramViewSelected, startLocation, currentLocation);
+                .mouseDragged(diagramViewSelected, startLocation, currentLocationOptimal, currentLocation);
     }
 
     @Override
@@ -101,7 +102,7 @@ public class TabbedPaneMouseAdapter extends MouseAdapter {
         if (mouseEventInsideTab(tabbedPane, e)) {
             System.out.println("MouseWheel moved in tab");
 
-            Point location = getOptimalLocation(tabbedPane, e);
+            Point location = getOptimalLocation(tabbedPane, e, true);
             ApplicationFramework.getInstance().getClassyRepository().getPackageView()
                     .mouseWheelMoved(e.getWheelRotation(), location, diagramViewSelected);
         }
@@ -126,15 +127,17 @@ public class TabbedPaneMouseAdapter extends MouseAdapter {
         return false;
     }
 
-    private Point getOptimalLocation(JTabbedPane tabbedPane, MouseEvent e) {
+    private Point getOptimalLocation(JTabbedPane tabbedPane, MouseEvent e, boolean bound) {
         if (!tabbedPaneIsEmpty(tabbedPane)) {
 
             // Find optimal unscaled location
             Point location = getLocationOfMouseOnDiagramView(e);
-            double width = diagramViewSelected.getWidth();
-            double height = diagramViewSelected.getHeight();
-            location.x = (int) Math.min(Math.max(1, location.x), width - 1);
-            location.y = (int) Math.min(Math.max(1, location.y), height - 1);
+            if (bound) {
+                double width = diagramViewSelected.getWidth();
+                double height = diagramViewSelected.getHeight();
+                location.x = (int) Math.min(Math.max(1, location.x), width - 1);
+                location.y = (int) Math.min(Math.max(1, location.y), height - 1);
+            }
 
             // Scale location back to the World Coordinate system
             try {

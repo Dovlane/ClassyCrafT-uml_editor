@@ -54,8 +54,9 @@ public class RemoveElementState implements State {
     }
 
     @Override
-    public void mouseDragged(Point startLocation, Point currentLocation, DiagramView diagramView) {
-        System.out.println("mouseDragged inside RemoveElementState");
+    public void mouseDragged(Point startLocation, Point currentLocationOptimal, Point currentLocation, DiagramView diagramView) {
+        System.out.println("mouseDragged inside of RemoveElementState from " + startLocation + " to " + currentLocation);
+        System.out.println("Optimal location: " + currentLocationOptimal);
 
     }
 

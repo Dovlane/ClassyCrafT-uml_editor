@@ -29,8 +29,9 @@ public class MoveState implements State {
     }
 
     @Override
-    public void mouseDragged(Point startLocation, Point currentLocation, DiagramView diagramView) {
+    public void mouseDragged(Point startLocation, Point currentLocationOptimal, Point currentLocation, DiagramView diagramView) {
         System.out.println("mouseDragged inside of MoveState from " + startLocation + " to " + currentLocation);
+        System.out.println("Optimal location: " + currentLocationOptimal);
 
         // Move selected DiagramElements around
         if (clickedElementPainter != null) {
@@ -38,6 +39,7 @@ public class MoveState implements State {
 
             // Only update locations of Interclass elements because connections will automatically adjust
             if (clickedDiagramElement instanceof Interclass) {
+                // Point t = new Point(currentLocationOptimal.x - previousLocation.x, currentLocationOptimal.y - previousLocation.y);
                 Point t = new Point(currentLocation.x - previousLocation.x, currentLocation.y - previousLocation.y);
 
                 // Move the whole Selection Model if the clicked painter is part of it
@@ -53,13 +55,14 @@ public class MoveState implements State {
                 }
 
                 // Change the previous location so the new vector can latter on be properly calculated
+                // previousLocation = currentLocationOptimal;
                 previousLocation = currentLocation;
             }
         }
 
         // Move work are around
         else {
-            ;
+            diagramView.move(previousLocation, currentLocation);
         }
     }
 

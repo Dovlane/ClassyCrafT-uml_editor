@@ -66,10 +66,11 @@ public class AddConnectionState implements State {
     }
 
     @Override
-    public void mouseDragged(Point startLocation, Point currentLocation, DiagramView diagramView) {
-        System.out.println("mouseDragged inside of AddConnectionState");
+    public void mouseDragged(Point startLocation, Point currentLocationOptimal, Point currentLocation, DiagramView diagramView) {
+        System.out.println("mouseDragged inside of AddConnectionState from " + startLocation + " to " + currentLocation);
+        System.out.println("Optimal location: " + currentLocationOptimal);
 
-        lineElement.setCurrentPoint(currentLocation);
+        lineElement.setCurrentPoint(currentLocationOptimal);
     }
 
     @Override

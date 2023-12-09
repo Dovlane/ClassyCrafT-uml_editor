@@ -82,7 +82,6 @@ public class AddInterclassState implements State {
                         "Diagram cannot be found in ClassyTree.", MessageType.ERROR);
                 return;
             }
-//            MainFrame.getInstance().getClassyTree().attachChild(classyTreeDiagram, interclass[0]);
             MainFrame.getInstance().getClassyTree().addChild(infoForCreatingInterclass[0]);
             interclassStateDialog.dispose();
         });
@@ -95,8 +94,9 @@ public class AddInterclassState implements State {
     }
 
     @Override
-    public void mouseDragged(Point startLocation, Point currentLocation, DiagramView diagramView) {
-        System.out.println("mouseDragged inside of AddInterclassState");
+    public void mouseDragged(Point startLocation, Point currentLocationOptimal, Point currentLocation, DiagramView diagramView) {
+        System.out.println("mouseDragged inside of AddInterclassState from " + startLocation + " to " + currentLocation);
+        System.out.println("Optimal location: " + currentLocationOptimal);
 
     }
 
@@ -106,7 +106,4 @@ public class AddInterclassState implements State {
 
     }
 
-    public InterclassStateDialog getInterclassStateDialog() {
-        return interclassStateDialog;
-    }
 }
