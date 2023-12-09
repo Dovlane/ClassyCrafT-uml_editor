@@ -23,6 +23,7 @@ public class EnumElement extends Interclass {
     // Create a Deep Copy Constructor
     public EnumElement(EnumElement enumElement) {
         super(enumElement);
+        enumLiterals = new ArrayList<>();
         for (EnumLiteral aEnumLiteral: enumElement.getEnumLiterals()) {
             addEnumLiteral(new EnumLiteral(aEnumLiteral));
         }

@@ -25,6 +25,7 @@ public class InterfaceElement extends Interclass {
     // Create a Deep Copy Constructor
     public InterfaceElement(InterfaceElement interfaceElement) {
         super(interfaceElement);
+        methods = new ArrayList<>();
         for (Method aMethod: interfaceElement.getInterfaceMethods()) {
             addMethod(new Method(aMethod));
         }
