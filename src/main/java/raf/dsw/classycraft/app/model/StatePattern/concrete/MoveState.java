@@ -8,18 +8,25 @@ import raf.dsw.classycraft.app.model.elements.DiagramElement;
 import raf.dsw.classycraft.app.model.elements.Interclass.Interclass;
 
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 
 public class MoveState implements State {
 
     Point previousLocation;
+    Point previousLocationWorld;
+    AffineTransform initialTransform;
     ElementPainter clickedElementPainter;
 
     @Override
     public void mousePressed(Point location, DiagramView diagramView) {
         System.out.println("mousePressed inside of MoveState");
 
-        previousLocation = location;
         clickedElementPainter = diagramView.getPainterAt(location);
+        previousLocationWorld = new Point(location);
+
+        initialTransform = diagramView.getTransform();
+        initialTransform.transform(location, location);
+        previousLocation = location;
     }
 
     @Override
@@ -39,8 +46,7 @@ public class MoveState implements State {
 
             // Only update locations of Interclass elements because connections will automatically adjust
             if (clickedDiagramElement instanceof Interclass) {
-                // Point t = new Point(currentLocationOptimal.x - previousLocation.x, currentLocationOptimal.y - previousLocation.y);
-                Point t = new Point(currentLocation.x - previousLocation.x, currentLocation.y - previousLocation.y);
+                Point t = new Point(currentLocation.x - previousLocationWorld.x, currentLocation.y - previousLocationWorld.y);
 
                 // Move the whole Selection Model if the clicked painter is part of it
                 if (diagramView.getSelectionModel().contains(clickedElementPainter)) {
@@ -55,14 +61,15 @@ public class MoveState implements State {
                 }
 
                 // Change the previous location so the new vector can latter on be properly calculated
-                // previousLocation = currentLocationOptimal;
-                previousLocation = currentLocation;
+                previousLocationWorld = currentLocation;
             }
         }
 
-        // Move work are around
+        // Move work area around
         else {
+            initialTransform.transform(currentLocation, currentLocation);
             diagramView.move(previousLocation, currentLocation);
+            previousLocation = currentLocation;
         }
     }
 

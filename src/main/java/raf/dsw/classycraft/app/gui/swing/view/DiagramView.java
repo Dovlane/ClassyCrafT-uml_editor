@@ -95,6 +95,7 @@ public class DiagramView extends JPanel implements IListener {
         }
 
         // Debug Info
+        graphics2D.drawRect(-10, -10, 20, 20);
         System.out.println("DiagramView paintComponent is being performed");
     }
 
@@ -179,8 +180,6 @@ public class DiagramView extends JPanel implements IListener {
     public void move(Point previousLocation, Point currentLocation) {
         AffineTransform previousTransform = new AffineTransform(transform);
         transform.setToIdentity();
-        transform.transform(previousLocation, previousLocation);
-        transform.transform(currentLocation, currentLocation);
         int dx = currentLocation.x - previousLocation.x;
         int dy = currentLocation.y - previousLocation.y;
         transform.translate(dx, dy);
