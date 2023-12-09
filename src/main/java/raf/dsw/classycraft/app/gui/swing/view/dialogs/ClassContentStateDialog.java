@@ -16,9 +16,6 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.Vector;
 
-enum ClassContentStateEnum {
-    CLASS_CONTENT, INTERFACE_CONTENT, ENUM_CONTENT
-}
 public class ClassContentStateDialog extends JFrame {
 
     private JButton buttonAdd;

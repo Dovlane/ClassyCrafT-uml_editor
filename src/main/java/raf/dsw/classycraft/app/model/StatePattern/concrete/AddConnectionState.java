@@ -46,31 +46,34 @@ public class AddConnectionState implements State {
 
         DiagramElement selectedDiagramElementTo = diagramView.getElementAt(location);
         Diagram currentDiagram = diagramView.getDiagram();
-        if (selectedDiagramElementTo != null && selectedDiagramElementTo instanceof Interclass) {
-            ElementConnectionType elementConnectionType = ElementConnectionType.AGGREGATION;
-            InfoForCreatingConnection infoForCreatingConnection = new InfoForCreatingConnection("aggrg", currentDiagram, (Interclass) selectedDiagramElementFrom, (Interclass)selectedDiagramElementTo, elementConnectionType);
-            ClassyTreeItem classyTreeDiagram =
-                    MainFrame.getInstance().getClassyTree().getRoot().getTreeItemFromClassyNode(currentDiagram);
-            if (classyTreeDiagram == null) {
-                MainFrame.getInstance().getMessageGenerator().generateMessage(
-                        "Diagram cannot be found in ClassyTree.", MessageType.ERROR);
-                return;
+        if (selectedDiagramElementFrom != null) {
+            if (selectedDiagramElementTo != null && selectedDiagramElementTo instanceof Interclass) {
+                ElementConnectionType elementConnectionType = ElementConnectionType.AGGREGATION;
+                InfoForCreatingConnection infoForCreatingConnection = new InfoForCreatingConnection("aggrg", currentDiagram, (Interclass) selectedDiagramElementFrom, (Interclass) selectedDiagramElementTo, elementConnectionType);
+                ClassyTreeItem classyTreeDiagram =
+                        MainFrame.getInstance().getClassyTree().getRoot().getTreeItemFromClassyNode(currentDiagram);
+                if (classyTreeDiagram == null) {
+                    MainFrame.getInstance().getMessageGenerator().generateMessage(
+                            "Diagram cannot be found in ClassyTree.", MessageType.ERROR);
+                    return;
+                }
+                MainFrame.getInstance().getClassyTree().addChild(infoForCreatingConnection);
             }
-            MainFrame.getInstance().getClassyTree().addChild(infoForCreatingConnection);
-        }
 
-        // Remove the clicked one from painters
-        ClassyTreeItem treeItemLineElement =
-                MainFrame.getInstance().getClassyTree().getRoot().getTreeItemFromClassyNode(lineElement);
-       MainFrame.getInstance().getClassyTree().removeItem(treeItemLineElement);
+            ClassyTreeItem treeItemLineElement =
+                    MainFrame.getInstance().getClassyTree().getRoot().getTreeItemFromClassyNode(lineElement);
+            MainFrame.getInstance().getClassyTree().removeItem(treeItemLineElement);
+        }
     }
 
     @Override
     public void mouseDragged(Point startLocation, Point currentLocationOptimal, Point currentLocation, DiagramView diagramView) {
-        System.out.println("mouseDragged inside of AddConnectionState from " + startLocation + " to " + currentLocation);
-        System.out.println("Optimal location: " + currentLocationOptimal);
+        if (lineElement != null) {
+            System.out.println("mouseDragged inside of AddConnectionState from " + startLocation + " to " + currentLocation);
+            System.out.println("Optimal location: " + currentLocationOptimal);
 
-        lineElement.setCurrentPoint(currentLocationOptimal);
+            lineElement.setCurrentPoint(currentLocationOptimal);
+        }
     }
 
     @Override
