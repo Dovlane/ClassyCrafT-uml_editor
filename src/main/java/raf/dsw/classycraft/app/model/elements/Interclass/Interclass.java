@@ -125,4 +125,14 @@ public abstract class Interclass extends DiagramElement {
     public NonAccessModifiers getNonAccessModifiers() {
         return nonAccessModifiers;
     }
+
+    public void setVisibility(AccessModifiers visibility) {
+        this.visibility = visibility;
+        notifyAllSubscribers(new Notification(this, NotificationType.SET));
+    }
+
+    public void setNonAccessModifiers(NonAccessModifiers nonAccessModifiers) {
+        this.nonAccessModifiers = nonAccessModifiers;
+        notifyAllSubscribers(new Notification(this, NotificationType.SET));
+    }
 }

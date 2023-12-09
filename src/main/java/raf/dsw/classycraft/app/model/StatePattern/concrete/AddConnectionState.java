@@ -23,7 +23,6 @@ public class AddConnectionState implements State {
         System.out.println("mousePressed inside of AddConnectionState");
 
         selectedDiagramElementFrom = diagramView.getElementAt(location);
-        Diagram currentDiagram = diagramView.getDiagram();
 
         if (selectedDiagramElementFrom != null && selectedDiagramElementFrom instanceof Interclass) {
             linePainter = new LinePainter((Interclass) selectedDiagramElementFrom);
