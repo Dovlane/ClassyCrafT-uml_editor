@@ -85,6 +85,6 @@ public class ClassPainter extends InterclassPainter {
         drawInterclassLine(graphics2D, yBelowInterclassName);
     }
 
-    private ClassElement getClassElement() { return (ClassElement)diagramElement; }
+    private ClassElement getClassElement() { return (ClassElement) diagramElement; }
 
 }

@@ -12,6 +12,7 @@ public class StateManager {
     private final ZoomState zoomState;
     private final RemoveElementState removeElementState;
     private final SelectElementState selectElementState;
+    private final DuplicateElementState duplicateElementState;
 
     public StateManager() {
 
@@ -23,6 +24,7 @@ public class StateManager {
         zoomState = new ZoomState();
         removeElementState = new RemoveElementState();
         selectElementState = new SelectElementState();
+        duplicateElementState = new DuplicateElementState();
 
         // Set default state for currentState
         setAddInterclassState();
@@ -56,6 +58,10 @@ public class StateManager {
 
     public void setSelectElementState() {
         currentState = selectElementState;
+    }
+
+    public void setDuplicateElementState() {
+        currentState = duplicateElementState;
     }
 
 

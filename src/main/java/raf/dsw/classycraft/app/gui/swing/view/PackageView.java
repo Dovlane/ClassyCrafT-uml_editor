@@ -52,6 +52,7 @@ public class PackageView extends JSplitPane implements IListener {
         addButton(toolBar, "Z", false);
         addButton(toolBar, "R", false);
         addButton(toolBar, "S", false);
+        addButton(toolBar, "DE", false);
 
         // Merge TabbedPane and ToolBar
         JSplitPane drawingPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, tabbedPane, toolBar);
@@ -89,6 +90,7 @@ public class PackageView extends JSplitPane implements IListener {
                             case "Z" -> startZoomState();
                             case "R" -> startRemoveElementState();
                             case "S" -> startSelectElementState();
+                            case "DE" -> startDuplicateElementState();
                             default -> MainFrame.getInstance().getMessageGenerator().generateMessage(
                                     "Something is wrong with the names of the buttons and the states.", MessageType.ERROR);
                         }
@@ -158,6 +160,9 @@ public class PackageView extends JSplitPane implements IListener {
     }
     public void startSelectElementState() {
         stateManager.setSelectElementState();
+    }
+    public void startDuplicateElementState() {
+        stateManager.setDuplicateElementState();
     }
 
 

@@ -4,6 +4,7 @@ import raf.dsw.classycraft.app.model.ClassyRepository.Diagram;
 import raf.dsw.classycraft.app.model.ClassyRepository.Notification;
 import raf.dsw.classycraft.app.model.ClassyRepository.NotificationType;
 import raf.dsw.classycraft.app.model.elements.ClassContent.ClassContent;
+import raf.dsw.classycraft.app.model.elements.ClassContent.EnumLiteral;
 import raf.dsw.classycraft.app.model.elements.ClassContent.Method;
 import raf.dsw.classycraft.app.model.elements.Modifiers.AccessModifiers;
 import raf.dsw.classycraft.app.model.elements.Modifiers.NonAccessModifiers;
@@ -21,10 +22,12 @@ public class InterfaceElement extends Interclass {
         methods = new ArrayList<>();
     }
 
-
-    // Getters and Setters
-    public List<Method> getInterfaceMethods() {
-        return methods;
+    // Create a Deep Copy Constructor
+    public InterfaceElement(InterfaceElement interfaceElement) {
+        super(interfaceElement);
+        for (Method aMethod: interfaceElement.getInterfaceMethods()) {
+            addMethod(new Method(aMethod));
+        }
     }
 
     public void addMethod(Method method) {
@@ -34,6 +37,11 @@ public class InterfaceElement extends Interclass {
         notifyAllSubscribers(notification);
     }
 
+
+    // Getters and Setters
+    public List<Method> getInterfaceMethods() {
+        return methods;
+    }
 
     public void setMethods(List<Method> methods) {
         this.methods = methods;
