@@ -95,6 +95,7 @@ public class DiagramView extends JPanel implements IListener {
         }
 
         // Debug Info
+        graphics2D.drawRect(-10, -10, 20, 20);
         System.out.println("DiagramView paintComponent is being performed");
     }
 
@@ -166,8 +167,12 @@ public class DiagramView extends JPanel implements IListener {
 
     public void zoom(int wheelRotation, Point location) {
         zoomFactor = (wheelRotation >= 0) ? (wheelRotation > 0) ? 0.95 : 1 : 1.05;
-        AffineTransform previousTransform = new AffineTransform(transform);
         transform.transform(location, location);
+        zoomWithFactor(zoomFactor, location);
+    }
+
+    public void zoomWithFactor(double zoomFactor, Point location) {
+        AffineTransform previousTransform = new AffineTransform(transform);
         transform.setToIdentity();
         transform.translate(location.x, location.y);
         transform.scale(zoomFactor, zoomFactor);
