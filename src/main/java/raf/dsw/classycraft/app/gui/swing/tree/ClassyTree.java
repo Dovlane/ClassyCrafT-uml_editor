@@ -32,61 +32,21 @@ public class ClassyTree implements IClassyTree {
     @Override
     public boolean addChild(InfoForCreatingClassyNode infoForCreatingClassyNode) {
 //    public boolean addChild(ClassyTreeItem parent, ClassyNodeType type) {
-        Object parent;
-        if (infoForCreatingClassyNode instanceof InfoForCreatingConnection) {
-            InfoForCreatingConnection infoForCreatingConnection = (InfoForCreatingConnection) infoForCreatingClassyNode;
-            parent = infoForCreatingConnection.getParent();
-        }
-        else if (infoForCreatingClassyNode instanceof InfoForCreatingClassyNodeCompositeNodes) {
-            InfoForCreatingClassyNodeCompositeNodes infoForCreatingClassyNodeCompositeNodes = (InfoForCreatingClassyNodeCompositeNodes) infoForCreatingClassyNode;
-            System.out.println("InfoForCreatingClassyNodeCompositeNodes");
-            System.out.println(" infoForCreatingClassyNodeCompositeNodes.getParent()" +  infoForCreatingClassyNodeCompositeNodes.getParent());
-            parent = infoForCreatingClassyNodeCompositeNodes.getParent();
-        }
-        else {
-            InfoForCreatingInterclass infoForCreatingInterclass = (InfoForCreatingInterclass) infoForCreatingClassyNode;
-            parent = infoForCreatingInterclass.getParent();
-        }
 
-        if (parent == null) {
-            MainFrame.getInstance().getMessageGenerator().generateMessage(
-                    "Parent Node must be selected.", MessageType.ERROR);
-            return false;
-        }
+        ClassyTreeItem parent = infoForCreatingClassyNode.getParent();
 
-//        if (parent.getClassyNode() instanceof ClassyNodeLeaf) {
-//            MainFrame.getInstance().getMessageGenerator().generateMessage(
-//                    "Leaf Node cannot contain any other node.", MessageType.ERROR);
-//            return false;
-//        }
         ClassyNode child;
-        //Creating Diagram, Package or Project
-        if (infoForCreatingClassyNode instanceof InfoForCreatingClassyNodeCompositeNodes) {
-            child = abstractClassyCraftManufacturer.createClassyNode((InfoForCreatingClassyNodeCompositeNodes) infoForCreatingClassyNode);
-        }
-        else {
-            //Creating DiagramElement
-            if (infoForCreatingClassyNode instanceof InfoForCreatingInterclass) {
-                child = abstractClassyCraftManufacturer.createInterclass((InfoForCreatingInterclass) infoForCreatingClassyNode);
-            } else {
-                child = abstractClassyCraftManufacturer.createConnection((InfoForCreatingConnection) infoForCreatingClassyNode);
-            }
-        }
 
-        ClassyTreeItem parentTreeItem;
-
-        // if parent is classyNode it means that we are adding DiagramElement
-        if (parent instanceof ClassyNode) {
-            parentTreeItem =
-                    MainFrame.getInstance().getClassyTree().getRoot().getTreeItemFromClassyNode((ClassyNode) parent);
-        }
-        else {
-            parentTreeItem = (ClassyTreeItem) parent;
-        }
+        if (infoForCreatingClassyNode instanceof InfoForCreatingClassyNodeComposite)
+            child = abstractClassyCraftManufacturer.createClassyNodeComposite((InfoForCreatingClassyNodeComposite) infoForCreatingClassyNode);
+        else if (infoForCreatingClassyNode instanceof InfoForCreatingInterclass)
+            child = abstractClassyCraftManufacturer.createInterclass((InfoForCreatingInterclass) infoForCreatingClassyNode);
+        else
+            child = abstractClassyCraftManufacturer.createConnection((InfoForCreatingConnection) infoForCreatingClassyNode);
 
 
 //        ClassyNode child = createChild(parent.getClassyNode(), type);
-        return attachChild(parentTreeItem, child);
+        return attachChild(parent, child);
     }
 
     @Override

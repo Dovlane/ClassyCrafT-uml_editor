@@ -59,6 +59,13 @@ public class AddInterclassState implements State {
             }
             for (JRadioButton jRadioButton : interclassStateDialog.getInterclassRadioButtons()){
                 if (jRadioButton.isSelected()) {
+                    ClassyTreeItem classyTreeDiagram =
+                            MainFrame.getInstance().getClassyTree().getRoot().getTreeItemFromClassyNode(currentDiagram);
+                    if (classyTreeDiagram ==  null) {
+                        MainFrame.getInstance().getMessageGenerator().generateMessage(
+                                "Diagram cannot be found in ClassyTree.", MessageType.ERROR);
+                        return;
+                    }
                     ElementInterclassType elementInterclassType = null;
                     if (jRadioButton.getText().equals("Class")) {
                         elementInterclassType = ElementInterclassType.CLASS;
@@ -69,19 +76,14 @@ public class AddInterclassState implements State {
                     else if (jRadioButton.getText().equals("Enum")) {
                         elementInterclassType = ElementInterclassType.ENUM;
                     }
-                    infoForCreatingInterclass[0] = new InfoForCreatingInterclass(interclassName, currentDiagram, location, accessModifier, nonAccessModifier, elementInterclassType);
+                    infoForCreatingInterclass[0] = new InfoForCreatingInterclass(interclassName, classyTreeDiagram, location, accessModifier, nonAccessModifier, elementInterclassType);
                     break;
                 }
             }
 
+
+
             // Attach a new Interclass object in the whole Model
-            ClassyTreeItem classyTreeDiagram =
-                    MainFrame.getInstance().getClassyTree().getRoot().getTreeItemFromClassyNode(currentDiagram);
-            if (classyTreeDiagram ==  null) {
-                MainFrame.getInstance().getMessageGenerator().generateMessage(
-                        "Diagram cannot be found in ClassyTree.", MessageType.ERROR);
-                return;
-            }
             MainFrame.getInstance().getClassyTree().addChild(infoForCreatingInterclass[0]);
             interclassStateDialog.dispose();
         });

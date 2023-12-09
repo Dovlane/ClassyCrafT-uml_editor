@@ -39,7 +39,6 @@ public class ClassContentStateDialog extends JFrame {
 
 
     private JPanel importDataJPanel;
-
     private JComboBox<AccessModifiers> accessModifiersJComboBox = new JComboBox<>(AccessModifiers.values());
     private JComboBox<NonAccessModifiers> nonAccessModifiersJComboBox = new JComboBox<>(NonAccessModifiers.values());
     private DiagramElement selectedDiagramElement;
@@ -233,30 +232,8 @@ public class ClassContentStateDialog extends JFrame {
 
         setFieldsForEditingInterclassFeatures();
         JPanel fieldsForMethodsAndAttributesJPanel = setImportFieldsForMethodsAndAttributes();
-        setImportFieldsForMethodsAndAttributes();
 
-        JPanel buttonsJPanel = new JPanel();
-        buttonsJPanel.setLayout(new BoxLayout(buttonsJPanel, BoxLayout.X_AXIS));
-
-        jRadioButtonsAttributeOrMethod = new JRadioButton[] {new JRadioButton("Edit methods"), new JRadioButton("Edit attributes")};
-        ButtonGroup methodAndAttributeRBtnGroup = new ButtonGroup();
-        JPanel jradioButtonPanel = new JPanel();
-        jradioButtonPanel.setLayout(new BoxLayout(jradioButtonPanel, BoxLayout.Y_AXIS));
-        jRadioButtonsAttributeOrMethod[0].setSelected(true);
-        buttonsJPanel.add(new Label("Set class content:"));
-
-        for (JRadioButton jRadioButton : jRadioButtonsAttributeOrMethod) {
-            methodAndAttributeRBtnGroup.add(jRadioButton);
-            jradioButtonPanel.add(jRadioButton);
-        }
-
-        buttonAdd = new JButton("ADD");
-        buttonDelete = new JButton("DELETE");
-        buttonOk = new JButton("OK");
-        buttonsJPanel.add(jradioButtonPanel);
-        buttonsJPanel.add(buttonAdd);
-        buttonsJPanel.add(buttonDelete);
-        buttonsJPanel.add(buttonOk);
+        JPanel buttonsJPanel = getButtonsForImportFieldsForMethodsAndAttributes();
 
         importDataJPanel.add(editDataInterclassJPanel);
         importDataJPanel.add(fieldsForMethodsAndAttributesJPanel);
@@ -272,15 +249,7 @@ public class ClassContentStateDialog extends JFrame {
         setFieldsForEditingInterclassFeatures();
         JPanel fieldsForMethodsAndAttributesJPanel = setImportFieldsForMethodsAndAttributes();
 
-        JPanel buttonsJPanel = new JPanel();
-        buttonsJPanel.setLayout(new BoxLayout(buttonsJPanel, BoxLayout.X_AXIS));
-
-        buttonAdd = new JButton("ADD");
-        buttonDelete = new JButton("DELETE");
-        buttonOk = new JButton("OK");
-        buttonsJPanel.add(buttonAdd);
-        buttonsJPanel.add(buttonDelete);
-        buttonsJPanel.add(buttonOk);
+        JPanel buttonsJPanel = getButtonsForImportFieldsForMethodsAndAttributes();
 
         importDataJPanel.add(editDataInterclassJPanel);
         importDataJPanel.add(fieldsForMethodsAndAttributesJPanel);
@@ -309,7 +278,38 @@ public class ClassContentStateDialog extends JFrame {
         return fieldsForMethodsAndAttributesJPanel;
     }
 
+    private JPanel getButtonsForImportFieldsForMethodsAndAttributes() {
+        JPanel buttonsJPanel = new JPanel();
+        buttonsJPanel.setLayout(new BoxLayout(buttonsJPanel, BoxLayout.X_AXIS));
 
+
+        if (selectedDiagramElement instanceof ClassElement) {
+            buttonsJPanel.setLayout(new BoxLayout(buttonsJPanel, BoxLayout.X_AXIS));
+
+            jRadioButtonsAttributeOrMethod = new JRadioButton[] {new JRadioButton("Edit methods"), new JRadioButton("Edit attributes")};
+            ButtonGroup methodAndAttributeRBtnGroup = new ButtonGroup();
+            JPanel jradioButtonPanel = new JPanel();
+            jradioButtonPanel.setLayout(new BoxLayout(jradioButtonPanel, BoxLayout.Y_AXIS));
+            jRadioButtonsAttributeOrMethod[0].setSelected(true);
+            buttonsJPanel.add(new Label("Set class content:"));
+
+            for (JRadioButton jRadioButton : jRadioButtonsAttributeOrMethod) {
+                methodAndAttributeRBtnGroup.add(jRadioButton);
+                jradioButtonPanel.add(jRadioButton);
+            }
+            buttonsJPanel.add(jradioButtonPanel);
+        }
+
+
+        buttonAdd = new JButton("ADD");
+        buttonDelete = new JButton("DELETE");
+        buttonOk = new JButton("OK");
+        buttonsJPanel.add(buttonAdd);
+        buttonsJPanel.add(buttonDelete);
+        buttonsJPanel.add(buttonOk);
+
+        return buttonsJPanel;
+    }
     private void setImportDataPaneForEnum() {
         importDataJPanel = new JPanel();
         importDataJPanel.setLayout(new BoxLayout(importDataJPanel, BoxLayout.Y_AXIS));
