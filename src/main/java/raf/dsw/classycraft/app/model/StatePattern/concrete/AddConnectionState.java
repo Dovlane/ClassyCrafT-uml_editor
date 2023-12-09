@@ -23,7 +23,6 @@ public class AddConnectionState implements State {
         System.out.println("mousePressed inside of AddConnectionState");
 
         selectedDiagramElementFrom = diagramView.getElementAt(location);
-        Diagram currentDiagram = diagramView.getDiagram();
 
         if (selectedDiagramElementFrom != null && selectedDiagramElementFrom instanceof Interclass) {
             linePainter = new LinePainter((Interclass) selectedDiagramElementFrom);
@@ -41,8 +40,6 @@ public class AddConnectionState implements State {
         Diagram currentDiagram = diagramView.getDiagram();
         if (selectedDiagramElementFrom != null) {
             if (selectedDiagramElementTo != null && selectedDiagramElementTo instanceof Interclass) {
-                ElementConnectionType elementConnectionType = ElementConnectionType.AGGREGATION;
-                InfoForCreatingConnection infoForCreatingConnection = new InfoForCreatingConnection("aggrg", currentDiagram, (Interclass) selectedDiagramElementFrom, (Interclass) selectedDiagramElementTo, elementConnectionType);
                 ClassyTreeItem classyTreeDiagram =
                         MainFrame.getInstance().getClassyTree().getRoot().getTreeItemFromClassyNode(currentDiagram);
                 if (classyTreeDiagram == null) {
@@ -50,6 +47,8 @@ public class AddConnectionState implements State {
                             "Diagram cannot be found in ClassyTree.", MessageType.ERROR);
                     return;
                 }
+                ElementConnectionType elementConnectionType = ElementConnectionType.AGGREGATION;
+                InfoForCreatingConnection infoForCreatingConnection = new InfoForCreatingConnection("aggrg", classyTreeDiagram, (Interclass) selectedDiagramElementFrom, (Interclass) selectedDiagramElementTo, elementConnectionType);
                 MainFrame.getInstance().getClassyTree().addChild(infoForCreatingConnection);
             }
             linePainter = null;

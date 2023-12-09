@@ -3,7 +3,7 @@ package raf.dsw.classycraft.app.gui.swing.controller;
 import raf.dsw.classycraft.app.gui.swing.tree.model.ClassyTreeItem;
 import raf.dsw.classycraft.app.gui.swing.view.MainFrame;
 import raf.dsw.classycraft.app.model.ClassyRepository.ClassyNodeType;
-import raf.dsw.classycraft.app.model.abstractFactoryForClassyNodes.InfoForCreatingClassyNodeCompositeNodes;
+import raf.dsw.classycraft.app.model.abstractFactoryForClassyNodes.InfoForCreatingClassyNodeComposite;
 
 import java.awt.event.ActionEvent;
 
@@ -19,7 +19,7 @@ public class NewDiagramAction extends AbstractClassyAction {
     @Override
     public void actionPerformed(ActionEvent e) {
         ClassyTreeItem selectedNode = MainFrame.getInstance().getClassyTree().getSelectedNode();
-        MainFrame.getInstance().getClassyTree().addChild(new InfoForCreatingClassyNodeCompositeNodes(selectedNode, ClassyNodeType.DIAGRAM));
+        MainFrame.getInstance().getClassyTree().addChild(new InfoForCreatingClassyNodeComposite(selectedNode, ClassyNodeType.DIAGRAM));
         System.out.println("NewDiagramAction has been performed.");
     }
 }

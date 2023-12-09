@@ -23,7 +23,7 @@ public class ClassyCraftManufacturer extends AbstractClassyCraftManufacturer {
     @Override
     public Interclass createInterclass(InfoForCreatingInterclass infoForCreatingInterclass) {
         String name = infoForCreatingInterclass.getName();
-        Diagram parent = (Diagram) infoForCreatingInterclass.getParent();
+        Diagram parent = (Diagram) (infoForCreatingInterclass.getParent().getClassyNode());
         Point point = infoForCreatingInterclass.getPoint();
         AccessModifiers visibility = infoForCreatingInterclass.getVisibility();
         NonAccessModifiers nonAccessModifiers = infoForCreatingInterclass.getNonAccessModifier();
@@ -41,7 +41,7 @@ public class ClassyCraftManufacturer extends AbstractClassyCraftManufacturer {
     @Override
     public Connection createConnection(InfoForCreatingConnection infoForCreatingConnection) {
         String name = infoForCreatingConnection.getName();
-        Diagram parent = (Diagram) infoForCreatingConnection.getParent();
+        Diagram parent = (Diagram) (infoForCreatingConnection.getParent().getClassyNode());
         Interclass from = infoForCreatingConnection.getFrom();
         Interclass to = infoForCreatingConnection.getTo();
         ElementConnectionType elementConnectionType = infoForCreatingConnection.getElementConnectionType();
@@ -59,9 +59,9 @@ public class ClassyCraftManufacturer extends AbstractClassyCraftManufacturer {
 
 
     @Override
-    public ClassyNode createClassyNode (InfoForCreatingClassyNodeCompositeNodes infoForCreatingClassyNodeCompositeNodes) {
-        ClassyNode parent = infoForCreatingClassyNodeCompositeNodes.getParent().getClassyNode();
-        ClassyNodeType type = infoForCreatingClassyNodeCompositeNodes.getType();
+    public ClassyNode createClassyNodeComposite (InfoForCreatingClassyNodeComposite infoForCreatingClassyNodeComposite) {
+        ClassyNode parent = infoForCreatingClassyNodeComposite.getParent().getClassyNode();
+        ClassyNodeType type = infoForCreatingClassyNodeComposite.getType();
         if (parent instanceof ProjectExplorer) {
             if (type == ClassyNodeType.PROJECT) {
                 ((ProjectExplorer) parent).increaseCounter();

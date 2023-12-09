@@ -21,8 +21,8 @@ public class LinePainter {
         graphics2D.setStroke(new BasicStroke(2));
         graphics2D.setColor(new Color(0, 0, 0));
         graphics2D.drawLine((int)getStartingPoint().getX(), (int)getStartingPoint().getY(), (int) getCurrentPoint().getX(), (int) getCurrentPoint().getY());
-        System.out.println("getStartingPoint() " + getStartingPoint());
-        System.out.println("getCurrentPoint() " + getCurrentPoint());
+//        System.out.println("getStartingPoint() " + getStartingPoint());
+//        System.out.println("getCurrentPoint() " + getCurrentPoint());
         graphics2D.setStroke(previousStroke);
         graphics2D.setColor(lastColor);
     }

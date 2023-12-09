@@ -32,8 +32,17 @@ public class AddClassContentState implements State {
                     });
             classContentStateDialog.getButtonDelete().addActionListener(e -> classContentStateDialog.deleteRow());
             classContentStateDialog.getButtonOk().addActionListener(
-                    e ->  {classContentStateDialog.insertData();
-                    classContentStateDialog.dispose();
+                    e ->  {
+                        try {
+                            classContentStateDialog.insertData();
+                        }
+                        catch (Exception exception) {
+                            JOptionPane.showMessageDialog(classContentStateDialog,
+                                    exception.getMessage(),
+                                    "Error",
+                                    JOptionPane.ERROR_MESSAGE);
+                        }
+                        classContentStateDialog.dispose();
                     });
 
         }
