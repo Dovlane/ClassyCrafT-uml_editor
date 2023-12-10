@@ -1,23 +1,16 @@
 package raf.dsw.classycraft.app.gui.swing.view;
 
 import raf.dsw.classycraft.app.gui.swing.view.painters.ElementPainter;
+import raf.dsw.classycraft.app.gui.swing.view.painters.FactoryForPainters;
 import raf.dsw.classycraft.app.gui.swing.view.painters.LassoPainter;
 import raf.dsw.classycraft.app.gui.swing.view.painters.LinePainter;
-import raf.dsw.classycraft.app.gui.swing.view.painters.connectionPainters.AgregationPainter;
-import raf.dsw.classycraft.app.gui.swing.view.painters.interclassPainters.ClassPainter;
-import raf.dsw.classycraft.app.gui.swing.view.painters.interclassPainters.EnumPainter;
-import raf.dsw.classycraft.app.gui.swing.view.painters.interclassPainters.InterfacePainter;
 import raf.dsw.classycraft.app.model.ClassyRepository.Diagram;
 import raf.dsw.classycraft.app.model.ClassyRepository.Notification;
 import raf.dsw.classycraft.app.model.ClassyRepository.NotificationType;
 import raf.dsw.classycraft.app.model.MessageGenerator.MessageType;
-import raf.dsw.classycraft.app.model.elements.Connection.Aggregation;
-import raf.dsw.classycraft.app.model.elements.Connection.Connection;
+import raf.dsw.classycraft.app.model.elements.Connection.*;
 import raf.dsw.classycraft.app.model.elements.DiagramElement;
-import raf.dsw.classycraft.app.model.elements.Interclass.ClassElement;
-import raf.dsw.classycraft.app.model.elements.Interclass.EnumElement;
 import raf.dsw.classycraft.app.model.elements.Interclass.Interclass;
-import raf.dsw.classycraft.app.model.elements.Interclass.InterfaceElement;
 import raf.dsw.classycraft.app.model.observerPattern.IListener;
 
 import javax.swing.*;
@@ -35,6 +28,7 @@ public class DiagramView extends JPanel implements IListener {
     private LinePainter linePainter;
     private double zoomFactor = 1.0;
     private AffineTransform transform = new AffineTransform();
+    private FactoryForPainters factoryForPainters = new FactoryForPainters();
 
     public DiagramView(Diagram diagram){
         this.diagram = diagram;
@@ -90,7 +84,6 @@ public class DiagramView extends JPanel implements IListener {
 
         // Draw temporary line for connections
         if (linePainter != null) {
-            System.out.println("IIIIIIIIIIIIISCRTAAAAAAAAAAAVAM SEEEEEEEEEEEEEEEE");
             linePainter.draw(graphics2D);
         }
 
@@ -103,19 +96,10 @@ public class DiagramView extends JPanel implements IListener {
         // Factory for ElementPainters based on Diagram Element
         ElementPainter elementPainter = null;
         if (diagramElement instanceof Interclass) {
-            if (diagramElement instanceof ClassElement) {
-                elementPainter = new ClassPainter((ClassElement) diagramElement);
-            }
-            else if (diagramElement instanceof InterfaceElement) {
-                elementPainter = new InterfacePainter((InterfaceElement) diagramElement);
-            }
-            else {
-                elementPainter = new EnumPainter((EnumElement) diagramElement);
-            }
+            elementPainter = factoryForPainters.createInterclassPainter((Interclass) diagramElement);
         }
         else if (diagramElement instanceof Connection) {
-            elementPainter = new AgregationPainter((Aggregation) diagramElement);
-            // TODO: add factory for connections
+            elementPainter = factoryForPainters.createConnectionPainter((Connection) diagramElement);
         }
 
         // Check for Factory quality
@@ -204,7 +188,6 @@ public class DiagramView extends JPanel implements IListener {
 
     public void setLinePainter(LinePainter linePainter) {
         this.linePainter = linePainter;
-        System.out.println("SETOVAO SAM LINE PAINTER!!!!");
     }
     public DiagramElement getElementAt(Point location) {
         ElementPainter elementPainter = getPainterAt(location);
