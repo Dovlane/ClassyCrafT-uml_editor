@@ -59,7 +59,6 @@ public class AddConnectionState implements State {
                     MainFrame.getInstance().getClassyTree().addChild(infoForCreatingConnection);
                     connectionStateDialog.dispose();
                 });
-
             }
             linePainter = null;
             diagramView.updateLinePainter(null);

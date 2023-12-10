@@ -4,12 +4,16 @@ import raf.dsw.classycraft.app.model.ClassyRepository.*;
 import raf.dsw.classycraft.app.model.ClassyRepository.Package;
 import raf.dsw.classycraft.app.model.MessageGenerator.MessageType;
 import raf.dsw.classycraft.app.model.StatePattern.StateManager;
+import raf.dsw.classycraft.app.model.compositePattern.ClassyNode;
+import raf.dsw.classycraft.app.model.elements.Interclass.Interclass;
 import raf.dsw.classycraft.app.model.observerPattern.IListener;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.NoninvertibleTransformException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +59,15 @@ public class PackageView extends JSplitPane implements IListener {
         addButton(toolBar, "Select", false);
         addButton(toolBar, "DuplicateElement", false);
 
+        // ZoomToFit Button
+        URL imageURL = getClass().getResource("/images/ZoomToFit.png");
+        JButton zoomToFitButton = new JButton(new ImageIcon(imageURL));
+        zoomToFitButton.setToolTipText("ZoomToFit");
+        zoomToFitButton.addActionListener( e -> {
+            zoomToFitAction();
+        });
+        toolBar.add(zoomToFitButton);
+
         // Merge TabbedPane and ToolBar
         JSplitPane drawingPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, tabbedPane, toolBar);
         drawingPane.setResizeWeight(0.95);
@@ -70,6 +83,7 @@ public class PackageView extends JSplitPane implements IListener {
 
         URL imageURL = getClass().getResource("/images/" + toolText + ".png");
         JToggleButton button = new JToggleButton(new ImageIcon(imageURL));
+        button.setToolTipText(toolText);
         button.setFocusPainted(false); // Remove focus border
 
         button.addChangeListener(new ChangeListener() {
@@ -140,6 +154,55 @@ public class PackageView extends JSplitPane implements IListener {
         System.out.println("PackageView - mouseWheelMoved:");
 
         stateManager.getCurrentState().mouseWheelMoved(wheelRotation, location, diagramView);
+    }
+
+    public void zoomToFitAction() {
+        System.out.println("ZoomToFitAction has been performed.");
+
+        if (tabbedPane.getTabCount() > 0) {
+
+            // Fetch the information about DiagramView
+            DiagramView diagramView = (DiagramView) tabbedPane.getComponentAt(tabbedPane.getSelectedIndex());
+            Diagram diagram = diagramView.getDiagram();
+            int width = diagramView.getWidth();
+            int height = diagramView.getHeight();
+            Point viewCentre = new Point(width / 2, height / 2);
+            AffineTransform transform = diagramView.getTransform();
+
+            // Find borders of all DiagramElements
+            int minX = Integer.MAX_VALUE;
+            int minY = Integer.MAX_VALUE;
+            int maxX = Integer.MIN_VALUE;
+            int maxY = Integer.MIN_VALUE;
+            for (ClassyNode child: diagram.getChildren()) {
+                if (child instanceof Interclass) {
+                    Interclass interclass = (Interclass) child;
+                    minX = Math.min(minX, interclass.getLocation().x);
+                    minY = Math.min(minY, interclass.getLocation().y);
+                    maxX = Math.max(maxX, interclass.getLocation().x + interclass.getBoxWidth());
+                    maxY = Math.max(maxY, interclass.getLocation().y + interclass.getBoxHeight());
+                }
+            }
+            Point upperLeft = new Point(minX, minY);
+            Point bottomRight = new Point(maxX, maxY);
+
+            // Center the UML Diagram
+            Point centreOfMass = new Point(
+                    (upperLeft.x + bottomRight.x) / 2,
+                    (upperLeft.y + bottomRight.y) / 2);
+            transform.transform(centreOfMass, centreOfMass);
+            diagramView.move(centreOfMass, viewCentre);
+
+            // Scale the UML Diagram so it fits the window
+            transform.transform(upperLeft, upperLeft);
+            transform.transform(bottomRight, bottomRight);
+            double zoomFactor = Math.min(
+                    (double) width / (bottomRight.x - upperLeft.x),
+                    (double) height / (bottomRight.y - upperLeft.y));
+            zoomFactor = Math.min(Math.max(0.0001, zoomFactor), 10000);
+            System.out.println(zoomFactor);
+            diagramView.zoomWithFactor(zoomFactor, viewCentre);
+        }
     }
 
 

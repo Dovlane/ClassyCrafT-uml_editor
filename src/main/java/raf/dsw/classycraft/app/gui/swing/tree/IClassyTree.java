@@ -9,14 +9,17 @@ import raf.dsw.classycraft.app.model.abstractFactoryForClassyNodes.InfoForCreati
 public interface IClassyTree {
 
     ClassyTreeView generateTree(ProjectExplorer projectExplorer);
-//    boolean addChild(ClassyTreeItem parent, ClassyNodeType type);
 
     boolean addChild(InfoForCreatingClassyNode infoForCreatingClassyNode);
 
     boolean attachChild(ClassyTreeItem parent, ClassyNode child);
 
     void removeItem(ClassyTreeItem item);
+
     void renameItem(ClassyTreeItem item);
+
+    boolean renameItem(ClassyTreeItem item, String newName);
+
     ClassyTreeItem getSelectedNode();
 
 }

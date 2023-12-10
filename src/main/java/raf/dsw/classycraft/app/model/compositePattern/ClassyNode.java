@@ -5,7 +5,10 @@ import raf.dsw.classycraft.app.gui.swing.view.MainFrame;
 import raf.dsw.classycraft.app.model.ClassyRepository.*;
 import raf.dsw.classycraft.app.model.MessageGenerator.MessageType;
 import raf.dsw.classycraft.app.model.elements.Connection.Connection;
+import raf.dsw.classycraft.app.model.elements.Interclass.ClassElement;
+import raf.dsw.classycraft.app.model.elements.Interclass.EnumElement;
 import raf.dsw.classycraft.app.model.elements.Interclass.Interclass;
+import raf.dsw.classycraft.app.model.elements.Interclass.InterfaceElement;
 import raf.dsw.classycraft.app.model.observerPattern.IListener;
 import raf.dsw.classycraft.app.model.observerPattern.IPublisher;
 
@@ -80,10 +83,25 @@ public abstract class ClassyNode implements IPublisher {
     }
 
     public String getAbsolutePath() {
+
+        // Recursive base case
         if (getParent() == null) {
             return getName();
         }
-        return getParent().getAbsolutePath() + "/" + getName();
+
+        // Check type of Interclass
+        String suffix = "";
+        if (this instanceof ClassElement) {
+            suffix = "Class-";
+        }
+        else if (this instanceof InterfaceElement) {
+            suffix = "Interface-";
+        }
+        else if (this instanceof EnumElement) {
+            suffix = "Enum-";
+        }
+
+        return getParent().getAbsolutePath() + "/" + suffix + getName();
     }
 
     public String getName() {

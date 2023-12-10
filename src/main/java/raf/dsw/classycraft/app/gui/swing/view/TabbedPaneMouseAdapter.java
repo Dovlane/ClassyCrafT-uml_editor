@@ -142,6 +142,7 @@ public class TabbedPaneMouseAdapter extends MouseAdapter {
             // Scale location back to the World Coordinate system
             try {
                 diagramViewSelected.getTransform().inverseTransform(location, location);
+                System.out.println("LOCATION: " + location);
                 return location;
             }
             catch (NoninvertibleTransformException exception) {

@@ -38,9 +38,6 @@ public class DuplicateElementState implements State {
             Interclass newInterclass;
             if (diagramElement instanceof ClassElement) {
                 newInterclass = new ClassElement((ClassElement) diagramElement);
-                System.out.println(newInterclass);
-                System.out.println(newInterclass.getAbsolutePath());
-                System.out.println(newInterclass == diagramElement);
                 MainFrame.getInstance().getClassyTree().attachChild(classyTreeDiagram, newInterclass);
             }
             else if (diagramElement instanceof InterfaceElement) {
