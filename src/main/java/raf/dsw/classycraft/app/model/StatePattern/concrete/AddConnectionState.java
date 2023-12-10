@@ -39,7 +39,7 @@ public class AddConnectionState implements State {
         DiagramElement selectedDiagramElementTo = diagramView.getElementAt(location);
         Diagram currentDiagram = diagramView.getDiagram();
         if (selectedDiagramElementFrom != null) {
-            if (selectedDiagramElementTo != null && selectedDiagramElementTo instanceof Interclass) {
+            if (selectedDiagramElementTo instanceof Interclass) {
                 ClassyTreeItem classyTreeDiagram =
                         MainFrame.getInstance().getClassyTree().getRoot().getTreeItemFromClassyNode(currentDiagram);
                 if (classyTreeDiagram == null) {

@@ -96,8 +96,12 @@ public class ClassyTree implements IClassyTree {
 
     @Override
     public void renameItem(ClassyTreeItem item) {
+
+        // Find ClassyNode of the ClassyTreeItem
         ClassyNode node = item.getClassyNode();
         ClassyNodeComposite nodeParent = (ClassyNodeComposite) node.getParent();
+
+        // Project Explorer cannot be renamed
         if (nodeParent == null) {
             String errorMessage = "The ProjectExplorer cannot be renamed.";
             MainFrame.getInstance().getMessageGenerator().generateMessage(errorMessage, MessageType.ERROR);
@@ -145,13 +149,32 @@ public class ClassyTree implements IClassyTree {
     }
 
     @Override
+    public boolean renameItem(ClassyTreeItem item, String newName) {
+
+        // Find ClassyNode of the ClassyTreeItem
+        ClassyNode node = item.getClassyNode();
+        ClassyNodeComposite nodeParent = (ClassyNodeComposite) node.getParent();
+
+        // Project Explorer cannot be renamed
+        if (nodeParent == null) {
+            String errorMessage = "The ProjectExplorer cannot be renamed.";
+            MainFrame.getInstance().getMessageGenerator().generateMessage(errorMessage, MessageType.ERROR);
+            return false;
+        }
+
+        // Try to set a new name
+        if (node.setName(newName)) {
+            SwingUtilities.updateComponentTreeUI(treeView);
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
     public ClassyTreeItem getSelectedNode() {
         return (ClassyTreeItem) treeView.getLastSelectedPathComponent();
     }
-
-//    private ClassyNode createChild(ClassyNode parent, ClassyNodeType type) {
-//        return ClassyNodeFactory.createClassyNode(parent, type);
-//    }
 
     public ClassyTreeItem getRoot() {
         return root;

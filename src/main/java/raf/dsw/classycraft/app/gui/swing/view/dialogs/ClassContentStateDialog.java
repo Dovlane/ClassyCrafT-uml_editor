@@ -1,5 +1,8 @@
 package raf.dsw.classycraft.app.gui.swing.view.dialogs;
 
+import raf.dsw.classycraft.app.gui.swing.tree.model.ClassyTreeItem;
+import raf.dsw.classycraft.app.gui.swing.view.MainFrame;
+import raf.dsw.classycraft.app.model.MessageGenerator.MessageType;
 import raf.dsw.classycraft.app.model.elements.ClassContent.Attribute;
 import raf.dsw.classycraft.app.model.elements.ClassContent.EnumLiteral;
 import raf.dsw.classycraft.app.model.elements.ClassContent.Method;
@@ -120,7 +123,14 @@ public class ClassContentStateDialog extends JFrame {
             throw new Exception("Name of interclass cannot be empty!");
         }
         else {
-            selectedDiagramElement.setName(interclassNameJTextField.getText());
+            ClassyTreeItem classyTreeItem =
+                    MainFrame.getInstance().getClassyTree().getRoot().getTreeItemFromClassyNode(selectedDiagramElement);
+            if (classyTreeItem ==  null) {
+                MainFrame.getInstance().getMessageGenerator().generateMessage(
+                        "Diagram cannot be found in ClassyTree.", MessageType.ERROR);
+                return;
+            }
+            MainFrame.getInstance().getClassyTree().renameItem(classyTreeItem, interclassNameJTextField.getText());
             ((Interclass)selectedDiagramElement).setVisibility(AccessModifiers.valueOf(accessModifiersForInterclassJComboBox.getItemAt(accessModifiersForInterclassJComboBox.getSelectedIndex()).toString()));
             ((Interclass)selectedDiagramElement).setNonAccessModifiers(NonAccessModifiers.valueOf(nonAccessModifiersForInterclassJComboBox.getItemAt(nonAccessModifiersForInterclassJComboBox.getSelectedIndex()).toString()));
         }

@@ -95,7 +95,6 @@ public class DiagramView extends JPanel implements IListener {
         }
 
         // Debug Info
-        graphics2D.drawRect(-10, -10, 20, 20);
         System.out.println("DiagramView paintComponent is being performed");
     }
 
