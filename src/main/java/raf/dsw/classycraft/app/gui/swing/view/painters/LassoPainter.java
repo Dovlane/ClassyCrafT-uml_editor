@@ -4,6 +4,8 @@ import raf.dsw.classycraft.app.gui.swing.view.painters.connectionPainters.Connec
 import raf.dsw.classycraft.app.gui.swing.view.painters.interclassPainters.InterclassPainter;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 public class LassoPainter extends ElementPainter {
 
@@ -57,18 +59,34 @@ public class LassoPainter extends ElementPainter {
         else if (elementPainter instanceof  ConnectionPainter) {
 
             ConnectionPainter connectionPainter = (ConnectionPainter) elementPainter;
-            Point from = connectionPainter.getCurrentPointFrom();
-            Point to = connectionPainter.getCurrentPointTo();
-            int x0 = (int) from.getX();
-            int y0 = (int) from.getY();
-            int x1 = (int) to.getX();
-            int y1 = (int) to.getY();
-
             Rectangle lassoRectangle = getLassoRectangle();
-            return lassoRectangle.intersectsLine(x0, y0, x1, y1);
+
+            // If connection is not reflexive
+            if (connectionPainter.getPointListOfReflexiveLine() == null) {
+                Point from = connectionPainter.getCurrentPointFrom();
+                Point to = connectionPainter.getCurrentPointTo();
+
+                int x0 = (int) from.getX();
+                int y0 = (int) from.getY();
+                int x1 = (int) to.getX();
+                int y1 = (int) to.getY();
+
+                return lassoRectangle.intersectsLine(x0, y0, x1, y1);
+            } else {
+                ArrayList<Point> listOfReflexiveLine = connectionPainter.getPointListOfReflexiveLine();
+                boolean intersects = false;
+                for (int i = 0; i < listOfReflexiveLine.size() - 1; i++) {
+                    Point firstPoint = listOfReflexiveLine.get(i);
+                    Point secondPoint = listOfReflexiveLine.get(i + 1);
+                    if (lassoRectangle.intersectsLine(firstPoint.x, firstPoint.y, secondPoint.x, secondPoint.y)) {
+                        intersects = true;
+                        break;
+                    }
+                }
+                return intersects;
+            }
         }
 
-        // Rectangles overlap
         return true;
     }
 

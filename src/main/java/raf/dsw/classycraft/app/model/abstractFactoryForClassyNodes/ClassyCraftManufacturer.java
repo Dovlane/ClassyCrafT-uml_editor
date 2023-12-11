@@ -60,8 +60,11 @@ public class ClassyCraftManufacturer extends AbstractClassyCraftManufacturer {
 
     @Override
     public ClassyNode createClassyNodeComposite (InfoForCreatingClassyNodeComposite infoForCreatingClassyNodeComposite) {
-        ClassyNode parent = infoForCreatingClassyNodeComposite.getParent().getClassyNode();
         ClassyNodeType type = infoForCreatingClassyNodeComposite.getType();
+        if (infoForCreatingClassyNodeComposite.getParent() == null) {
+            return null; // Message is generated in ClassyTree
+        }
+        ClassyNode parent = infoForCreatingClassyNodeComposite.getParent().getClassyNode();
         if (parent instanceof ProjectExplorer) {
             if (type == ClassyNodeType.PROJECT) {
                 ((ProjectExplorer) parent).increaseCounter();

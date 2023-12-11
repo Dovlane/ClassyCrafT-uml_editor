@@ -1,0 +1,1 @@
+[ERROR][2023-12-11 16:59:49.2631647] Generalisation connection can't be reflexive!

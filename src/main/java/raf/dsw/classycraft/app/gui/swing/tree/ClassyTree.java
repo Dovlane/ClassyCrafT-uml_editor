@@ -31,8 +31,6 @@ public class ClassyTree implements IClassyTree {
 
     @Override
     public boolean addChild(InfoForCreatingClassyNode infoForCreatingClassyNode) {
-//    public boolean addChild(ClassyTreeItem parent, ClassyNodeType type) {
-
         ClassyTreeItem parent = infoForCreatingClassyNode.getParent();
 
         ClassyNode child;
@@ -44,8 +42,6 @@ public class ClassyTree implements IClassyTree {
         else
             child = abstractClassyCraftManufacturer.createConnection((InfoForCreatingConnection) infoForCreatingClassyNode);
 
-
-//        ClassyNode child = createChild(parent.getClassyNode(), type);
         return attachChild(parent, child);
     }
 

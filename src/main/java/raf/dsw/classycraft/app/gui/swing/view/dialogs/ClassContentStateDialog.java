@@ -125,11 +125,6 @@ public class ClassContentStateDialog extends JFrame {
         else {
             ClassyTreeItem classyTreeItem =
                     MainFrame.getInstance().getClassyTree().getRoot().getTreeItemFromClassyNode(selectedDiagramElement);
-            if (classyTreeItem ==  null) {
-                MainFrame.getInstance().getMessageGenerator().generateMessage(
-                        "Diagram cannot be found in ClassyTree.", MessageType.ERROR);
-                return;
-            }
             MainFrame.getInstance().getClassyTree().renameItem(classyTreeItem, interclassNameJTextField.getText());
             ((Interclass)selectedDiagramElement).setVisibility(AccessModifiers.valueOf(accessModifiersForInterclassJComboBox.getItemAt(accessModifiersForInterclassJComboBox.getSelectedIndex()).toString()));
             ((Interclass)selectedDiagramElement).setNonAccessModifiers(NonAccessModifiers.valueOf(nonAccessModifiersForInterclassJComboBox.getItemAt(nonAccessModifiersForInterclassJComboBox.getSelectedIndex()).toString()));
