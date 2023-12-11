@@ -12,7 +12,7 @@ public class SelectElementState implements State {
     public void mousePressed(Point location, DiagramView diagramView) {
         System.out.println("mousePressed inside SelectElementState");
 
-        int offset = 2;
+        int offset = 3;
         Point upperLeftPoint = new Point(location.x - offset, location.y - offset);
         Point bottomRightPoint = new Point(location.x + offset, location.y + offset);
         diagramView.updateSelectionModel(new LassoPainter(upperLeftPoint, bottomRightPoint));
