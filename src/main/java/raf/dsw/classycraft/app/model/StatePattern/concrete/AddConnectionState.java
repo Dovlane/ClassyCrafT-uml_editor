@@ -57,6 +57,10 @@ public class AddConnectionState implements State {
                         return;
                     }
                     ElementConnectionType elementConnectionType = connectionStateDialog.getElementConnectionType();
+                    if (elementConnectionType == ElementConnectionType.GENERALISATION && selectedDiagramElementFrom.equals(selectedDiagramElementTo)) {
+                        MainFrame.getInstance().getMessageGenerator().generateMessage("Generalisation connection can't be reflexive!", MessageType.ERROR);
+                        return;
+                    }
                     InfoForCreatingConnection infoForCreatingConnection = new InfoForCreatingConnection("aggrg", classyTreeDiagram, (Interclass) selectedDiagramElementFrom, (Interclass) selectedDiagramElementTo, elementConnectionType);
                     MainFrame.getInstance().getClassyTree().addChild(infoForCreatingConnection);
                     connectionStateDialog.dispose();

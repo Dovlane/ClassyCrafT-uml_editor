@@ -1,6 +1,1 @@
-[ERROR][2023-12-11 16:35:00.6716715] Interclass name cannot be empty!
-[ERROR][2023-12-11 16:35:03.6269169] Interclass name cannot be empty!
-[ERROR][2023-12-11 16:35:07.3175176] Interclass name cannot be empty!
-[ERROR][2023-12-11 16:35:10.353653] Interclass name cannot be empty!
-[ERROR][2023-12-11 16:36:02.7237653] The path of the file is ambiguous.
-[ERROR][2023-12-11 16:36:10.8553275] Diagram can only contain Diagram Elements.
+[ERROR][2023-12-11 16:59:49.2631647] Generalisation connection can't be reflexive!

@@ -6,7 +6,6 @@ import raf.dsw.classycraft.app.model.elements.Connection.Connection;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Path2D;
-import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
 public class ConnectionPainter extends ElementPainter {
@@ -101,23 +100,32 @@ public class ConnectionPainter extends ElementPainter {
         pointListOfReflexiveLine.add(new Point(x - offset_around, y + half_height));
         reflexiveLineShape.lineTo(x - offset_around, y - offset_around);
         pointListOfReflexiveLine.add(new Point(x - offset_around, y - offset_around));
-        reflexiveLineShape.lineTo(x + half_width, y - offset_around);
-        pointListOfReflexiveLine.add(new Point(x + half_width, y - offset_around));
-        reflexiveLineShape.lineTo(x + half_width, y);
-        pointListOfReflexiveLine.add(new Point(x + half_width, y));
+
+        // Here is logic how to avoid issue when there are more reflexive connections
+        int horisontalOffset = 20;
+        Point endingPoint = new Point(x + half_width, y - offset_around);
+        if (connectionPainter instanceof AgregationPainter)
+            endingPoint.setLocation(new Point(endingPoint.x - horisontalOffset / 2 * 3, endingPoint.y));
+        else if (connectionPainter instanceof CompositionPainter)
+            endingPoint.setLocation(new Point(endingPoint.x, endingPoint.y));
+        else if (connectionPainter instanceof DependencyPainter)
+            endingPoint.setLocation(new Point(endingPoint.x + horisontalOffset / 2 * 3, endingPoint.y));
+
+        reflexiveLineShape.lineTo(endingPoint.x, endingPoint.y);
+        pointListOfReflexiveLine.add(endingPoint);
+        reflexiveLineShape.lineTo(endingPoint.x, y);
+        pointListOfReflexiveLine.add(new Point(endingPoint.x, y));
 
         graphics2D.draw(reflexiveLineShape);
 
         connectionPainter.setPointListOfReflexiveLine(pointListOfReflexiveLine);
 
         if (connectionPainter instanceof AgregationPainter)
-            drawAlignedRhomboid(graphics2D, x + half_width, y - offset_around, x + half_width, y, new Color(255, 255, 255));
+            drawAlignedRhomboid(graphics2D, endingPoint.x, endingPoint.y, endingPoint.x, y, new Color(255, 255, 255));
         else if (connectionPainter instanceof DependencyPainter)
-            drawArrowhead(graphics2D, x + half_width, y - offset_around, x + half_width, y);
-        else if (connectionPainter instanceof GeneralisationPainter)
-            drawTriangleArrowhead(graphics2D, x + half_width, y - offset_around, x + half_width, y);
-        else if (connectionPainter instanceof ConnectionPainter)
-            drawAlignedRhomboid(graphics2D, x + half_width, y - offset_around, x + half_width, y, new Color(0, 0, 0));
+            drawArrowhead(graphics2D, endingPoint.x, endingPoint.y, endingPoint.x, y);
+        else if (connectionPainter instanceof CompositionPainter)
+            drawAlignedRhomboid(graphics2D, endingPoint.x, endingPoint.y, endingPoint.x, y, new Color(0, 0, 0));
     }
 
     private static void drawSelectionBoxForReflexiveLine(Graphics2D graphics2D, ArrayList<Point> pointListOfReflexiveLine) {
