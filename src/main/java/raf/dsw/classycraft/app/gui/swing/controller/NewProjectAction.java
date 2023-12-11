@@ -3,7 +3,7 @@ package raf.dsw.classycraft.app.gui.swing.controller;
 import raf.dsw.classycraft.app.gui.swing.tree.model.ClassyTreeItem;
 import raf.dsw.classycraft.app.gui.swing.view.MainFrame;
 import raf.dsw.classycraft.app.model.ClassyRepository.ClassyNodeType;
-import raf.dsw.classycraft.app.model.abstractFactoryForClassyNodes.InfoForCreatingClassyNodeCompositeNodes;
+import raf.dsw.classycraft.app.model.abstractFactoryForClassyNodes.InfoForCreatingClassyNodeComposite;
 
 import java.awt.event.ActionEvent;
 
@@ -20,7 +20,7 @@ public class NewProjectAction extends AbstractClassyAction {
     public void actionPerformed(ActionEvent e) {
         ClassyTreeItem selectedNode = MainFrame.getInstance().getClassyTree().getSelectedNode();
         System.out.println("getSelectedNode " + selectedNode);
-        MainFrame.getInstance().getClassyTree().addChild(new InfoForCreatingClassyNodeCompositeNodes(selectedNode, ClassyNodeType.PROJECT));
+        MainFrame.getInstance().getClassyTree().addChild(new InfoForCreatingClassyNodeComposite(selectedNode, ClassyNodeType.PROJECT));
         System.out.println("NewProjectAction has been performed.");
     }
 

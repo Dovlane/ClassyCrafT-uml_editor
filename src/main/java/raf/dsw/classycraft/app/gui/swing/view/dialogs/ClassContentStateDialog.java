@@ -1,11 +1,15 @@
 package raf.dsw.classycraft.app.gui.swing.view.dialogs;
 
+import raf.dsw.classycraft.app.gui.swing.tree.model.ClassyTreeItem;
+import raf.dsw.classycraft.app.gui.swing.view.MainFrame;
+import raf.dsw.classycraft.app.model.MessageGenerator.MessageType;
 import raf.dsw.classycraft.app.model.elements.ClassContent.Attribute;
 import raf.dsw.classycraft.app.model.elements.ClassContent.EnumLiteral;
 import raf.dsw.classycraft.app.model.elements.ClassContent.Method;
 import raf.dsw.classycraft.app.model.elements.DiagramElement;
 import raf.dsw.classycraft.app.model.elements.Interclass.ClassElement;
 import raf.dsw.classycraft.app.model.elements.Interclass.EnumElement;
+import raf.dsw.classycraft.app.model.elements.Interclass.Interclass;
 import raf.dsw.classycraft.app.model.elements.Interclass.InterfaceElement;
 import raf.dsw.classycraft.app.model.elements.Modifiers.AccessModifiers;
 import raf.dsw.classycraft.app.model.elements.Modifiers.NonAccessModifiers;
@@ -16,9 +20,6 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.Vector;
 
-enum ClassContentStateEnum {
-    CLASS_CONTENT, INTERFACE_CONTENT, ENUM_CONTENT
-}
 public class ClassContentStateDialog extends JFrame {
 
     private JButton buttonAdd;
@@ -34,8 +35,13 @@ public class ClassContentStateDialog extends JFrame {
     private String[] columnNamesForMethodsAndAttributes = {"Name", "Access Modifiers", "Non-access Modifiers", "Type"};
     private String[] columnNamesForEnumLiterals = {"Name"};
 
-    private JPanel importDataJPanel;
+    private JPanel editDataInterclassJPanel;
+    private JComboBox accessModifiersForInterclassJComboBox = new JComboBox(AccessModifiers.values());
+    private JComboBox nonAccessModifiersForInterclassJComboBox = new JComboBox(NonAccessModifiers.values());
+    private  JTextField interclassNameJTextField = new JTextField();
 
+
+    private JPanel importDataJPanel;
     private JComboBox<AccessModifiers> accessModifiersJComboBox = new JComboBox<>(AccessModifiers.values());
     private JComboBox<NonAccessModifiers> nonAccessModifiersJComboBox = new JComboBox<>(NonAccessModifiers.values());
     private DiagramElement selectedDiagramElement;
@@ -74,6 +80,7 @@ public class ClassContentStateDialog extends JFrame {
             setImportDataPaneForEnum();
             setEnumLiteralTable();
         }
+        fillInterclassDataOfDiagramElement();
         fillDataOfDiagramElement();
 
         // Pack and set visible
@@ -111,7 +118,18 @@ public class ClassContentStateDialog extends JFrame {
         }
     }
 
-    public void insertData() {
+    public void insertData() throws Exception {
+        if (interclassNameJTextField.getText().isEmpty()) {
+            throw new Exception("Name of interclass cannot be empty!");
+        }
+        else {
+            ClassyTreeItem classyTreeItem =
+                    MainFrame.getInstance().getClassyTree().getRoot().getTreeItemFromClassyNode(selectedDiagramElement);
+            MainFrame.getInstance().getClassyTree().renameItem(classyTreeItem, interclassNameJTextField.getText());
+            ((Interclass)selectedDiagramElement).setVisibility(AccessModifiers.valueOf(accessModifiersForInterclassJComboBox.getItemAt(accessModifiersForInterclassJComboBox.getSelectedIndex()).toString()));
+            ((Interclass)selectedDiagramElement).setNonAccessModifiers(NonAccessModifiers.valueOf(nonAccessModifiersForInterclassJComboBox.getItemAt(nonAccessModifiersForInterclassJComboBox.getSelectedIndex()).toString()));
+        }
+
         if (classContentStateEnum == ClassContentStateEnum.CLASS_CONTENT) {
 
             ClassElement selectedClassElement = (ClassElement) selectedDiagramElement;
@@ -165,6 +183,28 @@ public class ClassContentStateDialog extends JFrame {
 
     }
 
+    private void setFieldsForEditingInterclassFeatures() {
+        editDataInterclassJPanel = new JPanel();
+        editDataInterclassJPanel.setLayout(new BorderLayout());
+
+        JPanel editDataInterclassOptionsJPanel = new JPanel();
+        editDataInterclassOptionsJPanel.setLayout(new BoxLayout(editDataInterclassOptionsJPanel, BoxLayout.X_AXIS));
+        editDataInterclassOptionsJPanel.add(interclassNameJTextField);
+        editDataInterclassOptionsJPanel.add(accessModifiersForInterclassJComboBox);
+        editDataInterclassOptionsJPanel.add(nonAccessModifiersForInterclassJComboBox);
+        editDataInterclassOptionsJPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+
+        editDataInterclassJPanel.add(new JLabel("Edit interclass settings:"), BorderLayout.NORTH);
+        editDataInterclassJPanel.add(editDataInterclassOptionsJPanel, BorderLayout.CENTER);
+        editDataInterclassJPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+    }
+
+    private void fillInterclassDataOfDiagramElement() {
+        interclassNameJTextField.setText(selectedDiagramElement.getName());
+        accessModifiersForInterclassJComboBox.setSelectedItem(((Interclass)selectedDiagramElement).getVisibility());
+        nonAccessModifiersForInterclassJComboBox.setSelectedItem(((Interclass)selectedDiagramElement).getNonAccessModifiers());
+    }
+
     private void fillDataOfDiagramElement() {
         if (classContentStateEnum == ClassContentStateEnum.CLASS_CONTENT) {
             ClassElement classElement = (ClassElement) selectedDiagramElement;
@@ -195,31 +235,13 @@ public class ClassContentStateDialog extends JFrame {
         importDataJPanel = new JPanel();
         importDataJPanel.setLayout(new BoxLayout(importDataJPanel, BoxLayout.Y_AXIS));
 
-        setImportFieldsForMethodsAndAttributes();
+        setFieldsForEditingInterclassFeatures();
+        JPanel fieldsForMethodsAndAttributesJPanel = setImportFieldsForMethodsAndAttributes();
 
-        JPanel buttonsJPanel = new JPanel();
-        buttonsJPanel.setLayout(new BoxLayout(buttonsJPanel, BoxLayout.X_AXIS));
+        JPanel buttonsJPanel = getButtonsForImportFieldsForMethodsAndAttributes();
 
-        jRadioButtonsAttributeOrMethod = new JRadioButton[] {new JRadioButton("Edit methods"), new JRadioButton("Edit attributes")};
-        ButtonGroup methodAndAttributeRBtnGroup = new ButtonGroup();
-        JPanel jradioButtonPanel = new JPanel();
-        jradioButtonPanel.setLayout(new BoxLayout(jradioButtonPanel, BoxLayout.Y_AXIS));
-        jRadioButtonsAttributeOrMethod[0].setSelected(true);
-        buttonsJPanel.add(new Label("Set class content:"));
-
-        for (JRadioButton jRadioButton : jRadioButtonsAttributeOrMethod) {
-            methodAndAttributeRBtnGroup.add(jRadioButton);
-            jradioButtonPanel.add(jRadioButton);
-        }
-
-        buttonAdd = new JButton("ADD");
-        buttonDelete = new JButton("DELETE");
-        buttonOk = new JButton("OK");
-        buttonsJPanel.add(jradioButtonPanel);
-        buttonsJPanel.add(buttonAdd);
-        buttonsJPanel.add(buttonDelete);
-        buttonsJPanel.add(buttonOk);
-
+        importDataJPanel.add(editDataInterclassJPanel);
+        importDataJPanel.add(fieldsForMethodsAndAttributesJPanel);
         importDataJPanel.add(buttonsJPanel);
 
         getContentPane().add(importDataJPanel, BorderLayout.NORTH);
@@ -229,30 +251,24 @@ public class ClassContentStateDialog extends JFrame {
         importDataJPanel = new JPanel();
         importDataJPanel.setLayout(new BoxLayout(importDataJPanel, BoxLayout.Y_AXIS));
 
-        setImportFieldsForMethodsAndAttributes();
+        setFieldsForEditingInterclassFeatures();
+        JPanel fieldsForMethodsAndAttributesJPanel = setImportFieldsForMethodsAndAttributes();
 
+        JPanel buttonsJPanel = getButtonsForImportFieldsForMethodsAndAttributes();
 
-        JPanel buttonsJPanel = new JPanel();
-        buttonsJPanel.setLayout(new BoxLayout(buttonsJPanel, BoxLayout.X_AXIS));
-
-        buttonAdd = new JButton("ADD");
-        buttonDelete = new JButton("DELETE");
-        buttonOk = new JButton("OK");
-        buttonsJPanel.add(buttonAdd);
-        buttonsJPanel.add(buttonDelete);
-        buttonsJPanel.add(buttonOk);
-
+        importDataJPanel.add(editDataInterclassJPanel);
+        importDataJPanel.add(fieldsForMethodsAndAttributesJPanel);
         importDataJPanel.add(buttonsJPanel);
 
         getContentPane().add(importDataJPanel, BorderLayout.NORTH);
     }
 
-    private void setImportFieldsForMethodsAndAttributes() {
+    private JPanel setImportFieldsForMethodsAndAttributes() {
         String[] dataRowStrings = new String[] {"Name: ", "Access modifiers: ", "Non-access modifiers: ", "Type: ", };
         fieldsForMethodsAndAttributes = new Object[]{new JTextField(), accessModifiersJComboBox, nonAccessModifiersJComboBox, new JTextField()};
 
-        JPanel dataJPanel = new JPanel();
-        dataJPanel.setLayout(new BoxLayout(dataJPanel, BoxLayout.Y_AXIS));
+        JPanel fieldsForMethodsAndAttributesJPanel = new JPanel();
+        fieldsForMethodsAndAttributesJPanel.setLayout(new BoxLayout(fieldsForMethodsAndAttributesJPanel, BoxLayout.Y_AXIS));
         for (int i = 0; i < dataRowStrings.length; i++) {
             JPanel jPanel = new JPanel();
             jPanel.setLayout(new BoxLayout(jPanel, BoxLayout.X_AXIS));
@@ -262,18 +278,48 @@ public class ClassContentStateDialog extends JFrame {
                 jTextField.setPreferredSize(new Dimension(jTextField.getPreferredSize().getSize().width * 2, jTextField.getPreferredSize().height));
             }
             jPanel.add((Component) fieldsForMethodsAndAttributes[i]);
-            dataJPanel.add(jPanel);
+            fieldsForMethodsAndAttributesJPanel.add(jPanel);
         }
-        importDataJPanel.add(dataJPanel);
+        return fieldsForMethodsAndAttributesJPanel;
     }
 
+    private JPanel getButtonsForImportFieldsForMethodsAndAttributes() {
+        JPanel buttonsJPanel = new JPanel();
+        buttonsJPanel.setLayout(new BoxLayout(buttonsJPanel, BoxLayout.X_AXIS));
 
+
+        if (selectedDiagramElement instanceof ClassElement) {
+            buttonsJPanel.setLayout(new BoxLayout(buttonsJPanel, BoxLayout.X_AXIS));
+
+            jRadioButtonsAttributeOrMethod = new JRadioButton[] {new JRadioButton("Edit methods"), new JRadioButton("Edit attributes")};
+            ButtonGroup methodAndAttributeRBtnGroup = new ButtonGroup();
+            JPanel jradioButtonPanel = new JPanel();
+            jradioButtonPanel.setLayout(new BoxLayout(jradioButtonPanel, BoxLayout.Y_AXIS));
+            jRadioButtonsAttributeOrMethod[0].setSelected(true);
+            buttonsJPanel.add(new Label("Set class content:"));
+
+            for (JRadioButton jRadioButton : jRadioButtonsAttributeOrMethod) {
+                methodAndAttributeRBtnGroup.add(jRadioButton);
+                jradioButtonPanel.add(jRadioButton);
+            }
+            buttonsJPanel.add(jradioButtonPanel);
+        }
+
+
+        buttonAdd = new JButton("ADD");
+        buttonDelete = new JButton("DELETE");
+        buttonOk = new JButton("OK");
+        buttonsJPanel.add(buttonAdd);
+        buttonsJPanel.add(buttonDelete);
+        buttonsJPanel.add(buttonOk);
+
+        return buttonsJPanel;
+    }
     private void setImportDataPaneForEnum() {
-        importDataJPanel = new JPanel();
-
         importDataJPanel = new JPanel();
         importDataJPanel.setLayout(new BoxLayout(importDataJPanel, BoxLayout.Y_AXIS));
 
+        setFieldsForEditingInterclassFeatures();
         JPanel dataJPanel = new JPanel();
         dataJPanel.setLayout(new BoxLayout(dataJPanel, BoxLayout.X_AXIS));
         dataJPanel.add(new Label("Enum literal: "));
@@ -291,6 +337,7 @@ public class ClassContentStateDialog extends JFrame {
         buttonsJPanel.add(buttonDelete);
         buttonsJPanel.add(buttonOk);
 
+        importDataJPanel.add(editDataInterclassJPanel);
         importDataJPanel.add(dataJPanel);
         importDataJPanel.add(buttonsJPanel);
 

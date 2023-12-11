@@ -18,6 +18,10 @@ public class Attribute extends ClassContent {
         this.type = type;
     }
 
+    // Create a Deep Copy Constructor
+    public Attribute(Attribute attribute) {
+        this(attribute.accessModifiers, attribute.nonAccessModifiers, attribute.name, attribute.type);
+    }
 
     // Getters and Setters
     public AccessModifiers getAccessModifiers() {

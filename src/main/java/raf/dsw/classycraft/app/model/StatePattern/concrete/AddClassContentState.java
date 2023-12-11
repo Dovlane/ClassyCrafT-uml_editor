@@ -1,7 +1,9 @@
 package raf.dsw.classycraft.app.model.StatePattern.concrete;
 
 import raf.dsw.classycraft.app.gui.swing.view.DiagramView;
+import raf.dsw.classycraft.app.gui.swing.view.MainFrame;
 import raf.dsw.classycraft.app.gui.swing.view.dialogs.ClassContentStateDialog;
+import raf.dsw.classycraft.app.model.MessageGenerator.MessageType;
 import raf.dsw.classycraft.app.model.StatePattern.State;
 import raf.dsw.classycraft.app.model.elements.DiagramElement;
 
@@ -24,16 +26,20 @@ public class AddClassContentState implements State {
                             classContentStateDialog.insertRow();
                         }
                         catch (Exception exception) {
-                            JOptionPane.showMessageDialog(classContentStateDialog,
-                                    exception.getMessage(),
-                                    "Error",
-                                    JOptionPane.ERROR_MESSAGE);
+                            MainFrame.getInstance().getMessageGenerator().generateMessage(exception.getMessage(), MessageType.ERROR);
                         }
                     });
             classContentStateDialog.getButtonDelete().addActionListener(e -> classContentStateDialog.deleteRow());
             classContentStateDialog.getButtonOk().addActionListener(
-                    e ->  {classContentStateDialog.insertData();
-                    classContentStateDialog.dispose();
+                    e ->  {
+                        try {
+                            classContentStateDialog.insertData();
+                        }
+                        catch (Exception exception) {
+                            MainFrame.getInstance().getMessageGenerator().generateMessage(exception.getMessage(), MessageType.ERROR);
+                            return;
+                        }
+                        classContentStateDialog.dispose();
                     });
 
         }
@@ -46,8 +52,9 @@ public class AddClassContentState implements State {
     }
 
     @Override
-    public void mouseDragged(Point startLocation, Point currentLocation, DiagramView diagramView) {
-        System.out.println("mouseDragged inside of AddClassContentState");
+    public void mouseDragged(Point startLocation, Point currentLocationOptimal, Point currentLocation, DiagramView diagramView) {
+        System.out.println("mouseDragged inside of AddClassContentState from " + startLocation + " to " + currentLocation);
+        System.out.println("Optimal location: " + currentLocationOptimal);
 
     }
 

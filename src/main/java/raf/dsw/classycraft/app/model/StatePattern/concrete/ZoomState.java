@@ -11,7 +11,6 @@ public class ZoomState implements State {
     public void mousePressed(Point location, DiagramView diagramView) {
         System.out.println("mousePressed inside of ZoomState");
 
-        System.out.println(location.x + " " + location.y);
     }
 
     @Override
@@ -21,8 +20,9 @@ public class ZoomState implements State {
     }
 
     @Override
-    public void mouseDragged(Point startLocation, Point currentLocation, DiagramView diagramView) {
-        System.out.println("mouseDragged inside of ZoomState");
+    public void mouseDragged(Point startLocation, Point currentLocationOptimal, Point currentLocation, DiagramView diagramView) {
+        System.out.println("mouseDragged inside of ZoomState from " + startLocation + " to " + currentLocation);
+        System.out.println("Optimal location: " + currentLocationOptimal);
 
     }
 

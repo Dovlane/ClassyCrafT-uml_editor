@@ -1,16 +1,17 @@
 package raf.dsw.classycraft.app.model.abstractFactoryForClassyNodes;
 
-import raf.dsw.classycraft.app.model.ClassyRepository.Diagram;
+import raf.dsw.classycraft.app.gui.swing.tree.model.ClassyTreeItem;
 import raf.dsw.classycraft.app.model.elements.Interclass.Interclass;
 
 public class InfoForCreatingConnection extends InfoForCreatingClassyNode {
     private String name;
     private Interclass from;
-    private Diagram parent;
+    private ClassyTreeItem parent;
     private Interclass to;
     private ElementConnectionType elementConnectionType;
 
-    public InfoForCreatingConnection(String name, Diagram parent, Interclass from, Interclass to, ElementConnectionType elementConnectionType) {
+    public InfoForCreatingConnection(String name, ClassyTreeItem parent, Interclass from, Interclass to, ElementConnectionType elementConnectionType) {
+        super(parent);
         this.name = name;
         this.from = from;
         this.parent = parent;
@@ -20,10 +21,6 @@ public class InfoForCreatingConnection extends InfoForCreatingClassyNode {
 
     public String getName() {
         return name;
-    }
-
-    public Diagram getParent() {
-        return parent;
     }
 
     public Interclass getFrom() {

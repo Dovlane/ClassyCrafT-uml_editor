@@ -5,6 +5,7 @@ import raf.dsw.classycraft.app.gui.swing.view.DiagramView;
 import raf.dsw.classycraft.app.gui.swing.view.MainFrame;
 import raf.dsw.classycraft.app.gui.swing.view.dialogs.InterclassStateDialog;
 import raf.dsw.classycraft.app.model.ClassyRepository.Diagram;
+import raf.dsw.classycraft.app.model.MessageGenerator.MessageGenerator;
 import raf.dsw.classycraft.app.model.MessageGenerator.MessageType;
 import raf.dsw.classycraft.app.model.StatePattern.State;
 import raf.dsw.classycraft.app.model.elements.DiagramElement;
@@ -35,16 +36,10 @@ public class AddInterclassState implements State {
         interclassStateDialog.getButtonOk().addActionListener(
                 e -> {
             if (interclassStateDialog.getTextField().getText().equals("")){
-                JOptionPane.showMessageDialog(interclassStateDialog,
-                        "Interclass name cannot be empty!",
-                        "Error",
-                        JOptionPane.ERROR_MESSAGE);
+                MainFrame.getInstance().getMessageGenerator().generateMessage("Interclass name cannot be empty!", MessageType.ERROR);
                 return;
             }
             String interclassName = interclassStateDialog.getTextField().getText();
-            if (interclassName.equals("")){
-
-            }
             AccessModifiers accessModifier = AccessModifiers.DEFAULT;
             for (JRadioButton jRadioButton : interclassStateDialog.getAccessModifiersRadioButtons()){
                 if (jRadioButton.isSelected()) {
@@ -59,6 +54,13 @@ public class AddInterclassState implements State {
             }
             for (JRadioButton jRadioButton : interclassStateDialog.getInterclassRadioButtons()){
                 if (jRadioButton.isSelected()) {
+                    ClassyTreeItem classyTreeDiagram =
+                            MainFrame.getInstance().getClassyTree().getRoot().getTreeItemFromClassyNode(currentDiagram);
+                    if (classyTreeDiagram ==  null) {
+                        MainFrame.getInstance().getMessageGenerator().generateMessage(
+                                "Diagram cannot be found in ClassyTree.", MessageType.ERROR);
+                        return;
+                    }
                     ElementInterclassType elementInterclassType = null;
                     if (jRadioButton.getText().equals("Class")) {
                         elementInterclassType = ElementInterclassType.CLASS;
@@ -69,20 +71,14 @@ public class AddInterclassState implements State {
                     else if (jRadioButton.getText().equals("Enum")) {
                         elementInterclassType = ElementInterclassType.ENUM;
                     }
-                    infoForCreatingInterclass[0] = new InfoForCreatingInterclass(interclassName, currentDiagram, location, accessModifier, nonAccessModifier, elementInterclassType);
+                    infoForCreatingInterclass[0] = new InfoForCreatingInterclass(interclassName, classyTreeDiagram, location, accessModifier, nonAccessModifier, elementInterclassType);
                     break;
                 }
             }
 
+
+
             // Attach a new Interclass object in the whole Model
-            ClassyTreeItem classyTreeDiagram =
-                    MainFrame.getInstance().getClassyTree().getRoot().getTreeItemFromClassyNode(currentDiagram);
-            if (classyTreeDiagram ==  null) {
-                MainFrame.getInstance().getMessageGenerator().generateMessage(
-                        "Diagram cannot be found in ClassyTree.", MessageType.ERROR);
-                return;
-            }
-//            MainFrame.getInstance().getClassyTree().attachChild(classyTreeDiagram, interclass[0]);
             MainFrame.getInstance().getClassyTree().addChild(infoForCreatingInterclass[0]);
             interclassStateDialog.dispose();
         });
@@ -95,8 +91,9 @@ public class AddInterclassState implements State {
     }
 
     @Override
-    public void mouseDragged(Point startLocation, Point currentLocation, DiagramView diagramView) {
-        System.out.println("mouseDragged inside of AddInterclassState");
+    public void mouseDragged(Point startLocation, Point currentLocationOptimal, Point currentLocation, DiagramView diagramView) {
+        System.out.println("mouseDragged inside of AddInterclassState from " + startLocation + " to " + currentLocation);
+        System.out.println("Optimal location: " + currentLocationOptimal);
 
     }
 
@@ -106,7 +103,4 @@ public class AddInterclassState implements State {
 
     }
 
-    public InterclassStateDialog getInterclassStateDialog() {
-        return interclassStateDialog;
-    }
 }

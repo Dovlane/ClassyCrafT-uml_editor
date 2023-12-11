@@ -1,8 +1,14 @@
 package raf.dsw.classycraft.app.model.compositePattern;
 
+import raf.dsw.classycraft.app.gui.swing.tree.model.ClassyTreeItem;
 import raf.dsw.classycraft.app.gui.swing.view.MainFrame;
 import raf.dsw.classycraft.app.model.ClassyRepository.*;
 import raf.dsw.classycraft.app.model.MessageGenerator.MessageType;
+import raf.dsw.classycraft.app.model.elements.Connection.Connection;
+import raf.dsw.classycraft.app.model.elements.Interclass.ClassElement;
+import raf.dsw.classycraft.app.model.elements.Interclass.EnumElement;
+import raf.dsw.classycraft.app.model.elements.Interclass.Interclass;
+import raf.dsw.classycraft.app.model.elements.Interclass.InterfaceElement;
 import raf.dsw.classycraft.app.model.observerPattern.IListener;
 import raf.dsw.classycraft.app.model.observerPattern.IPublisher;
 
@@ -34,10 +40,37 @@ public abstract class ClassyNode implements IPublisher {
 
         ClassyNodeComposite parent = (ClassyNodeComposite) getParent();
         if (parent != null) {
+
+            // If Interclass element is removed than all its connections should be removed
+            if (this instanceof Interclass) {
+
+                // Create a list of all connections that should be removed
+                // Avoid ConcurrentModificationException
+                List<ClassyNode> connectionsForRemoval = new ArrayList<>();
+                for (ClassyNode child: parent.getChildren()) {
+                    if (child instanceof Connection) {
+                        Connection connection = (Connection) child;
+                        if (connection.getFrom().equals(this) || connection.getTo().equals(this)) {
+                            connectionsForRemoval.add(child);
+                        }
+                    }
+                }
+
+                // Actually remove all obsolete connections
+                for (ClassyNode child: connectionsForRemoval) {
+                    ClassyTreeItem treeItemDiagramElement =
+                            MainFrame.getInstance().getClassyTree().getRoot().getTreeItemFromClassyNode(child);
+                    MainFrame.getInstance().getClassyTree().removeItem(treeItemDiagramElement);
+                }
+
+            }
+
+            // Notify about the child removal
             Notification notification =
                     new Notification(this, NotificationType.REMOVE);
             parent.notifyAllSubscribers(notification);
             parent.removeAt(this);
+
         }
     }
 
@@ -50,10 +83,25 @@ public abstract class ClassyNode implements IPublisher {
     }
 
     public String getAbsolutePath() {
+
+        // Recursive base case
         if (getParent() == null) {
             return getName();
         }
-        return getParent().getAbsolutePath() + "/" + getName();
+
+        // Check type of Interclass
+        String suffix = "";
+        if (this instanceof ClassElement) {
+            suffix = "Class-";
+        }
+        else if (this instanceof InterfaceElement) {
+            suffix = "Interface-";
+        }
+        else if (this instanceof EnumElement) {
+            suffix = "Enum-";
+        }
+
+        return getParent().getAbsolutePath() + "/" + suffix + getName();
     }
 
     public String getName() {

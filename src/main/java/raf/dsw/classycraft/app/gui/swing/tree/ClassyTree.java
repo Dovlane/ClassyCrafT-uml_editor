@@ -31,62 +31,18 @@ public class ClassyTree implements IClassyTree {
 
     @Override
     public boolean addChild(InfoForCreatingClassyNode infoForCreatingClassyNode) {
-//    public boolean addChild(ClassyTreeItem parent, ClassyNodeType type) {
-        Object parent;
-        if (infoForCreatingClassyNode instanceof InfoForCreatingConnection) {
-            InfoForCreatingConnection infoForCreatingConnection = (InfoForCreatingConnection) infoForCreatingClassyNode;
-            parent = infoForCreatingConnection.getParent();
-        }
-        else if (infoForCreatingClassyNode instanceof InfoForCreatingClassyNodeCompositeNodes) {
-            InfoForCreatingClassyNodeCompositeNodes infoForCreatingClassyNodeCompositeNodes = (InfoForCreatingClassyNodeCompositeNodes) infoForCreatingClassyNode;
-            System.out.println("InfoForCreatingClassyNodeCompositeNodes");
-            System.out.println(" infoForCreatingClassyNodeCompositeNodes.getParent()" +  infoForCreatingClassyNodeCompositeNodes.getParent());
-            parent = infoForCreatingClassyNodeCompositeNodes.getParent();
-        }
-        else {
-            InfoForCreatingInterclass infoForCreatingInterclass = (InfoForCreatingInterclass) infoForCreatingClassyNode;
-            parent = infoForCreatingInterclass.getParent();
-        }
+        ClassyTreeItem parent = infoForCreatingClassyNode.getParent();
 
-        if (parent == null) {
-            MainFrame.getInstance().getMessageGenerator().generateMessage(
-                    "Parent Node must be selected.", MessageType.ERROR);
-            return false;
-        }
-
-//        if (parent.getClassyNode() instanceof ClassyNodeLeaf) {
-//            MainFrame.getInstance().getMessageGenerator().generateMessage(
-//                    "Leaf Node cannot contain any other node.", MessageType.ERROR);
-//            return false;
-//        }
         ClassyNode child;
-        //Creating Diagram, Package or Project
-        if (infoForCreatingClassyNode instanceof InfoForCreatingClassyNodeCompositeNodes) {
-            child = abstractClassyCraftManufacturer.createClassyNode((InfoForCreatingClassyNodeCompositeNodes) infoForCreatingClassyNode);
-        }
-        else {
-            //Creating DiagramElement
-            if (infoForCreatingClassyNode instanceof InfoForCreatingInterclass) {
-                child = abstractClassyCraftManufacturer.createInterclass((InfoForCreatingInterclass) infoForCreatingClassyNode);
-            } else {
-                child = abstractClassyCraftManufacturer.createConnection((InfoForCreatingConnection) infoForCreatingClassyNode);
-            }
-        }
 
-        ClassyTreeItem parentTreeItem;
+        if (infoForCreatingClassyNode instanceof InfoForCreatingClassyNodeComposite)
+            child = abstractClassyCraftManufacturer.createClassyNodeComposite((InfoForCreatingClassyNodeComposite) infoForCreatingClassyNode);
+        else if (infoForCreatingClassyNode instanceof InfoForCreatingInterclass)
+            child = abstractClassyCraftManufacturer.createInterclass((InfoForCreatingInterclass) infoForCreatingClassyNode);
+        else
+            child = abstractClassyCraftManufacturer.createConnection((InfoForCreatingConnection) infoForCreatingClassyNode);
 
-        // if parent is classyNode it means that we are adding DiagramElement
-        if (parent instanceof ClassyNode) {
-            parentTreeItem =
-                    MainFrame.getInstance().getClassyTree().getRoot().getTreeItemFromClassyNode((ClassyNode) parent);
-        }
-        else {
-            parentTreeItem = (ClassyTreeItem) parent;
-        }
-
-
-//        ClassyNode child = createChild(parent.getClassyNode(), type);
-        return attachChild(parentTreeItem, child);
+        return attachChild(parent, child);
     }
 
     @Override
@@ -102,9 +58,7 @@ public class ClassyTree implements IClassyTree {
         boolean success = ((ClassyNodeComposite) parent.getClassyNode()).addChild(child);
         if (success) {
 
-            // It should be added first to model because
-            // JTree does not override equal by value.
-            // Instead, it uses default equal implementation.
+            // Update JTree
             parent.add(new ClassyTreeItem(child));
 
             // Refresh GUI - Classy Tree
@@ -138,8 +92,12 @@ public class ClassyTree implements IClassyTree {
 
     @Override
     public void renameItem(ClassyTreeItem item) {
+
+        // Find ClassyNode of the ClassyTreeItem
         ClassyNode node = item.getClassyNode();
         ClassyNodeComposite nodeParent = (ClassyNodeComposite) node.getParent();
+
+        // Project Explorer cannot be renamed
         if (nodeParent == null) {
             String errorMessage = "The ProjectExplorer cannot be renamed.";
             MainFrame.getInstance().getMessageGenerator().generateMessage(errorMessage, MessageType.ERROR);
@@ -187,13 +145,32 @@ public class ClassyTree implements IClassyTree {
     }
 
     @Override
+    public boolean renameItem(ClassyTreeItem item, String newName) {
+
+        // Find ClassyNode of the ClassyTreeItem
+        ClassyNode node = item.getClassyNode();
+        ClassyNodeComposite nodeParent = (ClassyNodeComposite) node.getParent();
+
+        // Project Explorer cannot be renamed
+        if (nodeParent == null) {
+            String errorMessage = "The ProjectExplorer cannot be renamed.";
+            MainFrame.getInstance().getMessageGenerator().generateMessage(errorMessage, MessageType.ERROR);
+            return false;
+        }
+
+        // Try to set a new name
+        if (node.setName(newName)) {
+            SwingUtilities.updateComponentTreeUI(treeView);
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
     public ClassyTreeItem getSelectedNode() {
         return (ClassyTreeItem) treeView.getLastSelectedPathComponent();
     }
-
-//    private ClassyNode createChild(ClassyNode parent, ClassyNodeType type) {
-//        return ClassyNodeFactory.createClassyNode(parent, type);
-//    }
 
     public ClassyTreeItem getRoot() {
         return root;

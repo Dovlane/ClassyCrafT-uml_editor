@@ -19,10 +19,11 @@ import raf.dsw.classycraft.app.model.elements.Modifiers.NonAccessModifiers;
 import java.awt.*;
 
 public class ClassyCraftManufacturer extends AbstractClassyCraftManufacturer {
+
     @Override
     public Interclass createInterclass(InfoForCreatingInterclass infoForCreatingInterclass) {
         String name = infoForCreatingInterclass.getName();
-        Diagram parent = (Diagram) infoForCreatingInterclass.getParent();
+        Diagram parent = (Diagram) (infoForCreatingInterclass.getParent().getClassyNode());
         Point point = infoForCreatingInterclass.getPoint();
         AccessModifiers visibility = infoForCreatingInterclass.getVisibility();
         NonAccessModifiers nonAccessModifiers = infoForCreatingInterclass.getNonAccessModifier();
@@ -40,7 +41,7 @@ public class ClassyCraftManufacturer extends AbstractClassyCraftManufacturer {
     @Override
     public Connection createConnection(InfoForCreatingConnection infoForCreatingConnection) {
         String name = infoForCreatingConnection.getName();
-        Diagram parent = (Diagram) infoForCreatingConnection.getParent();
+        Diagram parent = (Diagram) (infoForCreatingConnection.getParent().getClassyNode());
         Interclass from = infoForCreatingConnection.getFrom();
         Interclass to = infoForCreatingConnection.getTo();
         ElementConnectionType elementConnectionType = infoForCreatingConnection.getElementConnectionType();
@@ -57,9 +58,13 @@ public class ClassyCraftManufacturer extends AbstractClassyCraftManufacturer {
     }
 
 
-    public ClassyNode createClassyNode (InfoForCreatingClassyNodeCompositeNodes infoForCreatingClassyNodeCompositeNodes) {
-        ClassyNode parent = infoForCreatingClassyNodeCompositeNodes.getParent().getClassyNode();
-        ClassyNodeType type = infoForCreatingClassyNodeCompositeNodes.getType();
+    @Override
+    public ClassyNode createClassyNodeComposite (InfoForCreatingClassyNodeComposite infoForCreatingClassyNodeComposite) {
+        ClassyNodeType type = infoForCreatingClassyNodeComposite.getType();
+        if (infoForCreatingClassyNodeComposite.getParent() == null) {
+            return null; // Message is generated in ClassyTree
+        }
+        ClassyNode parent = infoForCreatingClassyNodeComposite.getParent().getClassyNode();
         if (parent instanceof ProjectExplorer) {
             if (type == ClassyNodeType.PROJECT) {
                 ((ProjectExplorer) parent).increaseCounter();

@@ -4,12 +4,17 @@ import raf.dsw.classycraft.app.model.ClassyRepository.*;
 import raf.dsw.classycraft.app.model.ClassyRepository.Package;
 import raf.dsw.classycraft.app.model.MessageGenerator.MessageType;
 import raf.dsw.classycraft.app.model.StatePattern.StateManager;
+import raf.dsw.classycraft.app.model.compositePattern.ClassyNode;
+import raf.dsw.classycraft.app.model.elements.Interclass.Interclass;
 import raf.dsw.classycraft.app.model.observerPattern.IListener;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.NoninvertibleTransformException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,13 +50,23 @@ public class PackageView extends JSplitPane implements IListener {
         // Toolbar
         JToolBar toolBar = new JToolBar(JToolBar.VERTICAL);
         toolBar.setLayout(new GridLayout(0, 1));
-        addButton(toolBar, "AI", true);
-        addButton(toolBar, "AC", false);
-        addButton(toolBar, "ACC", false);
-        addButton(toolBar, "M", false);
-        addButton(toolBar, "Z", false);
-        addButton(toolBar, "R", false);
-        addButton(toolBar, "S", false);
+        addButton(toolBar, "AddInterclass", true);
+        addButton(toolBar, "AddConnection", false);
+        addButton(toolBar, "AddClassContent", false);
+        addButton(toolBar, "Move", false);
+        addButton(toolBar, "Zoom", false);
+        addButton(toolBar, "RemoveElement", false);
+        addButton(toolBar, "Select", false);
+        addButton(toolBar, "DuplicateElement", false);
+
+        // ZoomToFit Button
+        URL imageURL = getClass().getResource("/images/ZoomToFit.png");
+        JButton zoomToFitButton = new JButton(new ImageIcon(imageURL));
+        zoomToFitButton.setToolTipText("ZoomToFit");
+        zoomToFitButton.addActionListener( e -> {
+            zoomToFitAction();
+        });
+        toolBar.add(zoomToFitButton);
 
         // Merge TabbedPane and ToolBar
         JSplitPane drawingPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, tabbedPane, toolBar);
@@ -65,8 +80,12 @@ public class PackageView extends JSplitPane implements IListener {
     }
 
     private void addButton(JToolBar toolBar, String toolText, boolean startSelected) {
-        JToggleButton button = new JToggleButton(toolText);
+
+        URL imageURL = getClass().getResource("/images/" + toolText + ".png");
+        JToggleButton button = new JToggleButton(new ImageIcon(imageURL));
+        button.setToolTipText(toolText);
         button.setFocusPainted(false); // Remove focus border
+
         button.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
@@ -80,15 +99,16 @@ public class PackageView extends JSplitPane implements IListener {
                         selectedButton.setBorder(BorderFactory.createEmptyBorder());
 
                         // Change the state of application
-                        String buttonName = button.getText();
-                        switch (buttonName) {
-                            case "AI" -> startAddInterclassState();
-                            case "AC" -> startAddConnectionState();
-                            case "ACC" -> startAddClassContentState();
-                            case "M" -> startMoveState();
-                            case "Z" -> startZoomState();
-                            case "R" -> startRemoveElementState();
-                            case "S" -> startSelectElementState();
+                        int index = toolBar.getComponentIndex(button);
+                        switch (index) {
+                            case 0 -> startAddInterclassState();
+                            case 1 -> startAddConnectionState();
+                            case 2 -> startAddClassContentState();
+                            case 3 -> startMoveState();
+                            case 4 -> startZoomState();
+                            case 5 -> startRemoveElementState();
+                            case 6 -> startSelectElementState();
+                            case 7 -> startDuplicateElementState();
                             default -> MainFrame.getInstance().getMessageGenerator().generateMessage(
                                     "Something is wrong with the names of the buttons and the states.", MessageType.ERROR);
                         }
@@ -124,16 +144,71 @@ public class PackageView extends JSplitPane implements IListener {
         stateManager.getCurrentState().mouseReleased(location, diagramView);
     }
 
-    public void mouseDragged(DiagramView diagramView, Point startLocation, Point currentLocation) {
+    public void mouseDragged(DiagramView diagramView, Point startLocation, Point currentLocationOptimal, Point currentLocation) {
         System.out.println("PackageView - mouseDragged:");
 
-        stateManager.getCurrentState().mouseDragged(startLocation, currentLocation, diagramView);
+        stateManager.getCurrentState().mouseDragged(startLocation, currentLocationOptimal, currentLocation, diagramView);
     }
 
     public void mouseWheelMoved(int wheelRotation, Point location, DiagramView diagramView) {
         System.out.println("PackageView - mouseWheelMoved:");
 
         stateManager.getCurrentState().mouseWheelMoved(wheelRotation, location, diagramView);
+    }
+
+    public void zoomToFitAction() {
+        System.out.println("ZoomToFitAction has been performed.");
+
+        if (tabbedPane.getTabCount() > 0) {
+
+            // Fetch the information about DiagramView
+            DiagramView diagramView = (DiagramView) tabbedPane.getComponentAt(tabbedPane.getSelectedIndex());
+            Diagram diagram = diagramView.getDiagram();
+            int width = diagramView.getWidth();
+            int height = diagramView.getHeight();
+            Point viewCentre = new Point(width / 2, height / 2);
+            AffineTransform transform = diagramView.getTransform();
+
+            // Check if current diagram has anything displayed
+            if (diagram.getChildren().size() == 0) {
+                System.out.println("ZoomToFit cannot be performed because there are no DiagramElements.");
+                return;
+            }
+
+            // Find borders of all DiagramElements
+            int minX = Integer.MAX_VALUE;
+            int minY = Integer.MAX_VALUE;
+            int maxX = Integer.MIN_VALUE;
+            int maxY = Integer.MIN_VALUE;
+            for (ClassyNode child: diagram.getChildren()) {
+                if (child instanceof Interclass) {
+                    Interclass interclass = (Interclass) child;
+                    minX = Math.min(minX, interclass.getLocation().x);
+                    minY = Math.min(minY, interclass.getLocation().y);
+                    maxX = Math.max(maxX, interclass.getLocation().x + interclass.getBoxWidth());
+                    maxY = Math.max(maxY, interclass.getLocation().y + interclass.getBoxHeight());
+                }
+            }
+            Point upperLeft = new Point(minX, minY);
+            Point bottomRight = new Point(maxX, maxY);
+
+            // Center the UML Diagram
+            Point centreOfMass = new Point(
+                    (upperLeft.x + bottomRight.x) / 2,
+                    (upperLeft.y + bottomRight.y) / 2);
+            transform.transform(centreOfMass, centreOfMass);
+            diagramView.move(centreOfMass, viewCentre);
+
+            // Scale the UML Diagram so it fits the window
+            transform.transform(upperLeft, upperLeft);
+            transform.transform(bottomRight, bottomRight);
+            double zoomFactor = Math.min(
+                    (double) width / (bottomRight.x - upperLeft.x),
+                    (double) height / (bottomRight.y - upperLeft.y));
+            zoomFactor = Math.min(Math.max(0.0001, zoomFactor), 10000);
+            System.out.println(zoomFactor);
+            diagramView.zoomWithFactor(zoomFactor, viewCentre);
+        }
     }
 
 
@@ -158,6 +233,9 @@ public class PackageView extends JSplitPane implements IListener {
     }
     public void startSelectElementState() {
         stateManager.setSelectElementState();
+    }
+    public void startDuplicateElementState() {
+        stateManager.setDuplicateElementState();
     }
 
 

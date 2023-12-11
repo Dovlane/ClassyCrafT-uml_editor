@@ -11,6 +11,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public abstract class Interclass extends DiagramElement {
+
     private static int initialBoxWidth = 200;
     private static int initialBoxHeight = 100;
     protected AccessModifiers visibility;
@@ -18,8 +19,7 @@ public abstract class Interclass extends DiagramElement {
     protected Point location;
     protected int boxWidth;
     protected int boxHeight;
-
-
+    private int numberOfCopies;
 
     public Interclass(String name, Diagram parent, Point point, AccessModifiers visibility, NonAccessModifiers nonAccessModifiers) {
         super(name, parent);
@@ -28,6 +28,16 @@ public abstract class Interclass extends DiagramElement {
         this.boxHeight = 100;
         this.location = point;
         this.nonAccessModifiers = nonAccessModifiers;
+        this.numberOfCopies = 0;
+    }
+
+    // Create a Deep Copy Constructor
+    public Interclass(Interclass interclass) {
+        this(interclass.getName() + "Copy" + interclass.getNumberOfCopies(true),
+                (Diagram) interclass.getParent(),
+                new Point(interclass.getLocation()),
+                interclass.visibility,
+                interclass.nonAccessModifiers);
     }
 
     // Getters and Setters
@@ -125,4 +135,21 @@ public abstract class Interclass extends DiagramElement {
     public NonAccessModifiers getNonAccessModifiers() {
         return nonAccessModifiers;
     }
+
+    public int getNumberOfCopies(boolean updateNumberOfCopies) {
+        if (updateNumberOfCopies)
+            numberOfCopies++;
+        return numberOfCopies;
+    }
+
+    public void setVisibility(AccessModifiers visibility) {
+        this.visibility = visibility;
+        notifyAllSubscribers(new Notification(this, NotificationType.SET));
+    }
+
+    public void setNonAccessModifiers(NonAccessModifiers nonAccessModifiers) {
+        this.nonAccessModifiers = nonAccessModifiers;
+        notifyAllSubscribers(new Notification(this, NotificationType.SET));
+    }
+
 }

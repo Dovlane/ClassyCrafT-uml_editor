@@ -18,6 +18,11 @@ public class Method extends ClassContent {
         this.type = type;
     }
 
+    // Create a Deep Copy Constructor
+    public Method(Method method) {
+        this(method.name, method.accessModifiers, method.nonAccessModifiers, method.type);
+    }
+
 
     // Getters and Setters
     public AccessModifiers getAccessModifiers() {
