@@ -33,6 +33,8 @@ public class AddConnectionState implements State {
             linePainter = new LinePainter((Interclass) selectedDiagramElementFrom);
             System.out.println("linePainter " + linePainter);
             diagramView.updateLinePainter(linePainter);
+        } else {
+            selectedDiagramElementFrom = null; // this is case when selectedDiagramElement is not type of Interclass
         }
     }
 

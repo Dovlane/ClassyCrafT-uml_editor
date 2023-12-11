@@ -5,6 +5,7 @@ import raf.dsw.classycraft.app.gui.swing.view.DiagramView;
 import raf.dsw.classycraft.app.gui.swing.view.MainFrame;
 import raf.dsw.classycraft.app.gui.swing.view.dialogs.InterclassStateDialog;
 import raf.dsw.classycraft.app.model.ClassyRepository.Diagram;
+import raf.dsw.classycraft.app.model.MessageGenerator.MessageGenerator;
 import raf.dsw.classycraft.app.model.MessageGenerator.MessageType;
 import raf.dsw.classycraft.app.model.StatePattern.State;
 import raf.dsw.classycraft.app.model.elements.DiagramElement;
@@ -35,16 +36,10 @@ public class AddInterclassState implements State {
         interclassStateDialog.getButtonOk().addActionListener(
                 e -> {
             if (interclassStateDialog.getTextField().getText().equals("")){
-                JOptionPane.showMessageDialog(interclassStateDialog,
-                        "Interclass name cannot be empty!",
-                        "Error",
-                        JOptionPane.ERROR_MESSAGE);
+                MainFrame.getInstance().getMessageGenerator().generateMessage("Interclass name cannot be empty!", MessageType.ERROR);
                 return;
             }
             String interclassName = interclassStateDialog.getTextField().getText();
-            if (interclassName.equals("")){
-
-            }
             AccessModifiers accessModifier = AccessModifiers.DEFAULT;
             for (JRadioButton jRadioButton : interclassStateDialog.getAccessModifiersRadioButtons()){
                 if (jRadioButton.isSelected()) {

@@ -1,7 +1,9 @@
 package raf.dsw.classycraft.app.model.StatePattern.concrete;
 
 import raf.dsw.classycraft.app.gui.swing.view.DiagramView;
+import raf.dsw.classycraft.app.gui.swing.view.MainFrame;
 import raf.dsw.classycraft.app.gui.swing.view.dialogs.ClassContentStateDialog;
+import raf.dsw.classycraft.app.model.MessageGenerator.MessageType;
 import raf.dsw.classycraft.app.model.StatePattern.State;
 import raf.dsw.classycraft.app.model.elements.DiagramElement;
 
@@ -24,10 +26,7 @@ public class AddClassContentState implements State {
                             classContentStateDialog.insertRow();
                         }
                         catch (Exception exception) {
-                            JOptionPane.showMessageDialog(classContentStateDialog,
-                                    exception.getMessage(),
-                                    "Error",
-                                    JOptionPane.ERROR_MESSAGE);
+                            MainFrame.getInstance().getMessageGenerator().generateMessage(exception.getMessage(), MessageType.ERROR);
                         }
                     });
             classContentStateDialog.getButtonDelete().addActionListener(e -> classContentStateDialog.deleteRow());
@@ -37,10 +36,8 @@ public class AddClassContentState implements State {
                             classContentStateDialog.insertData();
                         }
                         catch (Exception exception) {
-                            JOptionPane.showMessageDialog(classContentStateDialog,
-                                    exception.getMessage(),
-                                    "Error",
-                                    JOptionPane.ERROR_MESSAGE);
+                            MainFrame.getInstance().getMessageGenerator().generateMessage(exception.getMessage(), MessageType.ERROR);
+                            return;
                         }
                         classContentStateDialog.dispose();
                     });
