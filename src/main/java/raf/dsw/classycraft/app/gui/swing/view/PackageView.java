@@ -169,6 +169,12 @@ public class PackageView extends JSplitPane implements IListener {
             Point viewCentre = new Point(width / 2, height / 2);
             AffineTransform transform = diagramView.getTransform();
 
+            // Check if current diagram has anything displayed
+            if (diagram.getChildren().size() == 0) {
+                System.out.println("ZoomToFit cannot be performed because there are no DiagramElements.");
+                return;
+            }
+
             // Find borders of all DiagramElements
             int minX = Integer.MAX_VALUE;
             int minY = Integer.MAX_VALUE;
