@@ -2,8 +2,6 @@ package raf.dsw.classycraft.app.gui.swing.controller.debug;
 
 import raf.dsw.classycraft.app.core.ApplicationFramework;
 import raf.dsw.classycraft.app.gui.swing.controller.AbstractClassyAction;
-import raf.dsw.classycraft.app.gui.swing.view.MainFrame;
-import raf.dsw.classycraft.app.model.MessageGenerator.MessageType;
 
 import java.awt.event.ActionEvent;
 

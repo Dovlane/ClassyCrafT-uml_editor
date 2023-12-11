@@ -1,17 +1,11 @@
 package raf.dsw.classycraft.app.model.ClassyRepository;
 
-import raf.dsw.classycraft.app.core.ApplicationFramework;
 import raf.dsw.classycraft.app.model.compositePattern.ClassyNode;
 import raf.dsw.classycraft.app.model.compositePattern.ClassyNodeComposite;
-import raf.dsw.classycraft.app.model.observerPattern.IListener;
 import raf.dsw.classycraft.app.model.observerPattern.IPublisher;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class Package extends ClassyNodeComposite implements IPublisher {
 
-    List<IListener> listeners = new ArrayList<>();
     private int nmbOfCreatedPackages;
     private int nmbOfCreatedDiagrams;
 
@@ -19,34 +13,28 @@ public class Package extends ClassyNodeComposite implements IPublisher {
         super(name, parent);
         nmbOfCreatedPackages = 0;
         nmbOfCreatedDiagrams = 0;
-        addListener(ApplicationFramework.getInstance().getClassyRepository().getPackageView());
     }
 
     @Override
-    public void addChild(ClassyNode child) {
+    public boolean addChild(ClassyNode child) {
         if (child instanceof Package || child instanceof Diagram) {
             if (!getChildren().contains(child)) {
                 getChildren().add(child);
+                Notification notification =
+                        new Notification(child, NotificationType.ADD);
+                notifyAllSubscribers(notification);
+                return true;
             }
         }
+        return false;
     }
 
-    @Override
-    public void addListener(IListener listener) {
-        if (!listeners.contains(listener))
-            listeners.add(listener);
-    }
-
-    @Override
-    public void removeListener(IListener listener) {
-        if (listeners.contains(listener))
-            listeners.remove(listener);
-    }
-
-    @Override
-    public void notifyAllSubscribers(Object notification) {
-        for (IListener listener : listeners)
-            listener.update(notification);
+    public Project findParentProject() {
+        ClassyNode tmp = this;
+        while ((tmp != null) && !(tmp instanceof Project)) {
+            tmp = tmp.getParent();
+        }
+        return (Project) tmp;
     }
 
     public void increasePackageCounter() {
@@ -63,6 +51,12 @@ public class Package extends ClassyNodeComposite implements IPublisher {
 
     public int getNmbOfCreatedDiagrams() {
         return nmbOfCreatedDiagrams;
+    }
+
+    public void display() {
+        Notification notification =
+                new Notification(this, NotificationType.SET);
+        notifyAllSubscribers(notification);
     }
 
 }

@@ -3,7 +3,8 @@ package raf.dsw.classycraft.app.gui.swing.view;
 import raf.dsw.classycraft.app.core.ApplicationFramework;
 import raf.dsw.classycraft.app.gui.swing.controller.ActionManager;
 import raf.dsw.classycraft.app.gui.swing.tree.ClassyTree;
-import raf.dsw.classycraft.app.gui.swing.tree.IClassyTree;
+import raf.dsw.classycraft.app.model.Logger.LoggerFactory;
+import raf.dsw.classycraft.app.model.Logger.LoggerType;
 import raf.dsw.classycraft.app.model.MessageGenerator.Message;
 import raf.dsw.classycraft.app.model.MessageGenerator.MessageGenerator;
 import raf.dsw.classycraft.app.model.MessageGenerator.MessageType;
@@ -16,9 +17,9 @@ import java.time.LocalDateTime;
 public class MainFrame extends JFrame implements IListener {
 
     private static MainFrame instance;
-    private MessageGenerator messageGenerator;
-    private ActionManager actionManager;
-    private ClassyTree classyTree;
+    private final MessageGenerator messageGenerator;
+    private final ActionManager actionManager;
+    private final ClassyTree classyTree;
 
     private MainFrame() {
         messageGenerator = new MessageGenerator();
@@ -28,6 +29,12 @@ public class MainFrame extends JFrame implements IListener {
     }
 
     private void initialize() {
+
+        // Create Loggers
+        LoggerFactory.createLogger(LoggerType.CONSOLE_LOGGER);
+        LoggerFactory.createLogger(LoggerType.FILE_LOGGER);
+
+        // Create Graphics
         Toolkit kit = Toolkit.getDefaultToolkit();
         Dimension screenSize = kit.getScreenSize();
         int screenHeight = screenSize.height;

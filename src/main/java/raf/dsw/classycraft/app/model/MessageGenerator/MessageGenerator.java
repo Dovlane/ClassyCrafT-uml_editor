@@ -1,6 +1,5 @@
 package raf.dsw.classycraft.app.model.MessageGenerator;
 
-import raf.dsw.classycraft.app.model.Logger.*;
 import raf.dsw.classycraft.app.model.observerPattern.IListener;
 import raf.dsw.classycraft.app.model.observerPattern.IPublisher;
 
@@ -11,8 +10,6 @@ public class MessageGenerator implements IMessageGenerator, IPublisher {
 
     public MessageGenerator() {
         listeners = new ArrayList<>();
-        addListener(LoggerFactory.createLogger(LoggerType.CONSOLE_LOGGER));
-        addListener(LoggerFactory.createLogger(LoggerType.FILE_LOGGER));
     }
 
     @Override

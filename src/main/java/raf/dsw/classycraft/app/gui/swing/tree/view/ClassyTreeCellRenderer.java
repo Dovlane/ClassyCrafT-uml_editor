@@ -5,6 +5,11 @@ import raf.dsw.classycraft.app.model.ClassyRepository.Diagram;
 import raf.dsw.classycraft.app.model.ClassyRepository.Package;
 import raf.dsw.classycraft.app.model.ClassyRepository.Project;
 import raf.dsw.classycraft.app.model.ClassyRepository.ProjectExplorer;
+import raf.dsw.classycraft.app.model.elements.Connection.Connection;
+import raf.dsw.classycraft.app.model.elements.Interclass.ClassElement;
+import raf.dsw.classycraft.app.model.elements.Interclass.EnumElement;
+import raf.dsw.classycraft.app.model.elements.Interclass.Interclass;
+import raf.dsw.classycraft.app.model.elements.Interclass.InterfaceElement;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultTreeCellRenderer;
@@ -29,6 +34,18 @@ public class ClassyTreeCellRenderer extends DefaultTreeCellRenderer {
         }
         else if (((ClassyTreeItem) value).getClassyNode() instanceof Diagram) {
             imageURL = getClass().getResource("/images/Diagram.png");
+        }
+        else if (((ClassyTreeItem) value).getClassyNode() instanceof ClassElement) {
+            imageURL = getClass().getResource("/images/ClassElement.png");
+        }
+        else if (((ClassyTreeItem) value).getClassyNode() instanceof InterfaceElement) {
+            imageURL = getClass().getResource("/images/InterfaceElement.png");
+        }
+        else if (((ClassyTreeItem) value).getClassyNode() instanceof EnumElement) {
+            imageURL = getClass().getResource("/images/EnumElement.png");
+        }
+        else if (((ClassyTreeItem) value).getClassyNode() instanceof Connection) {
+            imageURL = getClass().getResource("/images/Connection.png");
         }
 
         Icon icon = null;

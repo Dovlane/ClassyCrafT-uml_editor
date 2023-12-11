@@ -2,6 +2,8 @@ package raf.dsw.classycraft.app.gui.swing.tree.controller;
 
 import raf.dsw.classycraft.app.core.ApplicationFramework;
 import raf.dsw.classycraft.app.gui.swing.tree.model.ClassyTreeItem;
+import raf.dsw.classycraft.app.model.compositePattern.ClassyNode;
+import raf.dsw.classycraft.app.model.elements.DiagramElement;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultTreeCellEditor;
@@ -43,7 +45,7 @@ public class ClassyTreeCellEditor extends DefaultTreeCellEditor {
             return;
         }
         ClassyTreeItem clicked = (ClassyTreeItem) clickedOn;
-        clicked.getClassyNode().setName(e.getActionCommand());
-        ApplicationFramework.getInstance().getClassyRepository().getPackageView().updatePackageView();
+        ClassyNode clickedNode = clicked.getClassyNode();
+        clickedNode.setName(e.getActionCommand());
     }
 }

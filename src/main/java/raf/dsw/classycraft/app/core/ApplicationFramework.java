@@ -9,7 +9,7 @@ public class ApplicationFramework {
     private ClassyRepository classyRepository;
 
     private ApplicationFramework() {
-
+        ;
     }
 
     public void initialize() {

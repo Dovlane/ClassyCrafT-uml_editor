@@ -1,6 +1,5 @@
 package raf.dsw.classycraft.app.gui.swing.tree;
 
-import raf.dsw.classycraft.app.core.ApplicationFramework;
 import raf.dsw.classycraft.app.gui.swing.tree.model.ClassyTreeItem;
 import raf.dsw.classycraft.app.gui.swing.tree.view.ClassyTreeView;
 import raf.dsw.classycraft.app.gui.swing.view.MainFrame;
@@ -8,56 +7,65 @@ import raf.dsw.classycraft.app.model.MessageGenerator.MessageType;
 import raf.dsw.classycraft.app.model.ClassyRepository.*;
 import raf.dsw.classycraft.app.model.compositePattern.ClassyNode;
 import raf.dsw.classycraft.app.model.compositePattern.ClassyNodeComposite;
-import raf.dsw.classycraft.app.model.compositePattern.ClassyNodeLeaf;
-import raf.dsw.classycraft.app.model.observerPattern.IListener;
+import raf.dsw.classycraft.app.model.abstractFactoryForClassyNodes.*;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreePath;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 public class ClassyTree implements IClassyTree {
 
+    private ClassyTreeItem root;
     private ClassyTreeView treeView;
+    private AbstractClassyCraftManufacturer abstractClassyCraftManufacturer;
+
     @Override
     public ClassyTreeView generateTree(ProjectExplorer projectExplorer) {
-        ClassyTreeItem root = new ClassyTreeItem(projectExplorer);
+        root = new ClassyTreeItem(projectExplorer);
         treeView = new ClassyTreeView(new DefaultTreeModel(root));
+        abstractClassyCraftManufacturer = new ClassyCraftManufacturer();
         return treeView;
     }
 
     @Override
-    public void addChild(ClassyTreeItem parent, ClassyNodeType type) {
+    public boolean addChild(InfoForCreatingClassyNode infoForCreatingClassyNode) {
+        ClassyTreeItem parent = infoForCreatingClassyNode.getParent();
+
+        ClassyNode child;
+
+        if (infoForCreatingClassyNode instanceof InfoForCreatingClassyNodeComposite)
+            child = abstractClassyCraftManufacturer.createClassyNodeComposite((InfoForCreatingClassyNodeComposite) infoForCreatingClassyNode);
+        else if (infoForCreatingClassyNode instanceof InfoForCreatingInterclass)
+            child = abstractClassyCraftManufacturer.createInterclass((InfoForCreatingInterclass) infoForCreatingClassyNode);
+        else
+            child = abstractClassyCraftManufacturer.createConnection((InfoForCreatingConnection) infoForCreatingClassyNode);
+
+        return attachChild(parent, child);
+    }
+
+    @Override
+    public boolean attachChild(ClassyTreeItem parent, ClassyNode child) {
 
         if (parent == null) {
             MainFrame.getInstance().getMessageGenerator().generateMessage(
                     "Parent Node must be selected.", MessageType.ERROR);
-            return;
+            return false;
         }
 
-        if (parent.getClassyNode() instanceof ClassyNodeLeaf) {
-            MainFrame.getInstance().getMessageGenerator().generateMessage(
-                    "Leaf Node cannot contain any other node.", MessageType.ERROR);
-            return;
-        }
+        // Add child to both Model and JTree
+        boolean success = ((ClassyNodeComposite) parent.getClassyNode()).addChild(child);
+        if (success) {
 
-        ClassyNode child = createChild(parent.getClassyNode(), type);
-        if (child != null) {
-
-            // Add child to both JTree and Model
+            // Update JTree
             parent.add(new ClassyTreeItem(child));
-            ((ClassyNodeComposite) parent.getClassyNode()).addChild(child);
 
-            // Refresh GUI
-            treeView.expandPath(treeView.getSelectionPath());
+            // Refresh GUI - Classy Tree
+            treeView.expandPath(new TreePath(parent.getPath()));
             SwingUtilities.updateComponentTreeUI(treeView);
-            ApplicationFramework.getInstance().getClassyRepository().getPackageView().updatePackageView();
         }
-    }
-
-    private ClassyNode createChild(ClassyNode parent, ClassyNodeType type) {
-        return ClassyNodeFactory.createClassyNode(parent, type);
+        return success;
     }
 
     @Override
@@ -79,15 +87,17 @@ public class ClassyTree implements IClassyTree {
         item.removeFromParent();
 
         // Refresh GUI
-        treeView.expandPath(treeView.getSelectionPath());
         SwingUtilities.updateComponentTreeUI(treeView);
-        ApplicationFramework.getInstance().getClassyRepository().getPackageView().updatePackageView();
     }
 
     @Override
     public void renameItem(ClassyTreeItem item) {
+
+        // Find ClassyNode of the ClassyTreeItem
         ClassyNode node = item.getClassyNode();
         ClassyNodeComposite nodeParent = (ClassyNodeComposite) node.getParent();
+
+        // Project Explorer cannot be renamed
         if (nodeParent == null) {
             String errorMessage = "The ProjectExplorer cannot be renamed.";
             MainFrame.getInstance().getMessageGenerator().generateMessage(errorMessage, MessageType.ERROR);
@@ -116,26 +126,14 @@ public class ClassyTree implements IClassyTree {
             public void actionPerformed(ActionEvent e) {
                 String content = textField.getText();
 
-                if (!content.isEmpty() && nodeParent.getChildByName(content) == null) {
-
-                    // Rename a selected Node
-                    node.setName(content);
+                if (node.setName(content)) {
 
                     // Refresh GUI
                     SwingUtilities.updateComponentTreeUI(treeView);
-                    ApplicationFramework.getInstance().getClassyRepository().getPackageView().updatePackageView();
-                    System.out.println(node.getName() + " has been renamed to " + content + ".");
 
                     // Close the window after successful renaming
                     frame.dispose();
 
-                } else if (content.isEmpty()) {
-                    String errorMessage = "New name cannot be an empty string.";
-                    MainFrame.getInstance().getMessageGenerator().generateMessage(errorMessage, MessageType.ERROR);
-                } else {
-                    System.out.println(content);
-                    String errorMessage = "The path of the file is ambiguous.";
-                    MainFrame.getInstance().getMessageGenerator().generateMessage(errorMessage, MessageType.ERROR);
                 }
             }
         });
@@ -147,11 +145,39 @@ public class ClassyTree implements IClassyTree {
     }
 
     @Override
+    public boolean renameItem(ClassyTreeItem item, String newName) {
+
+        // Find ClassyNode of the ClassyTreeItem
+        ClassyNode node = item.getClassyNode();
+        ClassyNodeComposite nodeParent = (ClassyNodeComposite) node.getParent();
+
+        // Project Explorer cannot be renamed
+        if (nodeParent == null) {
+            String errorMessage = "The ProjectExplorer cannot be renamed.";
+            MainFrame.getInstance().getMessageGenerator().generateMessage(errorMessage, MessageType.ERROR);
+            return false;
+        }
+
+        // Try to set a new name
+        if (node.setName(newName)) {
+            SwingUtilities.updateComponentTreeUI(treeView);
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
     public ClassyTreeItem getSelectedNode() {
         return (ClassyTreeItem) treeView.getLastSelectedPathComponent();
+    }
+
+    public ClassyTreeItem getRoot() {
+        return root;
     }
 
     public ClassyTreeView getTreeView() {
         return treeView;
     }
+
 }
