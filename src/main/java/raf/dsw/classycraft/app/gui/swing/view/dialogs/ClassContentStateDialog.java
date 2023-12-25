@@ -48,12 +48,7 @@ public class ClassContentStateDialog extends JFrame {
 
     public ClassContentStateDialog(DiagramElement elementDiagram) {
         super("Add Class Content");
-
-        Toolkit kit = Toolkit.getDefaultToolkit();
-        Dimension screenSize = kit.getScreenSize();
-        int screenHeight = screenSize.height;
-        int screenWidth = screenSize.width;
-        setSize(screenWidth / 3, (int)(screenHeight / 3));
+        setSize(500, 600);
         setLocationRelativeTo(null);
 
         selectedDiagramElement = elementDiagram;
