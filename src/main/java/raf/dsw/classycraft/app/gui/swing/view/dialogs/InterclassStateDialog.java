@@ -20,11 +20,7 @@ public class InterclassStateDialog extends JFrame {
     private JButton buttonOk;
     public InterclassStateDialog() throws HeadlessException {
         this.setName("Add class");
-        Toolkit kit = Toolkit.getDefaultToolkit();
-        Dimension screenSize = kit.getScreenSize();
-        int screenHeight = screenSize.height;
-        int screenWidth = screenSize.width;
-        setSize(screenWidth / 6, (int)(screenHeight / 3.5));
+        setSize(400, 300);
         setLocationRelativeTo(null);
 
         JPanel topJPanel = new JPanel();
@@ -83,7 +79,6 @@ public class InterclassStateDialog extends JFrame {
         buttonOk.addActionListener(new NewClassAction(this));
         setVisible(false);
     }
-
     public JTextField getTextField() {
         return textField;
     }

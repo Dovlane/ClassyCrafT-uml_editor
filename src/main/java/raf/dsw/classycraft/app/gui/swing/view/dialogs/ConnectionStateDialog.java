@@ -14,11 +14,7 @@ public class ConnectionStateDialog extends JFrame {
     private JButton buttonOk = new JButton("OK");
     public ConnectionStateDialog() {
         this.setName("Add connection");
-        Toolkit kit = Toolkit.getDefaultToolkit();
-        Dimension screenSize = kit.getScreenSize();
-        int screenHeight = screenSize.height;
-        int screenWidth = screenSize.width;
-        setSize(screenWidth / 6, (int)(screenHeight / 6));
+        setSize(300, 200);
         setLocationRelativeTo(null);
 
         JPanel connectionJPanel = new JPanel();

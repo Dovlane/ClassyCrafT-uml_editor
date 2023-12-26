@@ -3,9 +3,13 @@ package raf.dsw.classycraft.app.model.StatePattern.concrete;
 import raf.dsw.classycraft.app.gui.swing.view.DiagramView;
 import raf.dsw.classycraft.app.gui.swing.view.MainFrame;
 import raf.dsw.classycraft.app.gui.swing.view.dialogs.ClassContentStateDialog;
+import raf.dsw.classycraft.app.gui.swing.view.dialogs.ConnectionContentStateDialog;
+import raf.dsw.classycraft.app.gui.swing.view.painters.connectionPainters.ConnectionPainter;
 import raf.dsw.classycraft.app.model.MessageGenerator.MessageType;
 import raf.dsw.classycraft.app.model.StatePattern.State;
+import raf.dsw.classycraft.app.model.elements.Connection.Connection;
 import raf.dsw.classycraft.app.model.elements.DiagramElement;
+import raf.dsw.classycraft.app.model.elements.Interclass.Interclass;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,30 +22,44 @@ public class AddClassContentState implements State {
 
         DiagramElement diagramElementAt = diagramView.getElementAt(location);
         if (diagramElementAt != null) {
-            ClassContentStateDialog classContentStateDialog = new ClassContentStateDialog(diagramElementAt);
+            if (diagramElementAt instanceof Interclass) {
+                ClassContentStateDialog classContentStateDialog = new ClassContentStateDialog(diagramElementAt);
 
-            classContentStateDialog.getButtonAdd().addActionListener(
-                    e -> {
-                        try {
-                            classContentStateDialog.insertRow();
+                classContentStateDialog.getButtonAdd().addActionListener(
+                        e -> {
+                            try {
+                                classContentStateDialog.insertRow();
+                            } catch (Exception exception) {
+                                MainFrame.getInstance().getMessageGenerator().generateMessage(exception.getMessage(), MessageType.ERROR);
+                            }
+                        });
+                classContentStateDialog.getButtonDelete().addActionListener(e -> classContentStateDialog.deleteRow());
+                classContentStateDialog.getButtonOk().addActionListener(
+                        e -> {
+                            try {
+                                classContentStateDialog.insertData();
+                            } catch (Exception exception) {
+                                MainFrame.getInstance().getMessageGenerator().generateMessage(exception.getMessage(), MessageType.ERROR);
+                                return;
+                            }
+                            classContentStateDialog.dispose();
+                        });
+            }
+            else if (diagramElementAt instanceof Connection) {
+                ConnectionContentStateDialog connectionContentStateDialog = new ConnectionContentStateDialog((Connection) diagramElementAt);
+                connectionContentStateDialog.getButtonOK().addActionListener(
+                        e -> {
+                            try {
+                                connectionContentStateDialog.insertData();
+                            }
+                            catch (Exception exception) {
+                                MainFrame.getInstance().getMessageGenerator().generateMessage(exception.getMessage(), MessageType.ERROR);
+                                return;
+                            }
+                            connectionContentStateDialog.dispose();
                         }
-                        catch (Exception exception) {
-                            MainFrame.getInstance().getMessageGenerator().generateMessage(exception.getMessage(), MessageType.ERROR);
-                        }
-                    });
-            classContentStateDialog.getButtonDelete().addActionListener(e -> classContentStateDialog.deleteRow());
-            classContentStateDialog.getButtonOk().addActionListener(
-                    e ->  {
-                        try {
-                            classContentStateDialog.insertData();
-                        }
-                        catch (Exception exception) {
-                            MainFrame.getInstance().getMessageGenerator().generateMessage(exception.getMessage(), MessageType.ERROR);
-                            return;
-                        }
-                        classContentStateDialog.dispose();
-                    });
-
+                );
+            }
         }
     }
 
