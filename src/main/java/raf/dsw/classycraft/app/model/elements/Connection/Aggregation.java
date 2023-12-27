@@ -1,11 +1,13 @@
 package raf.dsw.classycraft.app.model.elements.Connection;
 
 import raf.dsw.classycraft.app.model.ClassyRepository.Diagram;
+import raf.dsw.classycraft.app.model.ClassyRepository.Package;
 import raf.dsw.classycraft.app.model.compositePattern.ClassyNode;
 import raf.dsw.classycraft.app.model.elements.Interclass.Interclass;
 import raf.dsw.classycraft.app.model.elements.Modifiers.AccessModifiers;
 
-public class Aggregation extends Connection implements  IAggregationAndComposition {
+public class Aggregation extends Connection implements IAggregationAndComposition {
+
     private String attributeName;
     private CardinalityEnum cardinalityEnum;
     private AccessModifiers attributeAccessModifier;
@@ -18,9 +20,13 @@ public class Aggregation extends Connection implements  IAggregationAndCompositi
 
     @Override
     public void setAttributeNameCardinalityAndAccessibility(String attributeName, CardinalityEnum cardinalityEnum, AccessModifiers attributeAccessModifier) {
+        if ((this.attributeName.equals(attributeName)) && (this.cardinalityEnum == cardinalityEnum) && (this.attributeAccessModifier == attributeAccessModifier)) {
+            return;
+        }
         this.attributeName = attributeName;
         this.cardinalityEnum = cardinalityEnum;
         this.attributeAccessModifier = attributeAccessModifier;
+        changeOccurred();
     }
 
     @Override

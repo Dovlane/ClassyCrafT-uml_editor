@@ -23,6 +23,7 @@ public class Package extends ClassyNodeComposite implements IPublisher {
                 Notification notification =
                         new Notification(child, NotificationType.ADD);
                 notifyAllSubscribers(notification);
+                changeOccurred();
                 return true;
             }
         }
@@ -57,6 +58,11 @@ public class Package extends ClassyNodeComposite implements IPublisher {
         Notification notification =
                 new Notification(this, NotificationType.SET);
         notifyAllSubscribers(notification);
+    }
+
+    @Override
+    public void changeOccurred() {
+        getParent().changeOccurred();
     }
 
 }

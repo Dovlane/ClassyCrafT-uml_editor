@@ -3,11 +3,12 @@ package raf.dsw.classycraft.app.gui.swing.controller;
 import raf.dsw.classycraft.app.gui.swing.controller.debug.ErrorTestAction;
 import raf.dsw.classycraft.app.gui.swing.controller.debug.PaintTestAction;
 import raf.dsw.classycraft.app.gui.swing.controller.debug.PrintTreeAction;
-import raf.dsw.classycraft.app.model.observerPattern.IListener;
 
-import java.awt.*;
-import java.util.ArrayList;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class ActionManager {
 
     private ExitAction exitAction;
@@ -17,12 +18,15 @@ public class ActionManager {
     private RemoveItemAction removeItemAction;
     private RenameAction renameAction;
     private ProjectAuthorAction projectAuthorAction;
+    private SaveAction saveAction;
+    private OpenAction openAction;
     private AboutUsAction aboutUsAction;
 
     // DEBUG actions
     private ErrorTestAction errorTestAction;
     private PrintTreeAction printTreeAction;
     private PaintTestAction paintTestAction;
+
     public ActionManager() {
         initializeActions();
     }
@@ -35,6 +39,8 @@ public class ActionManager {
         removeItemAction = new RemoveItemAction();
         renameAction = new RenameAction();
         projectAuthorAction = new ProjectAuthorAction();
+        saveAction = new SaveAction();
+        openAction = new OpenAction();
         aboutUsAction = new AboutUsAction();
 
         // DEBUG actions
@@ -43,47 +49,4 @@ public class ActionManager {
         paintTestAction = new PaintTestAction();
     }
 
-    public ExitAction getExitAction() {
-        return exitAction;
-    }
-
-    public NewProjectAction getNewProjectAction() {
-        return newProjectAction;
-    }
-
-    public NewPackageAction getNewPackageAction() {
-        return newPackageAction;
-    }
-
-    public NewDiagramAction getNewDiagramAction() {
-        return newDiagramAction;
-    }
-
-    public RemoveItemAction getRemoveItemAction() {
-        return removeItemAction;
-    }
-
-    public RenameAction getRenameAction() {
-        return renameAction;
-    }
-
-    public ProjectAuthorAction getProjectAuthorAction() {
-        return projectAuthorAction;
-    }
-
-    public AboutUsAction getAboutUsAction() {
-        return aboutUsAction;
-    }
-
-    public ErrorTestAction getErrorTestAction() {
-        return errorTestAction;
-    }
-
-    public PrintTreeAction getPrintTreeAction() {
-        return printTreeAction;
-    }
-
-    public PaintTestAction getPaintTestAction() {
-        return paintTestAction;
-    }
 }

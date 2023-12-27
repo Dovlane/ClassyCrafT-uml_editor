@@ -3,6 +3,7 @@ package raf.dsw.classycraft.app.model.elements.Interclass;
 import raf.dsw.classycraft.app.model.ClassyRepository.Diagram;
 import raf.dsw.classycraft.app.model.ClassyRepository.Notification;
 import raf.dsw.classycraft.app.model.ClassyRepository.NotificationType;
+import raf.dsw.classycraft.app.model.ClassyRepository.Package;
 import raf.dsw.classycraft.app.model.elements.ClassContent.EnumLiteral;
 import raf.dsw.classycraft.app.model.elements.Modifiers.AccessModifiers;
 import raf.dsw.classycraft.app.model.elements.Modifiers.NonAccessModifiers;
@@ -34,6 +35,7 @@ public class EnumElement extends Interclass {
         Notification notification =
                 new Notification(null, NotificationType.ADD);
         notifyAllSubscribers(notification);
+        changeOccurred();
     }
 
 
@@ -42,12 +44,9 @@ public class EnumElement extends Interclass {
         return enumLiterals;
     }
 
-    public void setEnumLiterals(List<EnumLiteral> enumLiterals) {
-        this.enumLiterals = enumLiterals;
-    }
-
     @Override
     public String toString() {
         return getName();
     }
+
 }

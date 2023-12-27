@@ -1,14 +1,15 @@
 package raf.dsw.classycraft.app.model.elements.Interclass;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import raf.dsw.classycraft.app.model.ClassyRepository.Diagram;
 import raf.dsw.classycraft.app.model.ClassyRepository.Notification;
 import raf.dsw.classycraft.app.model.ClassyRepository.NotificationType;
+import raf.dsw.classycraft.app.model.ClassyRepository.Package;
 import raf.dsw.classycraft.app.model.elements.Modifiers.AccessModifiers;
 import raf.dsw.classycraft.app.model.elements.DiagramElement;
 import raf.dsw.classycraft.app.model.elements.Modifiers.NonAccessModifiers;
 
 import java.awt.*;
-import java.util.ArrayList;
 
 public abstract class Interclass extends DiagramElement {
 
@@ -20,6 +21,8 @@ public abstract class Interclass extends DiagramElement {
     protected int boxWidth;
     protected int boxHeight;
     private int numberOfCopies;
+    @JsonIgnore
+    protected Point[] connectionAttachingPoints;
 
     public Interclass(String name, Diagram parent, Point point, AccessModifiers visibility, NonAccessModifiers nonAccessModifiers) {
         super(name, parent);
@@ -28,7 +31,6 @@ public abstract class Interclass extends DiagramElement {
         this.boxHeight = 100;
         this.location = point;
         this.nonAccessModifiers = nonAccessModifiers;
-        this.numberOfCopies = 0;
     }
 
     // Create a Deep Copy Constructor
@@ -46,6 +48,7 @@ public abstract class Interclass extends DiagramElement {
         Notification notification =
                 new Notification(null, NotificationType.ADD);
         notifyAllSubscribers(notification);
+        changeOccurred();
     }
 
     public void translate(Point t) {
@@ -62,6 +65,7 @@ public abstract class Interclass extends DiagramElement {
 
     public void setBoxWidth(int boxWidth) {
         this.boxWidth = boxWidth;
+        changeOccurred();
     }
 
     public int getBoxHeight() {
@@ -70,6 +74,7 @@ public abstract class Interclass extends DiagramElement {
 
     public void setBoxHeight(int boxHeight) {
         this.boxHeight = boxHeight;
+        changeOccurred();
     }
 
     public static int getInitialBoxWidth() {
@@ -79,6 +84,7 @@ public abstract class Interclass extends DiagramElement {
     public static int getInitialBoxHeight() {
         return initialBoxHeight;
     }
+
     public Point[] getConnectionAttachingPoints() {
         int locationX = (int)location.getX();
         int locationY = (int)location.getY();
@@ -145,11 +151,13 @@ public abstract class Interclass extends DiagramElement {
     public void setVisibility(AccessModifiers visibility) {
         this.visibility = visibility;
         notifyAllSubscribers(new Notification(this, NotificationType.SET));
+        changeOccurred();
     }
 
     public void setNonAccessModifiers(NonAccessModifiers nonAccessModifiers) {
         this.nonAccessModifiers = nonAccessModifiers;
         notifyAllSubscribers(new Notification(this, NotificationType.SET));
+        changeOccurred();
     }
 
 }

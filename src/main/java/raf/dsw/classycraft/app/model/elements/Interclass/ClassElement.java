@@ -3,6 +3,7 @@ package raf.dsw.classycraft.app.model.elements.Interclass;
 import raf.dsw.classycraft.app.model.ClassyRepository.Diagram;
 import raf.dsw.classycraft.app.model.ClassyRepository.Notification;
 import raf.dsw.classycraft.app.model.ClassyRepository.NotificationType;
+import raf.dsw.classycraft.app.model.ClassyRepository.Package;
 import raf.dsw.classycraft.app.model.elements.ClassContent.Attribute;
 import raf.dsw.classycraft.app.model.elements.ClassContent.ClassContent;
 import raf.dsw.classycraft.app.model.elements.ClassContent.EnumLiteral;
@@ -42,6 +43,7 @@ public class ClassElement extends Interclass {
         Notification notification =
                 new Notification(null, NotificationType.ADD);
         notifyAllSubscribers(notification);
+        changeOccurred();
     }
 
 
@@ -68,10 +70,6 @@ public class ClassElement extends Interclass {
             }
         }
         return methods;
-    }
-
-    public void setClassContent(List<ClassContent> classContent) {
-        this.classContent = classContent;
     }
 
 }

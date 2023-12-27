@@ -180,9 +180,9 @@ public class InterclassPainter extends ElementPainter {
 
     private Interclass getInterclassElement() { return (Interclass) diagramElement; }
 
-    protected void setBoxWidth(double newBoxWidth) { ((Interclass) diagramElement).setBoxWidth((int)newBoxWidth); }
+    protected void setBoxWidth(double newBoxWidth) { ((Interclass) diagramElement).setBoxWidth((int) newBoxWidth); }
 
-    protected void setBoxHeight(double newBoxWidth) { ((Interclass) diagramElement).setBoxHeight((int)newBoxWidth); }
+    protected void setBoxHeight(double newBoxWidth) { ((Interclass) diagramElement).setBoxHeight((int) newBoxWidth); }
 
     protected  double getBoxWidth() { return ((Interclass) diagramElement).getBoxWidth(); }
 

@@ -13,4 +13,5 @@ public class Generalization extends Connection {
     public Generalization(String name, Diagram parent, Interclass from, Interclass to) {
         super(name, parent, from, to);
     }
+
 }

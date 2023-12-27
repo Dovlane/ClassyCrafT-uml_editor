@@ -3,6 +3,7 @@ package raf.dsw.classycraft.app.model.elements.Interclass;
 import raf.dsw.classycraft.app.model.ClassyRepository.Diagram;
 import raf.dsw.classycraft.app.model.ClassyRepository.Notification;
 import raf.dsw.classycraft.app.model.ClassyRepository.NotificationType;
+import raf.dsw.classycraft.app.model.ClassyRepository.Package;
 import raf.dsw.classycraft.app.model.elements.ClassContent.ClassContent;
 import raf.dsw.classycraft.app.model.elements.ClassContent.EnumLiteral;
 import raf.dsw.classycraft.app.model.elements.ClassContent.Method;
@@ -15,7 +16,7 @@ import java.util.List;
 
 public class InterfaceElement extends Interclass {
 
-    private List<Method> methods;
+    private final List<Method> methods;
 
     public InterfaceElement(String name, Diagram parent, Point point, AccessModifiers visibility, NonAccessModifiers nonAccessModifiers) {
         super(name, parent, point, visibility, nonAccessModifiers);
@@ -36,6 +37,7 @@ public class InterfaceElement extends Interclass {
         Notification notification =
                 new Notification(null, NotificationType.ADD);
         notifyAllSubscribers(notification);
+        changeOccurred();
     }
 
 
@@ -43,10 +45,5 @@ public class InterfaceElement extends Interclass {
     public List<Method> getInterfaceMethods() {
         return methods;
     }
-
-    public void setMethods(List<Method> methods) {
-        this.methods = methods;
-    }
-
 
 }

@@ -1,5 +1,6 @@
 package raf.dsw.classycraft.app.model.compositePattern;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import raf.dsw.classycraft.app.gui.swing.tree.model.ClassyTreeItem;
 import raf.dsw.classycraft.app.gui.swing.view.MainFrame;
 import raf.dsw.classycraft.app.model.ClassyRepository.*;
@@ -18,7 +19,9 @@ import java.util.List;
 public abstract class ClassyNode implements IPublisher {
 
     protected String name;
+    @JsonIgnore
     protected ClassyNode parent;
+    @JsonIgnore
     protected List<IListener> listeners;
 
     public ClassyNode(String name, ClassyNode parent) {
@@ -70,7 +73,7 @@ public abstract class ClassyNode implements IPublisher {
                     new Notification(this, NotificationType.REMOVE);
             parent.notifyAllSubscribers(notification);
             parent.removeAt(this);
-
+            changeOccurred();
         }
     }
 
@@ -127,6 +130,7 @@ public abstract class ClassyNode implements IPublisher {
             Notification notification =
                     new Notification(this, NotificationType.SET);
             parent.notifyAllSubscribers(notification);
+            changeOccurred();
 
             return true;
         }
@@ -150,6 +154,8 @@ public abstract class ClassyNode implements IPublisher {
     public void setParent(ClassyNode parent) {
         this.parent = parent;
     }
+
+    public abstract void changeOccurred();
 
     @Override
     public void addListener(IListener listener) {
