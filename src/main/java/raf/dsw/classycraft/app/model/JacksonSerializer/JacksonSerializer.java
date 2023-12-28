@@ -20,7 +20,12 @@ public class JacksonSerializer implements Serializer {
 
     @Override
     public Project loadProject(File file) {
-        return null;
+        try (FileReader fileReader = new FileReader(file)) {
+            return objectMapper.readValue(fileReader, Project.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
