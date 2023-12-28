@@ -6,6 +6,7 @@ import raf.dsw.classycraft.app.model.elements.DiagramElement;
 import raf.dsw.classycraft.app.model.elements.Interclass.Interclass;
 
 import java.awt.*;
+import java.util.Objects;
 
 public abstract class Connection extends DiagramElement {
 
@@ -94,4 +95,20 @@ public abstract class Connection extends DiagramElement {
         this.to = to;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Connection that = (Connection) o;
+        return Objects.equals(from, that.from) && Objects.equals(to, that.to) && Objects.equals(this.getClass(), that.getClass());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(from, to, currentPointFrom, currentPointTo);
+    }
+
+    public boolean containsInterclass(Interclass interclass) {
+        return getFrom().equals(interclass) || getTo().equals(interclass);
+    }
 }
