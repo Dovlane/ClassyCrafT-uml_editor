@@ -1,4 +1,4 @@
-package dsw.rudok.app.gui.swing.commands;
+package raf.dsw.classycraft.app.model.commandPattern;
 
 public abstract class AbstractCommand {
 

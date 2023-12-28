@@ -21,6 +21,8 @@ public class ActionManager {
     private SaveAction saveAction;
     private OpenAction openAction;
     private AboutUsAction aboutUsAction;
+    private RedoAction redoAction;
+    private UndoAction undoAction;
 
     // DEBUG actions
     private ErrorTestAction errorTestAction;
@@ -42,6 +44,8 @@ public class ActionManager {
         saveAction = new SaveAction();
         openAction = new OpenAction();
         aboutUsAction = new AboutUsAction();
+        redoAction = new RedoAction();
+        undoAction = new UndoAction();
 
         // DEBUG actions
         errorTestAction = new ErrorTestAction();
