@@ -11,8 +11,7 @@ public class Package extends ClassyNodeComposite implements IPublisher {
 
     public Package(String name, ClassyNode parent) {
         super(name, parent);
-        nmbOfCreatedPackages = 0;
-        nmbOfCreatedDiagrams = 0;
+        setAbsolutePath(createAbsolutePath());
     }
 
     @Override

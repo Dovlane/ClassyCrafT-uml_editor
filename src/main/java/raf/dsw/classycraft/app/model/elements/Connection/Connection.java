@@ -1,15 +1,21 @@
 package raf.dsw.classycraft.app.model.elements.Connection;
 
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import lombok.Getter;
+import lombok.Setter;
 import raf.dsw.classycraft.app.model.ClassyRepository.Diagram;
-import raf.dsw.classycraft.app.model.compositePattern.ClassyNode;
 import raf.dsw.classycraft.app.model.elements.DiagramElement;
 import raf.dsw.classycraft.app.model.elements.Interclass.Interclass;
 
 import java.awt.*;
 
+@Getter
+@Setter
 public abstract class Connection extends DiagramElement {
 
+    @JsonIdentityReference
     protected Interclass from;
+    @JsonIdentityReference
     protected Interclass to;
     protected Point currentPointFrom;
     protected Point currentPointTo;
@@ -22,6 +28,7 @@ public abstract class Connection extends DiagramElement {
         super(name, parent);
         this.from = from;
         this.to = to;
+        setAbsolutePath(createAbsolutePath());
     }
 
     public void getBestPairOfStartAndEndPoint() {
@@ -66,32 +73,6 @@ public abstract class Connection extends DiagramElement {
             prefix = "gen";
         return prefix + "-" + from.getName() +
                  "-" + to.getName();
-    }
-
-    public Point getCurrentPointFrom() {
-        return currentPointFrom;
-    }
-
-    public Point getCurrentPointTo() {
-        return currentPointTo;
-    }
-
-
-    // Getters and Setters
-    public Interclass getFrom() {
-        return from;
-    }
-
-    public void setFrom(Interclass from) {
-        this.from = from;
-    }
-
-    public Interclass getTo() {
-        return to;
-    }
-
-    public void setTo(Interclass to) {
-        this.to = to;
     }
 
 }

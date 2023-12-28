@@ -31,6 +31,7 @@ public abstract class Interclass extends DiagramElement {
         this.boxHeight = 100;
         this.location = point;
         this.nonAccessModifiers = nonAccessModifiers;
+        setAbsolutePath(createAbsolutePath());
     }
 
     // Create a Deep Copy Constructor

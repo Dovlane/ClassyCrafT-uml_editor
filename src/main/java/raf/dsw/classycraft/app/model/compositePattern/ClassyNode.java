@@ -1,9 +1,9 @@
 package raf.dsw.classycraft.app.model.compositePattern;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import lombok.Getter;
+import lombok.Setter;
 import raf.dsw.classycraft.app.gui.swing.tree.model.ClassyTreeItem;
 import raf.dsw.classycraft.app.gui.swing.view.MainFrame;
 import raf.dsw.classycraft.app.model.ClassyRepository.*;
@@ -21,7 +21,9 @@ import raf.dsw.classycraft.app.model.observerPattern.IPublisher;
 import java.util.ArrayList;
 import java.util.List;
 
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+@Getter
+@Setter
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
 @JsonSubTypes({
         @JsonSubTypes.Type(value = Project.class, name = "Project"),
         @JsonSubTypes.Type(value = Package.class, name = "Package"),
@@ -36,14 +38,16 @@ import java.util.List;
         @JsonSubTypes.Type(value = Dependency.class, name = "Dependency"),
         @JsonSubTypes.Type(value = Generalization.class, name = "Generalization")
 })
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "absolutePath")
 @JsonDeserialize(using = ClassyNodeDeserializer.class)
 public abstract class ClassyNode implements IPublisher {
 
     protected String name;
-    @JsonIgnore
+    @JsonIdentityReference
     protected ClassyNode parent;
     @JsonIgnore
     protected List<IListener> listeners;
+    protected String absolutePath;
 
     public ClassyNode(String name, ClassyNode parent) {
         this.name = name;
@@ -86,7 +90,6 @@ public abstract class ClassyNode implements IPublisher {
                             MainFrame.getInstance().getClassyTree().getRoot().getTreeItemFromClassyNode(child);
                     MainFrame.getInstance().getClassyTree().removeItem(treeItemDiagramElement);
                 }
-
             }
 
             // Notify about the child removal
@@ -97,15 +100,7 @@ public abstract class ClassyNode implements IPublisher {
         }
     }
 
-    @Override
-    public boolean equals(Object object) {
-        if (object instanceof ClassyNode) {
-            return getAbsolutePath().equals(((ClassyNode) object).getAbsolutePath());
-        }
-        return false;
-    }
-
-    public String getAbsolutePath() {
+    public String createAbsolutePath() {
 
         // Recursive base case
         if (getParent() == null) {
@@ -125,10 +120,6 @@ public abstract class ClassyNode implements IPublisher {
         }
 
         return getParent().getAbsolutePath() + "/" + suffix + getName();
-    }
-
-    public String getName() {
-        return name;
     }
 
     public boolean setName(String name) {
@@ -167,16 +158,20 @@ public abstract class ClassyNode implements IPublisher {
         return false;
     }
 
-    public ClassyNode getParent() {
-        return parent;
+    @Override
+    public boolean equals(Object object) {
+        if (object instanceof ClassyNode) {
+            return getAbsolutePath().equals(((ClassyNode) object).getAbsolutePath());
+        }
+        return false;
     }
 
-    public void setParent(ClassyNode parent) {
-        this.parent = parent;
-    }
 
+    // Save Action
     public abstract void changeOccurred();
 
+
+    // IPublisher
     @Override
     public void addListener(IListener listener) {
         if (!listeners.contains(listener))

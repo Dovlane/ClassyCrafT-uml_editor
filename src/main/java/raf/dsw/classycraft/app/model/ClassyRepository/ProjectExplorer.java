@@ -10,7 +10,7 @@ public class ProjectExplorer extends ClassyNodeComposite implements IPublisher {
 
     public ProjectExplorer(String name) {
         super(name, null);
-        nmbOfCreatedProjects = 0;
+        setAbsolutePath(createAbsolutePath());
     }
 
     @Override

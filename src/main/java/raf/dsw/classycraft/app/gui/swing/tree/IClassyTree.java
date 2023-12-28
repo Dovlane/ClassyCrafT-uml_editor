@@ -23,6 +23,8 @@ public interface IClassyTree {
 
     boolean renameItem(ClassyTreeItem item, String newName);
 
+    ClassyNode getNodeFromAbsolutePath(String absolutePath);
+
     ClassyTreeItem getSelectedNode();
 
 }

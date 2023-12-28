@@ -1,5 +1,7 @@
 package raf.dsw.classycraft.app.gui.swing.tree;
 
+import lombok.Getter;
+import lombok.Setter;
 import raf.dsw.classycraft.app.gui.swing.tree.model.ClassyTreeItem;
 import raf.dsw.classycraft.app.gui.swing.tree.view.ClassyTreeView;
 import raf.dsw.classycraft.app.gui.swing.view.MainFrame;
@@ -15,6 +17,8 @@ import javax.swing.tree.TreePath;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+@Getter
+@Setter
 public class ClassyTree implements IClassyTree {
 
     private ClassyTreeItem root;
@@ -181,16 +185,21 @@ public class ClassyTree implements IClassyTree {
     }
 
     @Override
+    public ClassyNode getNodeFromAbsolutePath(String absolutePath) {
+        ClassyNodeComposite tmp = (ClassyNodeComposite) root.getClassyNode();
+        String[] parts = absolutePath.split("/");
+        for (String part: parts) {
+            tmp = (ClassyNodeComposite) tmp.getChildByName(part);
+            if (tmp == null) {
+                return null;
+            }
+        }
+        return tmp;
+    }
+
+    @Override
     public ClassyTreeItem getSelectedNode() {
         return (ClassyTreeItem) treeView.getLastSelectedPathComponent();
-    }
-
-    public ClassyTreeItem getRoot() {
-        return root;
-    }
-
-    public ClassyTreeView getTreeView() {
-        return treeView;
     }
 
 }
