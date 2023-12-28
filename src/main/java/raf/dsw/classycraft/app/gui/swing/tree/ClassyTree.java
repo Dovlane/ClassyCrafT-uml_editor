@@ -30,6 +30,18 @@ public class ClassyTree implements IClassyTree {
     }
 
     @Override
+    public void loadProject(Project node) {
+        ClassyTreeItem loadedProject = new ClassyTreeItem(node);
+        root.add(loadedProject);
+
+        ClassyNodeComposite classyNode = (ClassyNodeComposite) root.getClassyNode();
+        classyNode.addChild(node);
+
+        treeView.expandPath(treeView.getSelectionPath());
+        SwingUtilities.updateComponentTreeUI(treeView);
+    }
+
+    @Override
     public boolean addChild(InfoForCreatingClassyNode infoForCreatingClassyNode) {
         ClassyTreeItem parent = infoForCreatingClassyNode.getParent();
 

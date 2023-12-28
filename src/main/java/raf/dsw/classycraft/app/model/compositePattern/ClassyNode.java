@@ -1,9 +1,11 @@
 package raf.dsw.classycraft.app.model.compositePattern;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import raf.dsw.classycraft.app.gui.swing.tree.model.ClassyTreeItem;
 import raf.dsw.classycraft.app.gui.swing.view.MainFrame;
 import raf.dsw.classycraft.app.model.ClassyRepository.*;
+import raf.dsw.classycraft.app.model.JacksonSerializer.ClassyNodeDeserializer;
 import raf.dsw.classycraft.app.model.MessageGenerator.MessageType;
 import raf.dsw.classycraft.app.model.elements.Connection.Connection;
 import raf.dsw.classycraft.app.model.elements.Interclass.ClassElement;
@@ -16,6 +18,7 @@ import raf.dsw.classycraft.app.model.observerPattern.IPublisher;
 import java.util.ArrayList;
 import java.util.List;
 
+@JsonDeserialize(using = ClassyNodeDeserializer.class)
 public abstract class ClassyNode implements IPublisher {
 
     protected String name;
