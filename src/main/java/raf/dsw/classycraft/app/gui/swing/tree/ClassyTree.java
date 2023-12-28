@@ -83,6 +83,7 @@ public class ClassyTree implements IClassyTree {
             return;
         }
 
+        node.changeOccurred();
         node.removeSubtree();
         item.removeFromParent();
 
