@@ -73,7 +73,6 @@ public abstract class ClassyNode implements IPublisher {
                     new Notification(this, NotificationType.REMOVE);
             parent.notifyAllSubscribers(notification);
             parent.removeAt(this);
-            changeOccurred();
         }
     }
 
