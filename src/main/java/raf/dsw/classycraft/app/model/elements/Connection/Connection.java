@@ -68,7 +68,6 @@ public abstract class Connection extends DiagramElement {
                  "-" + to.getName();
     }
 
-
     public Point getCurrentPointFrom() {
         return currentPointFrom;
     }
@@ -76,6 +75,7 @@ public abstract class Connection extends DiagramElement {
     public Point getCurrentPointTo() {
         return currentPointTo;
     }
+
 
     // Getters and Setters
     public Interclass getFrom() {

@@ -19,6 +19,7 @@ public class Diagram extends ClassyNodeComposite {
                 Notification notification =
                         new Notification(child, NotificationType.ADD);
                 notifyAllSubscribers(notification);
+                changeOccurred();
                 return true;
             }
         }
@@ -30,4 +31,10 @@ public class Diagram extends ClassyNodeComposite {
         for (IListener listener: listeners)
             listener.update(notification);
     }
+
+    @Override
+    public void changeOccurred() {
+        getParent().changeOccurred();
+    }
+
 }

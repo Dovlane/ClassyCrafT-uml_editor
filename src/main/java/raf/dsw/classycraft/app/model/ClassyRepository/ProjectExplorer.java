@@ -27,6 +27,11 @@ public class ProjectExplorer extends ClassyNodeComposite implements IPublisher {
         return false;
     }
 
+    @Override
+    public void changeOccurred() {
+
+    }
+
     public void increaseCounter() {
         nmbOfCreatedProjects += 1;
     }
