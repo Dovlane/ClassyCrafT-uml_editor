@@ -8,6 +8,7 @@ import raf.dsw.classycraft.app.model.ClassyRepository.Diagram;
 import raf.dsw.classycraft.app.model.ClassyRepository.Notification;
 import raf.dsw.classycraft.app.model.ClassyRepository.NotificationType;
 import raf.dsw.classycraft.app.model.MessageGenerator.MessageType;
+import raf.dsw.classycraft.app.model.commandPattern.CommandManager;
 import raf.dsw.classycraft.app.model.elements.Connection.*;
 import raf.dsw.classycraft.app.model.elements.DiagramElement;
 import raf.dsw.classycraft.app.model.elements.Interclass.Interclass;
@@ -29,11 +30,13 @@ public class DiagramView extends JPanel implements IListener {
     private double zoomFactor = 1.0;
     private AffineTransform transform = new AffineTransform();
     private FactoryForPainters factoryForPainters = new FactoryForPainters();
+    private CommandManager commandManager;
 
     public DiagramView(Diagram diagram){
         this.diagram = diagram;
         painters = new ArrayList<>();
         selectionModel = new ArrayList<>();
+        commandManager = new CommandManager();
         diagram.addListener(this);
     }
 
@@ -222,4 +225,7 @@ public class DiagramView extends JPanel implements IListener {
         return false;
     }
 
+    public CommandManager getCommandManager() {
+        return commandManager;
+    }
 }

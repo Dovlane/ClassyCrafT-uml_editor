@@ -23,6 +23,8 @@ public class Diagram extends ClassyNodeComposite {
                 return true;
             }
         }
+
+
         return false;
     }
 

@@ -1,14 +1,20 @@
 package raf.dsw.classycraft.app.model.StatePattern.concrete;
 
 import raf.dsw.classycraft.app.core.ApplicationFramework;
+import raf.dsw.classycraft.app.gui.swing.tree.IClassyTree;
 import raf.dsw.classycraft.app.gui.swing.tree.model.ClassyTreeItem;
 import raf.dsw.classycraft.app.gui.swing.view.DiagramView;
-import raf.dsw.classycraft.app.gui.swing.view.MainFrame;
 import raf.dsw.classycraft.app.gui.swing.view.painters.ElementPainter;
+import raf.dsw.classycraft.app.model.ClassyRepository.Diagram;
 import raf.dsw.classycraft.app.model.StatePattern.State;
+import raf.dsw.classycraft.app.model.commandPattern.AbstractCommand;
+import raf.dsw.classycraft.app.model.commandPattern.concreteCommand.RemoveDiagramElementCommand;
 import raf.dsw.classycraft.app.model.elements.DiagramElement;
+import raf.dsw.classycraft.app.gui.swing.view.MainFrame;
+import java.util.List;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 public class RemoveElementState implements State {
 
@@ -18,32 +24,29 @@ public class RemoveElementState implements State {
 
         // Find the DiagramElement which was clicked
         boolean inSelectionModel = false;
-        DiagramElement diagramElement = null;
+        List<DiagramElement> diagramElementListToDelete = new ArrayList<>();
         for (ElementPainter elementPainter: diagramView.getPainters()) {
             if (elementPainter.elementAt(location)) {
-                diagramElement = elementPainter.getDiagramElement();
+                DiagramElement diagramElement = elementPainter.getDiagramElement();
                 inSelectionModel = diagramView.getSelectionModel().contains(elementPainter);
+                if (!inSelectionModel)
+                    diagramElementListToDelete.add(diagramElement);
             }
         }
 
-        // Remove it and potentially other DiagramElements if they are all selected together
-        if (diagramElement != null) {
-
-            // Remove the clicked one from painters
-            ClassyTreeItem treeItemDiagramElement =
-                    MainFrame.getInstance().getClassyTree().getRoot().getTreeItemFromClassyNode(diagramElement);
-            MainFrame.getInstance().getClassyTree().removeItem(treeItemDiagramElement);
-
-            // Remove all painters from SelectionModel if necessary
-            while (inSelectionModel && diagramView.getSelectionModel().size() > 0) {
-                diagramElement = diagramView.getSelectionModel().get(0).getDiagramElement();
-                treeItemDiagramElement =
-                        MainFrame.getInstance().getClassyTree().getRoot().getTreeItemFromClassyNode(diagramElement);
-                MainFrame.getInstance().getClassyTree().removeItem(treeItemDiagramElement);
+        if (inSelectionModel) {
+            for (ElementPainter selectedElementPainter : diagramView.getSelectionModel()) {
+                DiagramElement diagramElement = selectedElementPainter.getDiagramElement();
+                diagramElementListToDelete.add(diagramElement);
             }
+        }
 
-            // Debug
-            ApplicationFramework.getInstance().getClassyRepository().printTree();
+        if (diagramElementListToDelete.size() > 0) {
+            IClassyTree iClassyTree =  MainFrame.getInstance().getClassyTree();
+            Diagram diagram = diagramView.getDiagram();
+            ClassyTreeItem diagramTreeItem = MainFrame.getInstance().getClassyTree().getRoot().getTreeItemFromClassyNode(diagram);
+            AbstractCommand removeDiagramElementCommand = new RemoveDiagramElementCommand(iClassyTree, diagramTreeItem, diagramElementListToDelete);
+            diagramView.getCommandManager().addCommand(removeDiagramElementCommand);
         }
     }
 

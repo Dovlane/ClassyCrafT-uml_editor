@@ -13,7 +13,7 @@ public interface IClassyTree {
 
     void loadProject(Project node);
 
-    boolean addChild(InfoForCreatingClassyNode infoForCreatingClassyNode);
+    ClassyNode addChild(InfoForCreatingClassyNode infoForCreatingClassyNode);
 
     boolean attachChild(ClassyTreeItem parent, ClassyNode child);
 
@@ -22,6 +22,8 @@ public interface IClassyTree {
     void renameItem(ClassyTreeItem item);
 
     boolean renameItem(ClassyTreeItem item, String newName);
+
+    ClassyTreeItem getRoot();
 
     ClassyTreeItem getSelectedNode();
 

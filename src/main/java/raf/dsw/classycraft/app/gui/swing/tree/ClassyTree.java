@@ -1,13 +1,17 @@
 package raf.dsw.classycraft.app.gui.swing.tree;
 
+import raf.dsw.classycraft.app.core.ApplicationFramework;
 import raf.dsw.classycraft.app.gui.swing.tree.model.ClassyTreeItem;
 import raf.dsw.classycraft.app.gui.swing.tree.view.ClassyTreeView;
 import raf.dsw.classycraft.app.gui.swing.view.MainFrame;
 import raf.dsw.classycraft.app.model.MessageGenerator.MessageType;
 import raf.dsw.classycraft.app.model.ClassyRepository.*;
+import raf.dsw.classycraft.app.model.commandPattern.concreteCommand.AddInterclassCommand;
 import raf.dsw.classycraft.app.model.compositePattern.ClassyNode;
 import raf.dsw.classycraft.app.model.compositePattern.ClassyNodeComposite;
 import raf.dsw.classycraft.app.model.abstractFactoryForClassyNodes.*;
+import raf.dsw.classycraft.app.model.elements.DiagramElement;
+import raf.dsw.classycraft.app.model.elements.Interclass.Interclass;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultTreeModel;
@@ -42,19 +46,23 @@ public class ClassyTree implements IClassyTree {
     }
 
     @Override
-    public boolean addChild(InfoForCreatingClassyNode infoForCreatingClassyNode) {
+    public ClassyNode addChild(InfoForCreatingClassyNode infoForCreatingClassyNode) {
         ClassyTreeItem parent = infoForCreatingClassyNode.getParent();
 
         ClassyNode child;
 
         if (infoForCreatingClassyNode instanceof InfoForCreatingClassyNodeComposite)
             child = abstractClassyCraftManufacturer.createClassyNodeComposite((InfoForCreatingClassyNodeComposite) infoForCreatingClassyNode);
-        else if (infoForCreatingClassyNode instanceof InfoForCreatingInterclass)
+        else if (infoForCreatingClassyNode instanceof InfoForCreatingInterclass) {
             child = abstractClassyCraftManufacturer.createInterclass((InfoForCreatingInterclass) infoForCreatingClassyNode);
+        }
         else
             child = abstractClassyCraftManufacturer.createConnection((InfoForCreatingConnection) infoForCreatingClassyNode);
 
-        return attachChild(parent, child);
+        if (attachChild(parent, child))
+            return child;
+        else
+            return null;
     }
 
     @Override
@@ -185,6 +193,7 @@ public class ClassyTree implements IClassyTree {
         return (ClassyTreeItem) treeView.getLastSelectedPathComponent();
     }
 
+    @Override
     public ClassyTreeItem getRoot() {
         return root;
     }
@@ -192,5 +201,4 @@ public class ClassyTree implements IClassyTree {
     public ClassyTreeView getTreeView() {
         return treeView;
     }
-
 }

@@ -13,7 +13,7 @@ public class ClassyTreeItem extends DefaultMutableTreeNode {
     }
 
     public ClassyTreeItem getTreeItemFromClassyNode(ClassyNode node) {
-        if (classyNode == node) {
+        if (classyNode.equals(node)) {
             return this;
         }
         ClassyTreeItem returnTreeItem = null;

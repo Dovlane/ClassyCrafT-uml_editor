@@ -27,7 +27,6 @@ public class PackageView extends JSplitPane implements IListener {
     private final Label labelAuthorName;
     private final JTabbedPane tabbedPane;
     private static JToggleButton selectedButton;
-
     public PackageView(ProjectExplorer projectExplorer) {
         super(JSplitPane.VERTICAL_SPLIT);
 
@@ -379,5 +378,4 @@ public class PackageView extends JSplitPane implements IListener {
             }
         }
     }
-
 }

@@ -69,8 +69,6 @@ public class AddConnectionState implements State {
             }
             linePainter = null;
             diagramView.updateLinePainter(null);
-
-
         }
     }
 
@@ -90,5 +88,4 @@ public class AddConnectionState implements State {
         System.out.println("mouseWheelMoved inside of AddConnectionState");
 
     }
-
 }
