@@ -1,11 +1,16 @@
 package raf.dsw.classycraft.app.model.compositePattern;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import raf.dsw.classycraft.app.gui.swing.tree.model.ClassyTreeItem;
 import raf.dsw.classycraft.app.gui.swing.view.MainFrame;
 import raf.dsw.classycraft.app.model.ClassyRepository.*;
+import raf.dsw.classycraft.app.model.ClassyRepository.Package;
+import raf.dsw.classycraft.app.model.JacksonSerializer.ClassyNodeDeserializer;
 import raf.dsw.classycraft.app.model.MessageGenerator.MessageType;
-import raf.dsw.classycraft.app.model.elements.Connection.Connection;
+import raf.dsw.classycraft.app.model.elements.Connection.*;
 import raf.dsw.classycraft.app.model.elements.Interclass.ClassElement;
 import raf.dsw.classycraft.app.model.elements.Interclass.EnumElement;
 import raf.dsw.classycraft.app.model.elements.Interclass.Interclass;
@@ -16,6 +21,22 @@ import raf.dsw.classycraft.app.model.observerPattern.IPublisher;
 import java.util.ArrayList;
 import java.util.List;
 
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = Project.class, name = "Project"),
+        @JsonSubTypes.Type(value = Package.class, name = "Package"),
+        @JsonSubTypes.Type(value = Diagram.class, name = "Diagram"),
+
+        @JsonSubTypes.Type(value = ClassElement.class, name = "ClassElement"),
+        @JsonSubTypes.Type(value = InterfaceElement.class, name = "InterfaceElement"),
+        @JsonSubTypes.Type(value = EnumElement.class, name = "EnumElement"),
+
+        @JsonSubTypes.Type(value = Aggregation.class, name = "Aggregation"),
+        @JsonSubTypes.Type(value = Composition.class, name = "Composition"),
+        @JsonSubTypes.Type(value = Dependency.class, name = "Dependency"),
+        @JsonSubTypes.Type(value = Generalization.class, name = "Generalization")
+})
+@JsonDeserialize(using = ClassyNodeDeserializer.class)
 public abstract class ClassyNode implements IPublisher {
 
     protected String name;
@@ -73,7 +94,6 @@ public abstract class ClassyNode implements IPublisher {
                     new Notification(this, NotificationType.REMOVE);
             parent.notifyAllSubscribers(notification);
             parent.removeAt(this);
-            changeOccurred();
         }
     }
 
