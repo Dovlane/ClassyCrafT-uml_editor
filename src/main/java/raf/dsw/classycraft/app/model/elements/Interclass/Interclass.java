@@ -16,6 +16,7 @@ public abstract class Interclass extends DiagramElement {
     private static int initialBoxHeight = 100;
     protected AccessModifiers visibility;
     protected NonAccessModifiers nonAccessModifiers;
+
     protected Point location;
     protected int boxWidth;
     protected int boxHeight;
@@ -79,6 +80,7 @@ public abstract class Interclass extends DiagramElement {
     public static int getInitialBoxHeight() {
         return initialBoxHeight;
     }
+
     public Point[] getConnectionAttachingPoints() {
         int locationX = (int)location.getX();
         int locationY = (int)location.getY();
