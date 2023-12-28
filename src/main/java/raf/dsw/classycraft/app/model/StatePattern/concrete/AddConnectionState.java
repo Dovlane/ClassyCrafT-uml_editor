@@ -1,5 +1,6 @@
 package raf.dsw.classycraft.app.model.StatePattern.concrete;
 
+import raf.dsw.classycraft.app.gui.swing.tree.IClassyTree;
 import raf.dsw.classycraft.app.gui.swing.tree.model.ClassyTreeItem;
 import raf.dsw.classycraft.app.gui.swing.view.DiagramView;
 import raf.dsw.classycraft.app.gui.swing.view.MainFrame;
@@ -8,6 +9,8 @@ import raf.dsw.classycraft.app.gui.swing.view.painters.LinePainter;
 import raf.dsw.classycraft.app.model.ClassyRepository.Diagram;
 import raf.dsw.classycraft.app.model.MessageGenerator.MessageType;
 import raf.dsw.classycraft.app.model.StatePattern.State;
+import raf.dsw.classycraft.app.model.commandPattern.AbstractCommand;
+import raf.dsw.classycraft.app.model.commandPattern.concreteCommand.AddConnectionCommand;
 import raf.dsw.classycraft.app.model.elements.DiagramElement;
 import raf.dsw.classycraft.app.model.elements.Interclass.Interclass;
 import raf.dsw.classycraft.app.model.abstractFactoryForClassyNodes.ElementConnectionType;
@@ -63,7 +66,9 @@ public class AddConnectionState implements State {
                         return;
                     }
                     InfoForCreatingConnection infoForCreatingConnection = new InfoForCreatingConnection("aggrg", classyTreeDiagram, (Interclass) selectedDiagramElementFrom, (Interclass) selectedDiagramElementTo, elementConnectionType);
-                    MainFrame.getInstance().getClassyTree().addChild(infoForCreatingConnection);
+                    IClassyTree iClassyTree = MainFrame.getInstance().getClassyTree();
+                    AbstractCommand addConnectionCommand = new AddConnectionCommand(iClassyTree, infoForCreatingConnection, currentDiagram);
+                    diagramView.getCommandManager().addCommand(addConnectionCommand);
                     connectionStateDialog.dispose();
                 });
             }

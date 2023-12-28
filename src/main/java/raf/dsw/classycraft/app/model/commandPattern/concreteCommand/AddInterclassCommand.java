@@ -34,7 +34,6 @@ public class AddInterclassCommand extends AbstractCommand {
 
     @Override
     public void doCommand() {
-        System.out.println("mousePressed inside of AddInterclassState");
         interclass = (Interclass) iClassyTree.addChild(infoForCreatingInterclass);
 
         System.out.println("AddInterclass - doCommand");
@@ -43,12 +42,12 @@ public class AddInterclassCommand extends AbstractCommand {
 
     @Override
     public void undoCommand() {
-        interclass.setParent(diagram);
+        interclass.setParent(diagram); // this enables comparing two classyNodes with absolutePath
         ClassyTreeItem treeItemInterclass =
                 MainFrame.getInstance().getClassyTree().getRoot().getTreeItemFromClassyNode(interclass);
-        MainFrame.getInstance().getClassyTree().removeItem(treeItemInterclass);
+        iClassyTree.removeItem(treeItemInterclass);
 
-        System.out.println("AddInterclass - undo command");
+        System.out.println("AddInterclass - undoCommand");
         ApplicationFramework.getInstance().getClassyRepository().printTree();
     }
 }
