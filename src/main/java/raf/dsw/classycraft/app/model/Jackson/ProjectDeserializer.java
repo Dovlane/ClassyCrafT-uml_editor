@@ -1,4 +1,4 @@
-package raf.dsw.classycraft.app.model.JacksonSerializer;
+package raf.dsw.classycraft.app.model.Jackson;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.ObjectCodec;
@@ -12,7 +12,6 @@ import raf.dsw.classycraft.app.gui.swing.view.MainFrame;
 import raf.dsw.classycraft.app.model.ClassyRepository.Package;
 import raf.dsw.classycraft.app.model.ClassyRepository.Project;
 import raf.dsw.classycraft.app.model.ClassyRepository.ProjectExplorer;
-import raf.dsw.classycraft.app.model.compositePattern.ClassyNode;
 
 import java.io.IOException;
 

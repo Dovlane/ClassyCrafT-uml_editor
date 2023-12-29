@@ -1,4 +1,4 @@
-package raf.dsw.classycraft.app.model.JacksonSerializer;
+package raf.dsw.classycraft.app.model.Jackson;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.ObjectCodec;
@@ -15,7 +15,7 @@ import raf.dsw.classycraft.app.model.compositePattern.ClassyNode;
 
 import java.io.IOException;
 
-public class PackageDeserializer extends StdDeserializer<Package> {
+public final class PackageDeserializer extends StdDeserializer<Package> {
 
     public PackageDeserializer() {
         this(null);
@@ -75,11 +75,9 @@ public class PackageDeserializer extends StdDeserializer<Package> {
         JsonNode children = node.path("children");
         if (children.isArray()) {
             for (JsonNode child: children) {
-                if (child.path("type").asText().equals("Package")) {
-                    objectMapper.treeToValue(child, Package.class);
-                }
-                else {
-                    objectMapper.treeToValue(child, Diagram.class);
+                switch (child.path("type").asText()) {
+                    case "Package" -> objectMapper.treeToValue(child, Package.class);
+                    case "Diagram" -> objectMapper.treeToValue(child, Diagram.class);
                 }
             }
         }

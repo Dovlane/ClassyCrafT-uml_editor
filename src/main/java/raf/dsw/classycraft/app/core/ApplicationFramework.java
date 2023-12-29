@@ -2,8 +2,8 @@ package raf.dsw.classycraft.app.core;
 
 import raf.dsw.classycraft.app.gui.swing.view.MainFrame;
 import raf.dsw.classycraft.app.model.ClassyRepository.ClassyRepository;
-import raf.dsw.classycraft.app.model.JacksonSerializer.Jackson;
-import raf.dsw.classycraft.app.model.JacksonSerializer.IJackson;
+import raf.dsw.classycraft.app.model.Jackson.Jackson;
+import raf.dsw.classycraft.app.model.Jackson.IJackson;
 
 import lombok.Getter;
 import lombok.Setter;

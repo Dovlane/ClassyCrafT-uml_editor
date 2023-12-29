@@ -2,7 +2,7 @@ package raf.dsw.classycraft.app.model.ClassyRepository;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import raf.dsw.classycraft.app.gui.swing.view.MainFrame;
-import raf.dsw.classycraft.app.model.JacksonSerializer.ProjectDeserializer;
+import raf.dsw.classycraft.app.model.Jackson.ProjectDeserializer;
 import raf.dsw.classycraft.app.model.MessageGenerator.MessageType;
 import raf.dsw.classycraft.app.model.compositePattern.ClassyNode;
 import raf.dsw.classycraft.app.model.compositePattern.ClassyNodeComposite;

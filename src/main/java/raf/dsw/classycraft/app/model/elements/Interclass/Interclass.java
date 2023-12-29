@@ -21,8 +21,6 @@ public abstract class Interclass extends DiagramElement {
     protected int boxWidth;
     protected int boxHeight;
     private int numberOfCopies;
-    @JsonIgnore
-    protected Point[] connectionAttachingPoints;
 
     public Interclass(String name, Diagram parent, Point point, AccessModifiers visibility, NonAccessModifiers nonAccessModifiers) {
         super(name, parent);
@@ -60,6 +58,7 @@ public abstract class Interclass extends DiagramElement {
         return location;
     }
 
+    @JsonIgnore
     public int getBoxWidth() {
         return boxWidth;
     }
@@ -73,6 +72,7 @@ public abstract class Interclass extends DiagramElement {
         return boxHeight;
     }
 
+    @JsonIgnore
     public void setBoxHeight(int boxHeight) {
         this.boxHeight = boxHeight;
         changeOccurred();
@@ -86,6 +86,7 @@ public abstract class Interclass extends DiagramElement {
         return initialBoxHeight;
     }
 
+    @JsonIgnore
     public Point[] getConnectionAttachingPoints() {
         int locationX = (int)location.getX();
         int locationY = (int)location.getY();

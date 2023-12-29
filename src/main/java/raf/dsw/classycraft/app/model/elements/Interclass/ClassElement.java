@@ -1,12 +1,15 @@
 package raf.dsw.classycraft.app.model.elements.Interclass;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import lombok.Getter;
+import lombok.Setter;
 import raf.dsw.classycraft.app.model.ClassyRepository.Diagram;
 import raf.dsw.classycraft.app.model.ClassyRepository.Notification;
 import raf.dsw.classycraft.app.model.ClassyRepository.NotificationType;
-import raf.dsw.classycraft.app.model.ClassyRepository.Package;
+import raf.dsw.classycraft.app.model.Jackson.ClassElementDeserializer;
 import raf.dsw.classycraft.app.model.elements.ClassContent.Attribute;
 import raf.dsw.classycraft.app.model.elements.ClassContent.ClassContent;
-import raf.dsw.classycraft.app.model.elements.ClassContent.EnumLiteral;
 import raf.dsw.classycraft.app.model.elements.ClassContent.Method;
 import raf.dsw.classycraft.app.model.elements.Modifiers.AccessModifiers;
 import raf.dsw.classycraft.app.model.elements.Modifiers.NonAccessModifiers;
@@ -15,6 +18,9 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
+@Setter
+@JsonDeserialize(using = ClassElementDeserializer.class)
 public class ClassElement extends Interclass {
 
     private List<ClassContent> classContent;
@@ -46,12 +52,7 @@ public class ClassElement extends Interclass {
         changeOccurred();
     }
 
-
-    // Getters and Setters
-    public List<ClassContent> getClassContent() {
-        return classContent;
-    }
-
+    @JsonIgnore
     public List<Attribute> getClassAttributes() {
         ArrayList<Attribute> attributes = new ArrayList<>();
         for (ClassContent classContent : getClassContent()) {
@@ -62,6 +63,7 @@ public class ClassElement extends Interclass {
         return attributes;
     }
 
+    @JsonIgnore
     public List<Method> getClassMethods() {
         ArrayList<Method> methods = new ArrayList<>();
         for (ClassContent classContent : getClassContent()) {

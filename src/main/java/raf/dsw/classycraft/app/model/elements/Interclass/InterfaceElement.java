@@ -1,11 +1,12 @@
 package raf.dsw.classycraft.app.model.elements.Interclass;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import lombok.Getter;
+import lombok.Setter;
 import raf.dsw.classycraft.app.model.ClassyRepository.Diagram;
 import raf.dsw.classycraft.app.model.ClassyRepository.Notification;
 import raf.dsw.classycraft.app.model.ClassyRepository.NotificationType;
-import raf.dsw.classycraft.app.model.ClassyRepository.Package;
-import raf.dsw.classycraft.app.model.elements.ClassContent.ClassContent;
-import raf.dsw.classycraft.app.model.elements.ClassContent.EnumLiteral;
+import raf.dsw.classycraft.app.model.Jackson.InterfaceElementDeserializer;
 import raf.dsw.classycraft.app.model.elements.ClassContent.Method;
 import raf.dsw.classycraft.app.model.elements.Modifiers.AccessModifiers;
 import raf.dsw.classycraft.app.model.elements.Modifiers.NonAccessModifiers;
@@ -14,6 +15,9 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
+@Setter
+@JsonDeserialize(using = InterfaceElementDeserializer.class)
 public class InterfaceElement extends Interclass {
 
     private final List<Method> methods;
@@ -40,8 +44,7 @@ public class InterfaceElement extends Interclass {
         changeOccurred();
     }
 
-
-    // Getters and Setters
+    // Special InterfaceElement getter
     public List<Method> getInterfaceMethods() {
         return methods;
     }

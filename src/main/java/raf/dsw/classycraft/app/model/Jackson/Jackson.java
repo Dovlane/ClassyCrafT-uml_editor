@@ -1,4 +1,4 @@
-package raf.dsw.classycraft.app.model.JacksonSerializer;
+package raf.dsw.classycraft.app.model.Jackson;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;

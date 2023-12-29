@@ -3,7 +3,7 @@ package raf.dsw.classycraft.app.model.ClassyRepository;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Getter;
 import lombok.Setter;
-import raf.dsw.classycraft.app.model.JacksonSerializer.DiagramDeserializer;
+import raf.dsw.classycraft.app.model.Jackson.DiagramDeserializer;
 import raf.dsw.classycraft.app.model.compositePattern.ClassyNode;
 import raf.dsw.classycraft.app.model.compositePattern.ClassyNodeComposite;
 import raf.dsw.classycraft.app.model.elements.DiagramElement;

@@ -1,9 +1,12 @@
 package raf.dsw.classycraft.app.model.elements.Interclass;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import lombok.Getter;
+import lombok.Setter;
 import raf.dsw.classycraft.app.model.ClassyRepository.Diagram;
 import raf.dsw.classycraft.app.model.ClassyRepository.Notification;
 import raf.dsw.classycraft.app.model.ClassyRepository.NotificationType;
-import raf.dsw.classycraft.app.model.ClassyRepository.Package;
+import raf.dsw.classycraft.app.model.Jackson.EnumElementDeserializer;
 import raf.dsw.classycraft.app.model.elements.ClassContent.EnumLiteral;
 import raf.dsw.classycraft.app.model.elements.Modifiers.AccessModifiers;
 import raf.dsw.classycraft.app.model.elements.Modifiers.NonAccessModifiers;
@@ -12,6 +15,9 @@ import java.awt.*;
 import java.util.List;
 import java.util.ArrayList;
 
+@Getter
+@Setter
+@JsonDeserialize(using = EnumElementDeserializer.class)
 public class EnumElement extends Interclass {
 
     private List<EnumLiteral> enumLiterals;
@@ -36,12 +42,6 @@ public class EnumElement extends Interclass {
                 new Notification(null, NotificationType.ADD);
         notifyAllSubscribers(notification);
         changeOccurred();
-    }
-
-
-    // Getters and Setters
-    public List<EnumLiteral> getEnumLiterals() {
-        return enumLiterals;
     }
 
     @Override

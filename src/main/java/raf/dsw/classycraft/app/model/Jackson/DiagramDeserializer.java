@@ -1,4 +1,4 @@
-package raf.dsw.classycraft.app.model.JacksonSerializer;
+package raf.dsw.classycraft.app.model.Jackson;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.ObjectCodec;
@@ -14,7 +14,6 @@ import raf.dsw.classycraft.app.model.elements.Connection.Aggregation;
 import raf.dsw.classycraft.app.model.elements.Connection.Composition;
 import raf.dsw.classycraft.app.model.elements.Connection.Dependency;
 import raf.dsw.classycraft.app.model.elements.Connection.Generalization;
-import raf.dsw.classycraft.app.model.elements.DiagramElement;
 import raf.dsw.classycraft.app.model.elements.Interclass.ClassElement;
 import raf.dsw.classycraft.app.model.elements.Interclass.EnumElement;
 import raf.dsw.classycraft.app.model.elements.Interclass.InterfaceElement;
