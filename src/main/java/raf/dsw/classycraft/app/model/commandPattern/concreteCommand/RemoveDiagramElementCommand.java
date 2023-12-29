@@ -49,8 +49,8 @@ public class RemoveDiagramElementCommand extends AbstractCommand {
         // removing Interclass, and we now need to remove them directly
         for (ClassyTreeItem connectionTreeItem : connectionTreeItemsToDelete) {
             iClassyTree.removeItem(connectionTreeItem);
-
         }
+
         System.out.println("Remove - doCommand");
         ApplicationFramework.getInstance().getClassyRepository().printTree();
 

@@ -121,7 +121,7 @@ public class ConnectionContentStateDialog extends JFrame {
     }
 
     public void insertData() {
-        if (selectedConnection instanceof Aggregation || selectedConnection instanceof Composition) {
+        if (selectedConnection instanceof IAggregationAndComposition) {
             IAggregationAndComposition iAggregationAndComposition = null;
             if (selectedConnection instanceof Aggregation)
                 iAggregationAndComposition = (IAggregationAndComposition) (Aggregation) selectedConnection;

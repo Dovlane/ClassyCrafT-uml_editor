@@ -7,6 +7,10 @@ import raf.dsw.classycraft.app.gui.swing.view.dialogs.ConnectionContentStateDial
 import raf.dsw.classycraft.app.gui.swing.view.painters.connectionPainters.ConnectionPainter;
 import raf.dsw.classycraft.app.model.MessageGenerator.MessageType;
 import raf.dsw.classycraft.app.model.StatePattern.State;
+import raf.dsw.classycraft.app.model.commandPattern.AbstractCommand;
+import raf.dsw.classycraft.app.model.commandPattern.concreteCommand.AddDiagramElementContentCommand;
+import raf.dsw.classycraft.app.model.commandPattern.concreteCommand.diagramElementContent.DiagramElementContent;
+import raf.dsw.classycraft.app.model.commandPattern.concreteCommand.diagramElementContent.DiagramElementContentFactory;
 import raf.dsw.classycraft.app.model.elements.Connection.Connection;
 import raf.dsw.classycraft.app.model.elements.DiagramElement;
 import raf.dsw.classycraft.app.model.elements.Interclass.Interclass;
@@ -16,15 +20,19 @@ import java.awt.*;
 
 public class AddClassContentState implements State {
 
+    DiagramElementContent startContent = null;
+    DiagramElementContent finalContent = null;
+
+    private DiagramElementContentFactory diagramElementContentFactory = new DiagramElementContentFactory();
     @Override
     public void mousePressed(Point location, DiagramView diagramView) {
         System.out.println("mousePressed inside of AddClassContentState");
 
         DiagramElement diagramElementAt = diagramView.getElementAt(location);
         if (diagramElementAt != null) {
+            startContent = diagramElementContentFactory.createDiagramElementContent(diagramElementAt);
             if (diagramElementAt instanceof Interclass) {
                 ClassContentStateDialog classContentStateDialog = new ClassContentStateDialog(diagramElementAt);
-
                 classContentStateDialog.getButtonAdd().addActionListener(
                         e -> {
                             try {
@@ -38,6 +46,13 @@ public class AddClassContentState implements State {
                         e -> {
                             try {
                                 classContentStateDialog.insertData();
+                                finalContent = diagramElementContentFactory.createDiagramElementContent(diagramElementAt);
+                                if (!startContent.equals(finalContent)) {
+                                    AbstractCommand addDiagramElementContentCommand = new  AddDiagramElementContentCommand(diagramElementAt, startContent, finalContent);
+                                    diagramView.getCommandManager().addCommand(addDiagramElementContentCommand);
+                                }
+                                startContent = null;
+                                finalContent = null;
                             } catch (Exception exception) {
                                 MainFrame.getInstance().getMessageGenerator().generateMessage(exception.getMessage(), MessageType.ERROR);
                                 return;
@@ -51,6 +66,13 @@ public class AddClassContentState implements State {
                         e -> {
                             try {
                                 connectionContentStateDialog.insertData();
+                                finalContent = diagramElementContentFactory.createDiagramElementContent(diagramElementAt);
+                                if (!startContent.equals(finalContent)) {
+                                    AbstractCommand addDiagramElementContentCommand = new AddDiagramElementContentCommand(diagramElementAt, startContent, finalContent);
+                                    diagramView.getCommandManager().addCommand(addDiagramElementContentCommand);
+                                }
+                                startContent = null;
+                                finalContent = null;
                             }
                             catch (Exception exception) {
                                 MainFrame.getInstance().getMessageGenerator().generateMessage(exception.getMessage(), MessageType.ERROR);

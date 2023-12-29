@@ -3,6 +3,8 @@ package raf.dsw.classycraft.app.model.elements.ClassContent;
 import raf.dsw.classycraft.app.model.elements.Modifiers.AccessModifiers;
 import raf.dsw.classycraft.app.model.elements.Modifiers.NonAccessModifiers;
 
+import java.util.Objects;
+
 public class Method extends ClassContent {
 
     private AccessModifiers accessModifiers;
@@ -69,5 +71,18 @@ public class Method extends ClassContent {
         stringBuilder.append(name + "() : " + getType());
         return stringBuilder.toString();
 
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Method method = (Method) o;
+        return accessModifiers == method.accessModifiers && nonAccessModifiers == method.nonAccessModifiers && name.equals(method.name) && type.equals(method.type);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(accessModifiers, nonAccessModifiers, name, type);
     }
 }

@@ -52,6 +52,12 @@ public class ClassElement extends Interclass {
         return classContent;
     }
 
+    public void setClassContent(List<ClassContent> classContent) {
+        this.classContent = classContent;
+        Notification notification = new Notification(this, NotificationType.SET);
+        notifyAllSubscribers(notification);
+    }
+
     public List<Attribute> getClassAttributes() {
         ArrayList<Attribute> attributes = new ArrayList<>();
         for (ClassContent classContent : getClassContent()) {
@@ -71,5 +77,4 @@ public class ClassElement extends Interclass {
         }
         return methods;
     }
-
 }

@@ -24,12 +24,18 @@ public class CommandManager {
             commands.get(currentCommand++).doCommand();
             SwingUtilities.updateComponentTreeUI(MainFrame.getInstance().getClassyTree().getTreeView());
         }
+        else {
+            System.out.println("doCommand is disabled");
+        }
     }
 
     public void undoCommand(){
         if(currentCommand > 0){
             commands.get(--currentCommand).undoCommand();
             SwingUtilities.updateComponentTreeUI(MainFrame.getInstance().getClassyTree().getTreeView());
+        }
+        else {
+            System.out.println("undoCommand is disabled");
         }
     }
 

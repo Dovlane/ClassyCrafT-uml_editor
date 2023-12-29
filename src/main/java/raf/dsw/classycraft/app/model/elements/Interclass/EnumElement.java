@@ -44,6 +44,10 @@ public class EnumElement extends Interclass {
         return enumLiterals;
     }
 
+    public void setEnumLiterals(List<EnumLiteral> enumLiterals) {
+        this.enumLiterals = enumLiterals;
+    }
+
     @Override
     public String toString() {
         return getName();

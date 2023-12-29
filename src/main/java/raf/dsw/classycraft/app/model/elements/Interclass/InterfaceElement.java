@@ -16,7 +16,7 @@ import java.util.List;
 
 public class InterfaceElement extends Interclass {
 
-    private final List<Method> methods;
+    private List<Method> methods;
 
     public InterfaceElement(String name, Diagram parent, Point point, AccessModifiers visibility, NonAccessModifiers nonAccessModifiers) {
         super(name, parent, point, visibility, nonAccessModifiers);
@@ -44,6 +44,14 @@ public class InterfaceElement extends Interclass {
     // Getters and Setters
     public List<Method> getInterfaceMethods() {
         return methods;
+    }
+
+    public void setInterfaceMethods(List<Method> methods) {
+        this.methods = methods;
+        Notification notification =
+                new Notification(null, NotificationType.ADD);
+        notifyAllSubscribers(notification);
+        changeOccurred();
     }
 
 }

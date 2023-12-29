@@ -19,7 +19,6 @@ public class Composition extends Connection implements IAggregationAndCompositio
         this.attributeAccessModifier = AccessModifiers.PRIVATE;
     }
 
-    @Override
     public void setAttributeNameCardinalityAndAccessibility(String attributeName, CardinalityEnum cardinalityEnum, AccessModifiers attributeAccessModifier) {
         if ((this.attributeName.equals(attributeName)) && (this.cardinalityEnum == cardinalityEnum) && (this.attributeAccessModifier == attributeAccessModifier)) {
             return;

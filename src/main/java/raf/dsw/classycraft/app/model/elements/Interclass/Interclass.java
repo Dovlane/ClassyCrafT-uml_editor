@@ -5,11 +5,13 @@ import raf.dsw.classycraft.app.model.ClassyRepository.Diagram;
 import raf.dsw.classycraft.app.model.ClassyRepository.Notification;
 import raf.dsw.classycraft.app.model.ClassyRepository.NotificationType;
 import raf.dsw.classycraft.app.model.ClassyRepository.Package;
+import raf.dsw.classycraft.app.model.abstractFactoryForClassyNodes.InfoForCreatingConnection;
 import raf.dsw.classycraft.app.model.elements.Modifiers.AccessModifiers;
 import raf.dsw.classycraft.app.model.elements.DiagramElement;
 import raf.dsw.classycraft.app.model.elements.Modifiers.NonAccessModifiers;
 
 import java.awt.*;
+import java.util.Dictionary;
 
 public abstract class Interclass extends DiagramElement {
 
@@ -168,5 +170,4 @@ public abstract class Interclass extends DiagramElement {
         notifyAllSubscribers(new Notification(this, NotificationType.SET));
         changeOccurred();
     }
-
 }

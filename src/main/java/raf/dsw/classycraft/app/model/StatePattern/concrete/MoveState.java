@@ -23,6 +23,7 @@ public class MoveState implements State {
     ElementPainter clickedElementPainter;
     Point startLocation;
     boolean mousePressedOnInterclassPainter = false;
+    boolean mouseIsMoved = false;
 
     @Override
     public void mousePressed(Point location, DiagramView diagramView) {
@@ -44,22 +45,25 @@ public class MoveState implements State {
     @Override
     public void mouseReleased(Point location, DiagramView diagramView) {
         System.out.println("mouseReleased inside of MoveState");
-        if (mousePressedOnInterclassPainter) {
+        if (mousePressedOnInterclassPainter && mouseIsMoved) {
             Interclass movedInterclass = (Interclass) clickedElementPainter.getDiagramElement();
             Point endLocation = movedInterclass.getLocation();
             Diagram diagram = diagramView.getDiagram();
             AbstractCommand moveCommand = new MoveCommand(diagram, movedInterclass, startLocation, endLocation);
             diagramView.getCommandManager().addCommand(moveCommand);
             startLocation = null;
-            mousePressedOnInterclassPainter = false;
             clickedElementPainter = null;
         }
+        mousePressedOnInterclassPainter = false;
+        mouseIsMoved = false;
     }
 
     @Override
     public void mouseDragged(Point startLocation, Point currentLocationOptimal, Point currentLocation, DiagramView diagramView) {
         System.out.println("mouseDragged inside of MoveState from " + startLocation + " to " + currentLocation);
         System.out.println("Optimal location: " + currentLocationOptimal);
+
+        mouseIsMoved = true;
 
         // Move selected DiagramElements around
         if (clickedElementPainter != null) {
