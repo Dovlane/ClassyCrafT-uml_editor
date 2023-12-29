@@ -6,7 +6,6 @@ import raf.dsw.classycraft.app.model.ClassyRepository.Project;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
 import java.io.File;
 
 public class SaveAction extends AbstractClassyAction {
@@ -43,7 +42,7 @@ public class SaveAction extends AbstractClassyAction {
             }
         }
 
-        ApplicationFramework.getInstance().getSerializer().saveProject(project);
+        ApplicationFramework.getInstance().getJackson().saveProject(project);
         project.setChanged(false);
 
         System.out.println("SaveAction has been performed.");

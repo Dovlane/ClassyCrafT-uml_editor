@@ -1,12 +1,13 @@
 package raf.dsw.classycraft.app.model.JacksonSerializer;
 
 import raf.dsw.classycraft.app.model.ClassyRepository.Project;
+import raf.dsw.classycraft.app.model.compositePattern.ClassyNode;
 
 import java.io.File;
 
-public interface Serializer {
+public interface IJackson {
 
-    Project loadProject(File file);
+    ClassyNode loadProject(File file);
     void saveProject(Project node);
 
 }

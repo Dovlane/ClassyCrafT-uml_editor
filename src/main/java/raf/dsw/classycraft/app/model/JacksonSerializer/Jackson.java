@@ -3,23 +3,22 @@ package raf.dsw.classycraft.app.model.JacksonSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import raf.dsw.classycraft.app.model.ClassyRepository.Project;
+import raf.dsw.classycraft.app.model.compositePattern.ClassyNode;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 
-public class JacksonSerializer implements Serializer {
+public class Jackson implements IJackson {
 
     private final ObjectMapper objectMapper;
 
-    public JacksonSerializer() {
+    public Jackson() {
         objectMapper = new ObjectMapper();
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
+
     }
 
     @Override
-    public Project loadProject(File file) {
+    public ClassyNode loadProject(File file) {
         try (FileReader fileReader = new FileReader(file)) {
             return objectMapper.readValue(fileReader, Project.class);
         } catch (IOException e) {

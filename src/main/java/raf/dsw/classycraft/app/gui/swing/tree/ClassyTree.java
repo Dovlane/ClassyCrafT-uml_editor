@@ -188,7 +188,8 @@ public class ClassyTree implements IClassyTree {
     public ClassyNode getNodeFromAbsolutePath(String absolutePath) {
         ClassyNodeComposite tmp = (ClassyNodeComposite) root.getClassyNode();
         String[] parts = absolutePath.split("/");
-        for (String part: parts) {
+        for (int i = 1; i < parts.length; i++) {
+            String part = parts[i];
             tmp = (ClassyNodeComposite) tmp.getChildByName(part);
             if (tmp == null) {
                 return null;

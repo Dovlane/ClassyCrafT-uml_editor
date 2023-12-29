@@ -1,9 +1,16 @@
 package raf.dsw.classycraft.app.model.ClassyRepository;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import lombok.Getter;
+import lombok.Setter;
+import raf.dsw.classycraft.app.model.JacksonSerializer.PackageDeserializer;
 import raf.dsw.classycraft.app.model.compositePattern.ClassyNode;
 import raf.dsw.classycraft.app.model.compositePattern.ClassyNodeComposite;
 import raf.dsw.classycraft.app.model.observerPattern.IPublisher;
 
+@Getter
+@Setter
+@JsonDeserialize(using = PackageDeserializer.class)
 public class Package extends ClassyNodeComposite implements IPublisher {
 
     private int nmbOfCreatedPackages;
@@ -43,14 +50,6 @@ public class Package extends ClassyNodeComposite implements IPublisher {
 
     public void increaseDiagramCounter() {
         nmbOfCreatedDiagrams += 1;
-    }
-
-    public int getNmbOfCreatedPackages() {
-        return nmbOfCreatedPackages;
-    }
-
-    public int getNmbOfCreatedDiagrams() {
-        return nmbOfCreatedDiagrams;
     }
 
     public void display() {

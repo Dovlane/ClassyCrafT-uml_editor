@@ -1,14 +1,12 @@
 package raf.dsw.classycraft.app.model.compositePattern;
 
 import com.fasterxml.jackson.annotation.*;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Getter;
 import lombok.Setter;
 import raf.dsw.classycraft.app.gui.swing.tree.model.ClassyTreeItem;
 import raf.dsw.classycraft.app.gui.swing.view.MainFrame;
 import raf.dsw.classycraft.app.model.ClassyRepository.*;
 import raf.dsw.classycraft.app.model.ClassyRepository.Package;
-import raf.dsw.classycraft.app.model.JacksonSerializer.ClassyNodeDeserializer;
 import raf.dsw.classycraft.app.model.MessageGenerator.MessageType;
 import raf.dsw.classycraft.app.model.elements.Connection.*;
 import raf.dsw.classycraft.app.model.elements.Interclass.ClassElement;
@@ -39,7 +37,6 @@ import java.util.List;
         @JsonSubTypes.Type(value = Generalization.class, name = "Generalization")
 })
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "absolutePath")
-@JsonDeserialize(using = ClassyNodeDeserializer.class)
 public abstract class ClassyNode implements IPublisher {
 
     protected String name;
