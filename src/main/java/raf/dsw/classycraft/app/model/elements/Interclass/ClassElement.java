@@ -74,4 +74,10 @@ public class ClassElement extends Interclass {
         return methods;
     }
 
+    @JsonIgnore
+    @Override
+    public String getName() {
+        return "Class-" + getPlainName();
+    }
+
 }

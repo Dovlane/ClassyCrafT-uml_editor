@@ -37,7 +37,7 @@ public final class InterfaceElementDeserializer extends StdDeserializer<Interfac
         ObjectMapper objectMapper = new ObjectMapper();
 
         // Read attributes values from JSON
-        String name = node.path("name").asText();
+        String plainName = node.path("plainName").asText();
         String absolutePath = node.path("absolutePath").asText();
         AccessModifiers visibility = AccessModifiers.valueOf(node.path("visibility").asText());
         NonAccessModifiers nonAccessModifiers = NonAccessModifiers.valueOf(node.path("nonAccessModifiers").asText());
@@ -52,7 +52,7 @@ public final class InterfaceElementDeserializer extends StdDeserializer<Interfac
             String parentAbsolutePath = node.path("parent").asText();
             parent = (Diagram) MainFrame.getInstance().getClassyTree().getNodeFromAbsolutePath(parentAbsolutePath);
         }
-        interfaceElement = new InterfaceElement(name, parent, location, visibility, nonAccessModifiers);
+        interfaceElement = new InterfaceElement(plainName, parent, location, visibility, nonAccessModifiers);
 
         // Write attributes to the project
         interfaceElement.setAbsolutePath(absolutePath);

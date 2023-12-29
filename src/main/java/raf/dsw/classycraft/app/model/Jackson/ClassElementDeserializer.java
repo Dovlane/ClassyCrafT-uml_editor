@@ -39,7 +39,7 @@ public final class ClassElementDeserializer extends StdDeserializer<ClassElement
         ObjectMapper objectMapper = new ObjectMapper();
 
         // Read attributes values from JSON
-        String name = node.path("name").asText();
+        String plainName = node.path("plainName").asText();
         String absolutePath = node.path("absolutePath").asText();
         AccessModifiers visibility = AccessModifiers.valueOf(node.path("visibility").asText());
         NonAccessModifiers nonAccessModifiers = NonAccessModifiers.valueOf(node.path("nonAccessModifiers").asText());
@@ -55,7 +55,7 @@ public final class ClassElementDeserializer extends StdDeserializer<ClassElement
             String parentAbsolutePath = node.path("parent").asText();
             parent = (Diagram) MainFrame.getInstance().getClassyTree().getNodeFromAbsolutePath(parentAbsolutePath);
         }
-        classElement = new ClassElement(name, parent, location, visibility, nonAccessModifiers);
+        classElement = new ClassElement(plainName, parent, location, visibility, nonAccessModifiers);
 
         // Write attributes to the project
         classElement.setAbsolutePath(absolutePath);
@@ -74,14 +74,14 @@ public final class ClassElementDeserializer extends StdDeserializer<ClassElement
         if (classContent.isArray()) {
             for (JsonNode content: classContent) {
                 switch (content.path("type").asText()) {
-                    case "Method":
+                    case "Method" -> {
                         Method newMethod = objectMapper.treeToValue(content, Method.class);
                         classElement.addClassContent(newMethod);
-                        break;
-                    case "Attribute":
+                    }
+                    case "Attribute" -> {
                         Attribute newAttribute = objectMapper.treeToValue(content, Attribute.class);
                         classElement.addClassContent(newAttribute);
-                        break;
+                    }
                 }
             }
         }

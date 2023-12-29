@@ -1,5 +1,6 @@
 package raf.dsw.classycraft.app.model.elements.Interclass;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,6 +21,7 @@ import java.util.List;
 @JsonDeserialize(using = InterfaceElementDeserializer.class)
 public class InterfaceElement extends Interclass {
 
+    @JsonIgnore
     private final List<Method> methods;
 
     public InterfaceElement(String name, Diagram parent, Point point, AccessModifiers visibility, NonAccessModifiers nonAccessModifiers) {
@@ -47,6 +49,12 @@ public class InterfaceElement extends Interclass {
     // Special InterfaceElement getter
     public List<Method> getInterfaceMethods() {
         return methods;
+    }
+
+    @JsonIgnore
+    @Override
+    public String getName() {
+        return "Interface-" + getPlainName();
     }
 
 }

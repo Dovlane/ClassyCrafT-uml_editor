@@ -1,5 +1,6 @@
 package raf.dsw.classycraft.app.model.elements.Interclass;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Getter;
 import lombok.Setter;
@@ -47,6 +48,12 @@ public class EnumElement extends Interclass {
     @Override
     public String toString() {
         return getName();
+    }
+
+    @JsonIgnore
+    @Override
+    public String getName() {
+        return "Enum-" + getPlainName();
     }
 
 }

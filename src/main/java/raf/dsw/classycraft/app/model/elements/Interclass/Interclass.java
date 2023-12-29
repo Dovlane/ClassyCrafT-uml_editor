@@ -162,4 +162,8 @@ public abstract class Interclass extends DiagramElement {
         changeOccurred();
     }
 
+    public String getPlainName() {
+        return name;
+    }
+
 }

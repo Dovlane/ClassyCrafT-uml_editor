@@ -37,7 +37,7 @@ public final class EnumElementDeserializer extends StdDeserializer<EnumElement> 
         ObjectMapper objectMapper = new ObjectMapper();
 
         // Read attributes values from JSON
-        String name = node.path("name").asText();
+        String plainName = node.path("plainName").asText();
         String absolutePath = node.path("absolutePath").asText();
         AccessModifiers visibility = AccessModifiers.valueOf(node.path("visibility").asText());
         NonAccessModifiers nonAccessModifiers = NonAccessModifiers.valueOf(node.path("nonAccessModifiers").asText());
@@ -52,7 +52,7 @@ public final class EnumElementDeserializer extends StdDeserializer<EnumElement> 
             String parentAbsolutePath = node.path("parent").asText();
             parent = (Diagram) MainFrame.getInstance().getClassyTree().getNodeFromAbsolutePath(parentAbsolutePath);
         }
-        enumElement = new EnumElement(name, parent, location, visibility, nonAccessModifiers);
+        enumElement = new EnumElement(plainName, parent, location, visibility, nonAccessModifiers);
 
         // Write attributes to the project
         enumElement.setAbsolutePath(absolutePath);

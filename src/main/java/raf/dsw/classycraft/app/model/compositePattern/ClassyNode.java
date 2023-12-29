@@ -104,19 +104,7 @@ public abstract class ClassyNode implements IPublisher {
             return getName();
         }
 
-        // Check type of Interclass
-        String suffix = "";
-        if (this instanceof ClassElement) {
-            suffix = "Class-";
-        }
-        else if (this instanceof InterfaceElement) {
-            suffix = "Interface-";
-        }
-        else if (this instanceof EnumElement) {
-            suffix = "Enum-";
-        }
-
-        return getParent().getAbsolutePath() + "/" + suffix + getName();
+        return getParent().getAbsolutePath() + "/" + getName();
     }
 
     public boolean setName(String name) {

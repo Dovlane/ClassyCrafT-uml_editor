@@ -1,6 +1,7 @@
 package raf.dsw.classycraft.app.model.elements.Connection;
 
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import raf.dsw.classycraft.app.model.ClassyRepository.Diagram;
@@ -17,7 +18,9 @@ public abstract class Connection extends DiagramElement {
     protected Interclass from;
     @JsonIdentityReference
     protected Interclass to;
+    @JsonIgnore
     protected Point currentPointFrom;
+    @JsonIgnore
     protected Point currentPointTo;
 
     public Connection(String name, Diagram parent) {
@@ -56,23 +59,13 @@ public abstract class Connection extends DiagramElement {
         return Point.distance(fromPoint.getX(), fromPoint.getY(), toPoint.getX(), toPoint.getY());
     }
 
+    @JsonIgnore
     public boolean isReflexiveConnection() {
         return getFrom().equals(getTo());
     }
 
-    @Override
-    public String getName() {
-        String prefix = "";
-        if (this instanceof Aggregation)
-            prefix = "agg";
-        else if (this instanceof Composition)
-            prefix = "com";
-        else if (this instanceof Dependency)
-            prefix = "dep";
-        else
-            prefix = "gen";
-        return prefix + "-" + from.getName() +
-                 "-" + to.getName();
+    public String getPlainName() {
+        return from.getPlainName() + "-" + to.getPlainName();
     }
 
 }

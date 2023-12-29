@@ -186,11 +186,11 @@ public class ClassyTree implements IClassyTree {
 
     @Override
     public ClassyNode getNodeFromAbsolutePath(String absolutePath) {
-        ClassyNodeComposite tmp = (ClassyNodeComposite) root.getClassyNode();
+        ClassyNode tmp = root.getClassyNode();
         String[] parts = absolutePath.split("/");
         for (int i = 1; i < parts.length; i++) {
             String part = parts[i];
-            tmp = (ClassyNodeComposite) tmp.getChildByName(part);
+            tmp = ((ClassyNodeComposite) tmp).getChildByName(part);
             if (tmp == null) {
                 return null;
             }
