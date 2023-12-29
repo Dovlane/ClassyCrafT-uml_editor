@@ -80,6 +80,8 @@ public abstract class ClassyNode implements IPublisher {
                     }
                 }
 
+
+
                 // Actually remove all obsolete connections
                 for (ClassyNode child: connectionsForRemoval) {
                     ClassyTreeItem treeItemDiagramElement =

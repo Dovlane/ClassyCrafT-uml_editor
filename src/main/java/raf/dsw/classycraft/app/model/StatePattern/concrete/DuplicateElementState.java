@@ -24,33 +24,33 @@ public class DuplicateElementState implements State {
 
         Diagram currentDiagram = diagramView.getDiagram();
         DiagramElement diagramElement = diagramView.getPainterAt(location).getDiagramElement();
-        if (diagramElement instanceof Interclass) {
+        if (diagramElement != null) {
+            if (diagramElement instanceof Interclass) {
 
-            // Attach a new Interclass object in the whole Model
-            ClassyTreeItem classyTreeDiagram =
-                    MainFrame.getInstance().getClassyTree().getRoot().getTreeItemFromClassyNode(currentDiagram);
-            if (classyTreeDiagram ==  null) {
-                MainFrame.getInstance().getMessageGenerator().generateMessage(
-                        "Diagram cannot be found in ClassyTree.", MessageType.ERROR);
-                return;
-            }
+                // Attach a new Interclass object in the whole Model
+                ClassyTreeItem classyTreeDiagram =
+                        MainFrame.getInstance().getClassyTree().getRoot().getTreeItemFromClassyNode(currentDiagram);
+                if (classyTreeDiagram == null) {
+                    MainFrame.getInstance().getMessageGenerator().generateMessage(
+                            "Diagram cannot be found in ClassyTree.", MessageType.ERROR);
+                    return;
+                }
 
-            Interclass newInterclass;
-            if (diagramElement instanceof ClassElement) {
-                newInterclass = new ClassElement((ClassElement) diagramElement);
-                MainFrame.getInstance().getClassyTree().attachChild(classyTreeDiagram, newInterclass);
-            }
-            else if (diagramElement instanceof InterfaceElement) {
-                newInterclass = new InterfaceElement((InterfaceElement) diagramElement);
-                MainFrame.getInstance().getClassyTree().attachChild(classyTreeDiagram, newInterclass);
-            }
-            else {
-                newInterclass = new EnumElement((EnumElement) diagramElement);
-                MainFrame.getInstance().getClassyTree().attachChild(classyTreeDiagram, newInterclass);
-            }
+                Interclass newInterclass;
+                if (diagramElement instanceof ClassElement) {
+                    newInterclass = new ClassElement((ClassElement) diagramElement);
+                    MainFrame.getInstance().getClassyTree().attachChild(classyTreeDiagram, newInterclass);
+                } else if (diagramElement instanceof InterfaceElement) {
+                    newInterclass = new InterfaceElement((InterfaceElement) diagramElement);
+                    MainFrame.getInstance().getClassyTree().attachChild(classyTreeDiagram, newInterclass);
+                } else {
+                    newInterclass = new EnumElement((EnumElement) diagramElement);
+                    MainFrame.getInstance().getClassyTree().attachChild(classyTreeDiagram, newInterclass);
+                }
 
-            int shift = defaultShift * ((Interclass) diagramElement).getNumberOfCopies(false);
-            newInterclass.translate(new Point(shift, shift));
+                int shift = defaultShift * ((Interclass) diagramElement).getNumberOfCopies(false);
+                newInterclass.translate(new Point(shift, shift));
+            }
         }
     }
 

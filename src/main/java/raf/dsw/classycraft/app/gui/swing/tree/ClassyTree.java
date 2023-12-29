@@ -10,6 +10,7 @@ import raf.dsw.classycraft.app.model.commandPattern.concreteCommand.AddInterclas
 import raf.dsw.classycraft.app.model.compositePattern.ClassyNode;
 import raf.dsw.classycraft.app.model.compositePattern.ClassyNodeComposite;
 import raf.dsw.classycraft.app.model.abstractFactoryForClassyNodes.*;
+import raf.dsw.classycraft.app.model.elements.Connection.Connection;
 import raf.dsw.classycraft.app.model.elements.DiagramElement;
 import raf.dsw.classycraft.app.model.elements.Interclass.Interclass;
 
@@ -124,9 +125,15 @@ public class ClassyTree implements IClassyTree {
             return;
         }
 
+        // connections can (i.e. their parents can be removed) if removeItem for interclass From or To is called before
+        if (node instanceof Connection  && node.getParent() == null) {
+            return;
+        }
+
         node.changeOccurred();
         node.removeSubtree();
         item.removeFromParent();
+
 
         // Refresh GUI
         SwingUtilities.updateComponentTreeUI(treeView);

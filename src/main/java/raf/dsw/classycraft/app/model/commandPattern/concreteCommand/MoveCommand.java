@@ -25,7 +25,6 @@ public class MoveCommand extends AbstractCommand {
 
     @Override
     public void doCommand() {
-        updateMovedInterclass();
         movedInterclass.setLocation(endLocation);
 
         System.out.println("MoveCommand doCommand");
@@ -33,29 +32,9 @@ public class MoveCommand extends AbstractCommand {
 
     @Override
     public void undoCommand() {
-        updateMovedInterclass();
         movedInterclass.setLocation(startLocation);
 
         System.out.println("MoveCommand undoCommand");
     }
 
-    private void updateMovedInterclass() {
-        movedInterclass.setParent(diagram);
-        ClassyTreeItem treeItemMovedInterclass =
-                MainFrame.getInstance().getClassyTree().getRoot().getTreeItemFromClassyNode(movedInterclass);
-        if (movedInterclass.equals(treeItemMovedInterclass.getClassyNode())) {
-            movedInterclass = (Interclass) treeItemMovedInterclass.getClassyNode();
-            for (ClassyNode diagramElementClassyNode : diagram.getChildren()) {
-                if (diagramElementClassyNode instanceof Connection) {
-                    Connection connection = (Connection) diagramElementClassyNode;
-                    if (connection.containsInterclass(movedInterclass)) {
-                        if (connection.getFrom().equals(movedInterclass))
-                            connection.setFrom(movedInterclass);
-                        else if (connection.getTo().equals(movedInterclass))
-                            connection.setTo(movedInterclass);
-                    }
-                }
-            }
-        }
-    }
 }
