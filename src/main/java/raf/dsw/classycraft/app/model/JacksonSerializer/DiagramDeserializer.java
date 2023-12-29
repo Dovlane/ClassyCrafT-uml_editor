@@ -71,11 +71,19 @@ public final class DiagramDeserializer extends StdDeserializer<Diagram> {
         // Deserialize children
         JsonNode children = node.path("children");
         if (children.isArray()) {
+
+            // Create first all interclass objects
             for (JsonNode child: children) {
                 switch (child.path("type").asText()) {
                     case "ClassElement"     -> objectMapper.treeToValue(child, ClassElement.class);
                     case "InterfaceElement" -> objectMapper.treeToValue(child, InterfaceElement.class);
                     case "EnumElement"      -> objectMapper.treeToValue(child, EnumElement.class);
+                }
+            }
+
+            // Create all connections
+            for (JsonNode child: children) {
+                switch (child.path("type").asText()) {
                     case "Aggregation"      -> objectMapper.treeToValue(child, Aggregation.class);
                     case "Composition"      -> objectMapper.treeToValue(child, Composition.class);
                     case "Dependency"       -> objectMapper.treeToValue(child, Dependency.class);
