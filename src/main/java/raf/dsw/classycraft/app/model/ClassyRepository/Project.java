@@ -38,7 +38,7 @@ public class Project extends ClassyNodeComposite implements IPublisher {
     @Override
     public boolean addChild(ClassyNode child) {
         if (child instanceof Package) {
-            if (!getChildren().contains(child)) {
+            if (getChildByName(child.getName()) == null) {
                 getChildren().add(child);
                 Notification notification =
                         new Notification(child, NotificationType.ADD);
