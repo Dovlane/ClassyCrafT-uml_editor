@@ -24,7 +24,6 @@ public class Project extends ClassyNodeComposite implements IPublisher {
     public Project(String name, ClassyNode parent) {
         super(name, parent);
         this.changed = true;
-        setAbsolutePath(createAbsolutePath());
     }
 
     public Project(String projectName, ClassyNode parent, String author, String folderPath) {
@@ -32,7 +31,6 @@ public class Project extends ClassyNodeComposite implements IPublisher {
         this.author = author;
         this.folderPath = folderPath;
         this.changed = true;
-        setAbsolutePath(createAbsolutePath());
     }
 
     @Override

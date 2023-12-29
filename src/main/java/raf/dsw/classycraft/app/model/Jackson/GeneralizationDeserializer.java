@@ -84,9 +84,10 @@ public class GeneralizationDeserializer extends StdDeserializer<Generalization> 
             to = (Interclass) MainFrame.getInstance().getClassyTree().getNodeFromAbsolutePath(toAbsolutePath);
         }
 
-        // Write attributes to the project
+        // Link to the parent
         Generalization generalization = new Generalization(plainName, parent, from, to);
-        generalization.setAbsolutePath(absolutePath);
+
+        // Write attributes to the generalization
 
         // Add a child to its parent
         ClassyTreeItem classyTreeParent =

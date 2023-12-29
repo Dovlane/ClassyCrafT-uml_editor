@@ -16,7 +16,6 @@ public class Diagram extends ClassyNodeComposite {
 
     public Diagram(String name, ClassyNode parent) {
         super(name, parent);
-        setAbsolutePath(createAbsolutePath());
     }
 
     @Override

@@ -45,7 +45,7 @@ public final class ClassElementDeserializer extends StdDeserializer<ClassElement
         NonAccessModifiers nonAccessModifiers = NonAccessModifiers.valueOf(node.path("nonAccessModifiers").asText());
         Point location = objectMapper.treeToValue(node.path("location"), Point.class);
 
-        // Link to parent
+        // Link to the parent
         Diagram parent;
         ClassElement classElement;
         if (node.path("parent").isObject()) {
@@ -57,9 +57,6 @@ public final class ClassElementDeserializer extends StdDeserializer<ClassElement
         }
         classElement = new ClassElement(plainName, parent, location, visibility, nonAccessModifiers);
 
-        // Write attributes to the project
-        classElement.setAbsolutePath(absolutePath);
-
         // Add a child to its parent
         ClassyTreeItem classyTreeParent =
                 MainFrame.getInstance().getClassyTree().getRoot().getTreeItemFromClassyNode(parent);
@@ -68,6 +65,8 @@ public final class ClassElementDeserializer extends StdDeserializer<ClassElement
             System.out.println("ClassElement with the same name already exists.");
             return null;
         }
+
+        // Write attributes to the ClassElement
 
         // Deserialize classContent
         JsonNode classContent = node.path("classContent");

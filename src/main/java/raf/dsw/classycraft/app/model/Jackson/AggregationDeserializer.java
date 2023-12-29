@@ -89,10 +89,8 @@ public final class AggregationDeserializer extends StdDeserializer<Aggregation> 
             to = (Interclass) MainFrame.getInstance().getClassyTree().getNodeFromAbsolutePath(toAbsolutePath);
         }
 
-        // Write attributes to the project
+        // Link to the parent
         Aggregation aggregation = new Aggregation(plainName, parent, from, to);
-        aggregation.setAttributeNameCardinalityAndAccessibility(attributeName, cardinalityEnum, attributeAccessModifier);
-        aggregation.setAbsolutePath(absolutePath);
 
         // Add a child to its parent
         ClassyTreeItem classyTreeParent =
@@ -102,6 +100,9 @@ public final class AggregationDeserializer extends StdDeserializer<Aggregation> 
             System.out.println("Aggregation with the same name already exists.");
             return null;
         }
+
+        // Write attributes to the aggregation
+        aggregation.setAttributeNameCardinalityAndAccessibility(attributeName, cardinalityEnum, attributeAccessModifier);
 
         return aggregation;
     }

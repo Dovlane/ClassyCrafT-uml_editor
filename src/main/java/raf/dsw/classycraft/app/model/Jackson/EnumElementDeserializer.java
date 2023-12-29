@@ -43,7 +43,7 @@ public final class EnumElementDeserializer extends StdDeserializer<EnumElement> 
         NonAccessModifiers nonAccessModifiers = NonAccessModifiers.valueOf(node.path("nonAccessModifiers").asText());
         Point location = objectMapper.treeToValue(node.path("location"), Point.class);
 
-        // Link to parent
+        // Link to the parent
         Diagram parent;
         EnumElement enumElement;
         if (node.path("parent").isObject()) {
@@ -54,9 +54,6 @@ public final class EnumElementDeserializer extends StdDeserializer<EnumElement> 
         }
         enumElement = new EnumElement(plainName, parent, location, visibility, nonAccessModifiers);
 
-        // Write attributes to the project
-        enumElement.setAbsolutePath(absolutePath);
-
         // Add a child to its parent
         ClassyTreeItem classyTreeParent =
                 MainFrame.getInstance().getClassyTree().getRoot().getTreeItemFromClassyNode(parent);
@@ -65,6 +62,8 @@ public final class EnumElementDeserializer extends StdDeserializer<EnumElement> 
             System.out.println("EnumElement with the same name already exists.");
             return null;
         }
+
+        // Write attributes to the enumElement
 
         // Deserialize enumLiterals
         JsonNode enumLiterals = node.path("enumLiterals");

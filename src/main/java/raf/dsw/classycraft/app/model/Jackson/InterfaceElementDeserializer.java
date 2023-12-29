@@ -43,7 +43,7 @@ public final class InterfaceElementDeserializer extends StdDeserializer<Interfac
         NonAccessModifiers nonAccessModifiers = NonAccessModifiers.valueOf(node.path("nonAccessModifiers").asText());
         Point location = objectMapper.treeToValue(node.path("location"), Point.class);
 
-        // Link to parent
+        // Link to the parent
         Diagram parent;
         InterfaceElement interfaceElement;
         if (node.path("parent").isObject()) {
@@ -54,9 +54,6 @@ public final class InterfaceElementDeserializer extends StdDeserializer<Interfac
         }
         interfaceElement = new InterfaceElement(plainName, parent, location, visibility, nonAccessModifiers);
 
-        // Write attributes to the project
-        interfaceElement.setAbsolutePath(absolutePath);
-
         // Add a child to its parent
         ClassyTreeItem classyTreeParent =
                 MainFrame.getInstance().getClassyTree().getRoot().getTreeItemFromClassyNode(parent);
@@ -65,6 +62,8 @@ public final class InterfaceElementDeserializer extends StdDeserializer<Interfac
             System.out.println("InterfaceElement with the same name already exists.");
             return null;
         }
+
+        // Write attributes to the InterfaceElement
 
         // Deserialize classContent
         JsonNode interfaceMethods = node.path("interfaceMethods");

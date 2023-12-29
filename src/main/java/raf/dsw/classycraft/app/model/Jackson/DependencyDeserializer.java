@@ -87,10 +87,8 @@ public class DependencyDeserializer extends StdDeserializer<Dependency> {
             to = (Interclass) MainFrame.getInstance().getClassyTree().getNodeFromAbsolutePath(toAbsolutePath);
         }
 
-        // Write attributes to the project
+        // Link to the parent
         Dependency dependency = new Dependency(plainName, parent, from, to);
-        dependency.setDependencyEnum(dependencyEnum);
-        dependency.setAbsolutePath(absolutePath);
 
         // Add a child to its parent
         ClassyTreeItem classyTreeParent =
@@ -100,6 +98,9 @@ public class DependencyDeserializer extends StdDeserializer<Dependency> {
             System.out.println("Dependency with the same name already exists.");
             return null;
         }
+
+        // Write attributes to the dependency
+        dependency.setDependencyEnum(dependencyEnum);
 
         return dependency;
     }

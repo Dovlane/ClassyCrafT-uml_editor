@@ -40,7 +40,7 @@ public final class PackageDeserializer extends StdDeserializer<Package> {
         int nmbOfCreatedPackages = node.path("nmbOfCreatedPackages").asInt();
         int nmbOfCreatedDiagrams = node.path("nmbOfCreatedDiagrams").asInt();
 
-        // Link to parent
+        // Link to the parent
         ClassyNode parent;
         Package aPackage;
         if (node.path("parent").isObject()) {
@@ -57,11 +57,6 @@ public final class PackageDeserializer extends StdDeserializer<Package> {
         }
         aPackage = new Package(name, parent);
 
-        // Write attributes to the project
-        aPackage.setAbsolutePath(absolutePath);
-        aPackage.setNmbOfCreatedPackages(nmbOfCreatedPackages);
-        aPackage.setNmbOfCreatedDiagrams(nmbOfCreatedDiagrams);
-
         // Add a child to its parent
         ClassyTreeItem classyTreeParent =
                 MainFrame.getInstance().getClassyTree().getRoot().getTreeItemFromClassyNode(parent);
@@ -70,6 +65,10 @@ public final class PackageDeserializer extends StdDeserializer<Package> {
             System.out.println("Package with the same name already exists.");
             return null;
         }
+
+        // Write attributes to the package
+        aPackage.setNmbOfCreatedPackages(nmbOfCreatedPackages);
+        aPackage.setNmbOfCreatedDiagrams(nmbOfCreatedDiagrams);
 
         // Deserialize children
         JsonNode children = node.path("children");

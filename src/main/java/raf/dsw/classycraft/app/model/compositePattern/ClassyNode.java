@@ -44,7 +44,6 @@ public abstract class ClassyNode implements IPublisher {
     protected ClassyNode parent;
     @JsonIgnore
     protected List<IListener> listeners;
-    protected String absolutePath;
 
     public ClassyNode(String name, ClassyNode parent) {
         this.name = name;
@@ -97,7 +96,7 @@ public abstract class ClassyNode implements IPublisher {
         }
     }
 
-    public String createAbsolutePath() {
+    public String getAbsolutePath() {
 
         // Recursive base case
         if (getParent() == null) {

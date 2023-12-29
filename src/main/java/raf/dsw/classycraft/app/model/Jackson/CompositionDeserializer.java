@@ -89,10 +89,8 @@ public class CompositionDeserializer extends StdDeserializer<Composition> {
             to = (Interclass) MainFrame.getInstance().getClassyTree().getNodeFromAbsolutePath(toAbsolutePath);
         }
 
-        // Write attributes to the project
+        // Link to the parent
         Composition composition = new Composition(plainName, parent, from, to);
-        composition.setAttributeNameCardinalityAndAccessibility(attributeName, cardinalityEnum, attributeAccessModifier);
-        composition.setAbsolutePath(absolutePath);
 
         // Add a child to its parent
         ClassyTreeItem classyTreeParent =
@@ -102,6 +100,9 @@ public class CompositionDeserializer extends StdDeserializer<Composition> {
             System.out.println("Composition with the same name already exists.");
             return null;
         }
+
+        // Write attributes to the composition
+        composition.setAttributeNameCardinalityAndAccessibility(attributeName, cardinalityEnum, attributeAccessModifier);
 
         return composition;
     }

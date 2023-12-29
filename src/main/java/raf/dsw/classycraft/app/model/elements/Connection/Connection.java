@@ -31,7 +31,6 @@ public abstract class Connection extends DiagramElement {
         super(name, parent);
         this.from = from;
         this.to = to;
-        setAbsolutePath(createAbsolutePath());
     }
 
     public void getBestPairOfStartAndEndPoint() {

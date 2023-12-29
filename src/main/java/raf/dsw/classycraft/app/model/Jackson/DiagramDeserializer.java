@@ -43,7 +43,7 @@ public final class DiagramDeserializer extends StdDeserializer<Diagram> {
         String name = node.path("name").asText();
         String absolutePath = node.path("absolutePath").asText();
 
-        // Link to parent
+        // Link to the parent
         Package parent;
         Diagram diagram;
         if (node.path("parent").isObject()) {
@@ -55,9 +55,6 @@ public final class DiagramDeserializer extends StdDeserializer<Diagram> {
         }
         diagram = new Diagram(name, parent);
 
-        // Write attributes to the project
-        diagram.setAbsolutePath(absolutePath);
-
         // Add a child to its parent
         ClassyTreeItem classyTreeParent =
                 MainFrame.getInstance().getClassyTree().getRoot().getTreeItemFromClassyNode(parent);
@@ -66,6 +63,8 @@ public final class DiagramDeserializer extends StdDeserializer<Diagram> {
             System.out.println("Diagram with the same name already exists.");
             return null;
         }
+
+        // Write attributes to the diagram
 
         // Deserialize children
         JsonNode children = node.path("children");
