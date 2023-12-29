@@ -1,59 +1,33 @@
 package raf.dsw.classycraft.app.model.elements.ClassContent;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import lombok.Getter;
+import lombok.Setter;
+import raf.dsw.classycraft.app.model.Jackson.AttributeDeserializer;
 import raf.dsw.classycraft.app.model.elements.Modifiers.AccessModifiers;
 import raf.dsw.classycraft.app.model.elements.Modifiers.NonAccessModifiers;
 
+@Getter
+@Setter
+@JsonDeserialize(using = AttributeDeserializer.class)
 public class Attribute extends ClassContent {
 
     private AccessModifiers accessModifiers;
     private NonAccessModifiers nonAccessModifiers;
     private String name;
-    private String type;
+    private String dataType;
 
-    public Attribute(AccessModifiers accessModifiers, NonAccessModifiers nonAccessModifiers, String name, String type) {
+    public Attribute(AccessModifiers accessModifiers, NonAccessModifiers nonAccessModifiers, String name, String dataType) {
         super();
         this.accessModifiers = accessModifiers;
         this.nonAccessModifiers = nonAccessModifiers;
         this.name = name;
-        this.type = type;
+        this.dataType = dataType;
     }
 
     // Create a Deep Copy Constructor
     public Attribute(Attribute attribute) {
-        this(attribute.accessModifiers, attribute.nonAccessModifiers, attribute.name, attribute.type);
-    }
-
-    // Getters and Setters
-    public AccessModifiers getAccessModifiers() {
-        return accessModifiers;
-    }
-
-    public void setAccessModifiers(AccessModifiers accessModifiers) {
-        this.accessModifiers = accessModifiers;
-    }
-
-    public NonAccessModifiers getNonAccessModifiers() {
-        return nonAccessModifiers;
-    }
-
-    public void setNonAccessModifiers(NonAccessModifiers nonAccessModifiers) {
-        this.nonAccessModifiers = nonAccessModifiers;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
+        this(attribute.accessModifiers, attribute.nonAccessModifiers, attribute.name, attribute.dataType);
     }
 
     public String toString() {
@@ -64,7 +38,8 @@ public class Attribute extends ClassContent {
             case PROTECTED -> stringBuilder.append('#');
             case DEFAULT -> stringBuilder.append('~');
         }
-        stringBuilder.append(type + " " + name);
+        stringBuilder.append(dataType).append(" ").append(name);
         return stringBuilder.toString();
     }
+
 }

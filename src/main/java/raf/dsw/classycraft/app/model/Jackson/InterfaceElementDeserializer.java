@@ -69,8 +69,9 @@ public final class InterfaceElementDeserializer extends StdDeserializer<Interfac
         // Deserialize classContent
         JsonNode interfaceMethods = node.path("interfaceMethods");
         if (interfaceMethods.isArray()) {
-            for (JsonNode content : interfaceMethods) {
-                objectMapper.treeToValue(content, Method.class);
+            for (JsonNode method : interfaceMethods) {
+                Method newMethod = objectMapper.treeToValue(method, Method.class);
+                interfaceElement.addMethod(newMethod);
             }
         }
 

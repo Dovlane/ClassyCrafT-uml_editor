@@ -70,7 +70,8 @@ public final class EnumElementDeserializer extends StdDeserializer<EnumElement> 
         JsonNode enumLiterals = node.path("enumLiterals");
         if (enumLiterals.isArray()) {
             for (JsonNode enumLiteral : enumLiterals) {
-                objectMapper.treeToValue(enumLiteral, EnumLiteral.class);
+                EnumLiteral newEnumLiteral = objectMapper.treeToValue(enumLiteral, EnumLiteral.class);
+                enumElement.addEnumLiteral(newEnumLiteral);
             }
         }
 

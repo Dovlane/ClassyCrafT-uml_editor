@@ -10,6 +10,7 @@ import raf.dsw.classycraft.app.gui.swing.tree.model.ClassyTreeItem;
 import raf.dsw.classycraft.app.gui.swing.view.MainFrame;
 import raf.dsw.classycraft.app.model.ClassyRepository.Diagram;
 import raf.dsw.classycraft.app.model.elements.ClassContent.Attribute;
+import raf.dsw.classycraft.app.model.elements.ClassContent.ClassContent;
 import raf.dsw.classycraft.app.model.elements.ClassContent.Method;
 import raf.dsw.classycraft.app.model.elements.Interclass.ClassElement;
 import raf.dsw.classycraft.app.model.elements.Modifiers.AccessModifiers;
@@ -73,8 +74,14 @@ public final class ClassElementDeserializer extends StdDeserializer<ClassElement
         if (classContent.isArray()) {
             for (JsonNode content: classContent) {
                 switch (content.path("type").asText()) {
-                    case "Method" -> objectMapper.treeToValue(content, Method.class);
-                    case "Attribute" -> objectMapper.treeToValue(content, Attribute.class);
+                    case "Method":
+                        Method newMethod = objectMapper.treeToValue(content, Method.class);
+                        classElement.addClassContent(newMethod);
+                        break;
+                    case "Attribute":
+                        Attribute newAttribute = objectMapper.treeToValue(content, Attribute.class);
+                        classElement.addClassContent(newAttribute);
+                        break;
                 }
             }
         }
