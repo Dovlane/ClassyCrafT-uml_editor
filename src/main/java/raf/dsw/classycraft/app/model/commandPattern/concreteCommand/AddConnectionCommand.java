@@ -15,28 +15,34 @@ public class AddConnectionCommand extends AbstractCommand {
 
     private IClassyTree iClassyTree;
     private InfoForCreatingConnection infoForCreatingConnection;
-    private Connection connection;
+    private ClassyTreeItem treeItemConnection;
     private Diagram diagram;
+    private ClassyTreeItem treeItemDiagram;
 
     public AddConnectionCommand(IClassyTree iClassyTree, InfoForCreatingConnection infoForCreatingConnection, Diagram diagram) {
         this.iClassyTree = iClassyTree;
         this.infoForCreatingConnection = infoForCreatingConnection;
+        this.treeItemConnection = null;
+        this.treeItemDiagram = iClassyTree.getRoot().getTreeItemFromClassyNode(diagram);
         this.diagram = diagram;
     }
 
     @Override
     public void doCommand() {
-        connection = (Connection) iClassyTree.addChild(infoForCreatingConnection);
-
+        if (treeItemConnection == null) {
+            Connection connection = (Connection) iClassyTree.addChild(infoForCreatingConnection);
+            treeItemConnection = iClassyTree.getRoot().getTreeItemFromClassyNode(connection);
+        }
+        else {
+            treeItemConnection.getClassyNode().setParent(diagram);
+            iClassyTree.attachChild(treeItemDiagram, treeItemConnection);
+        }
         System.out.println("AddConnection - doCommand");
         ApplicationFramework.getInstance().getClassyRepository().printTree();
     }
 
     @Override
     public void undoCommand() {
-        connection.setParent(diagram); // this enables comparing two classyNodes with absolutePath
-        ClassyTreeItem treeItemConnection =
-                iClassyTree.getRoot().getTreeItemFromClassyNode(connection);
         iClassyTree.removeItem(treeItemConnection);
 
         System.out.println("AddConnection - undoCommand");

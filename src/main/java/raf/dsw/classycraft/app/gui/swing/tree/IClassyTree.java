@@ -17,6 +17,8 @@ public interface IClassyTree {
 
     boolean attachChild(ClassyTreeItem parent, ClassyNode child);
 
+    boolean attachChild(ClassyTreeItem parent, ClassyTreeItem child);
+
     void removeItem(ClassyTreeItem item);
 
     void renameItem(ClassyTreeItem item);

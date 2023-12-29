@@ -3,10 +3,8 @@ package raf.dsw.classycraft.app.model.commandPattern.concreteCommand;
 import raf.dsw.classycraft.app.core.ApplicationFramework;
 import raf.dsw.classycraft.app.gui.swing.tree.IClassyTree;
 import raf.dsw.classycraft.app.gui.swing.tree.model.ClassyTreeItem;
-import raf.dsw.classycraft.app.model.ClassyRepository.Diagram;
 import raf.dsw.classycraft.app.model.commandPattern.AbstractCommand;
 import raf.dsw.classycraft.app.model.elements.Connection.Connection;
-import raf.dsw.classycraft.app.model.elements.DiagramElement;
 import raf.dsw.classycraft.app.model.elements.Interclass.Interclass;
 
 import java.util.List;
@@ -14,31 +12,33 @@ import java.util.List;
 public class RemoveDiagramElementCommand extends AbstractCommand {
 
     private final IClassyTree iClassyTree;
-    private List<DiagramElement> diagramElementListToDelete;
+    private List<Interclass> interclassesToDelete;
+    private List<Connection> connectionsToDelete;
     private ClassyTreeItem diagramTreeItem;
-    public RemoveDiagramElementCommand(IClassyTree iClassyTree, ClassyTreeItem diagram, List<DiagramElement> diagramElementListToDelete) {
+
+    public RemoveDiagramElementCommand(IClassyTree iClassyTree, List<Interclass> interclassesToDelete, List<Connection> connectionsToDelete, ClassyTreeItem diagramTreeItem) {
         this.iClassyTree = iClassyTree;
-        this.diagramTreeItem = diagram;
-        this.diagramElementListToDelete = diagramElementListToDelete;
+        this.interclassesToDelete = interclassesToDelete;
+        this.connectionsToDelete = connectionsToDelete;
+        this.diagramTreeItem = diagramTreeItem;
     }
 
     @Override
     public void doCommand() {
-        int index = 0;
-        while (index < diagramElementListToDelete.size()) {
-            DiagramElement diagramElement = diagramElementListToDelete.get(index);
-            diagramElement.setParent(diagramTreeItem.getClassyNode());
-            if (diagramElement instanceof Connection) {
-                Connection connection = (Connection) diagramElement;
-                if (connectionIsDeleted(connection)) {
-                    index++;
-                    continue;
-                }
+        for (Interclass interclassToDelete : interclassesToDelete) {
+            interclassToDelete.setParent(diagramTreeItem.getClassyNode());
+            ClassyTreeItem treeItemInterclass = iClassyTree.getRoot().getTreeItemFromClassyNode(interclassToDelete);
+            iClassyTree.removeItem(treeItemInterclass);
+        }
+
+        // here we are deleting connections that are not deleted indirectly by
+        // removing Interclass, and we now need to remove them directly
+        for (Connection connectionToDelete : connectionsToDelete) {
+            if (!connectionIsDeleted(connectionToDelete)) {
+                connectionToDelete.setParent(diagramTreeItem.getClassyNode());
+                ClassyTreeItem treeItemConnection = iClassyTree.getRoot().getTreeItemFromClassyNode(connectionToDelete);
+                iClassyTree.removeItem(treeItemConnection);
             }
-            ClassyTreeItem treeItemDiagramElement =
-                    iClassyTree.getRoot().getTreeItemFromClassyNode(diagramElement);
-            iClassyTree.removeItem(treeItemDiagramElement);
-            index++;
         }
         System.out.println("Remove - doCommand");
         ApplicationFramework.getInstance().getClassyRepository().printTree();
@@ -47,11 +47,13 @@ public class RemoveDiagramElementCommand extends AbstractCommand {
 
     @Override
     public void undoCommand() {
-        for (DiagramElement diagramElement : diagramElementListToDelete) {
-            diagramElement.setParent(diagramTreeItem.getClassyNode());
-            if (diagramElement instanceof Connection)
-                System.out.println("STANI");
-            iClassyTree.attachChild(diagramTreeItem, diagramElement);
+        for (Interclass interclassToGetBack : interclassesToDelete) {
+            interclassToGetBack.setParent(diagramTreeItem.getClassyNode());
+            iClassyTree.attachChild(diagramTreeItem, interclassToGetBack);
+        }
+        for (Connection connectionsToGetBack : connectionsToDelete) {
+            connectionsToGetBack.setParent(diagramTreeItem.getClassyNode());
+            iClassyTree.attachChild(diagramTreeItem, connectionsToGetBack);
         }
         System.out.println("Remove - undo command");
         ApplicationFramework.getInstance().getClassyRepository().printTree();
@@ -59,12 +61,9 @@ public class RemoveDiagramElementCommand extends AbstractCommand {
     }
 
     private boolean connectionIsDeleted(Connection connection) {
-        for (DiagramElement diagramElement : diagramElementListToDelete) {
-            if (diagramElement instanceof Interclass) {
-                Interclass interclass = (Interclass) diagramElement;
-                if (connection.containsInterclass(interclass))
-                    return true;
-            }
+        for (Interclass interclass : interclassesToDelete) {
+            if (connection.containsInterclass(interclass))
+                return true;
         }
         return false;
     }

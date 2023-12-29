@@ -60,6 +60,14 @@ public abstract class Interclass extends DiagramElement {
         return location;
     }
 
+    public void setLocation(Point location) {
+        this.location = location;
+        Notification notification =
+                new Notification(null, NotificationType.ADD);
+        notifyAllSubscribers(notification);
+        changeOccurred();
+    }
+
     public int getBoxWidth() {
         return boxWidth;
     }

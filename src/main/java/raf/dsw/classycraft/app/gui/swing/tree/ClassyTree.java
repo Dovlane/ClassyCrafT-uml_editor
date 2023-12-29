@@ -89,6 +89,27 @@ public class ClassyTree implements IClassyTree {
     }
 
     @Override
+    // unlike
+    public boolean attachChild(ClassyTreeItem parent, ClassyTreeItem child) {
+        if (parent == null) {
+            MainFrame.getInstance().getMessageGenerator().generateMessage(
+                    "Parent Node must be selected.", MessageType.ERROR);
+            return false;
+        }
+        boolean success = ((ClassyNodeComposite) parent.getClassyNode()).addChild(child.getClassyNode());
+
+        if (success) {
+            // Update JTree
+            parent.add(child);
+
+            // Refresh GUI - Classy Tree
+            treeView.expandPath(new TreePath(parent.getPath()));
+            SwingUtilities.updateComponentTreeUI(treeView);
+        }
+        return success;
+    }
+
+    @Override
     public void removeItem(ClassyTreeItem item) {
         if (item == null) {
             MainFrame.getInstance().getMessageGenerator().generateMessage(

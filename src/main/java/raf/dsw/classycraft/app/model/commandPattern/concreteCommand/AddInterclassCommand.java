@@ -3,48 +3,43 @@ package raf.dsw.classycraft.app.model.commandPattern.concreteCommand;
 import raf.dsw.classycraft.app.core.ApplicationFramework;
 import raf.dsw.classycraft.app.gui.swing.tree.IClassyTree;
 import raf.dsw.classycraft.app.gui.swing.tree.model.ClassyTreeItem;
-import raf.dsw.classycraft.app.gui.swing.view.DiagramView;
-import raf.dsw.classycraft.app.gui.swing.view.MainFrame;
-import raf.dsw.classycraft.app.gui.swing.view.dialogs.InterclassStateDialog;
 import raf.dsw.classycraft.app.model.ClassyRepository.Diagram;
-import raf.dsw.classycraft.app.model.MessageGenerator.MessageType;
-import raf.dsw.classycraft.app.model.abstractFactoryForClassyNodes.ElementInterclassType;
 import raf.dsw.classycraft.app.model.abstractFactoryForClassyNodes.InfoForCreatingInterclass;
 import raf.dsw.classycraft.app.model.commandPattern.AbstractCommand;
-import raf.dsw.classycraft.app.model.elements.DiagramElement;
 import raf.dsw.classycraft.app.model.elements.Interclass.Interclass;
-import raf.dsw.classycraft.app.model.elements.Modifiers.AccessModifiers;
-import raf.dsw.classycraft.app.model.elements.Modifiers.NonAccessModifiers;
-
-import javax.swing.*;
-import java.awt.*;
 
 public class AddInterclassCommand extends AbstractCommand {
 
     private IClassyTree iClassyTree;
     private InfoForCreatingInterclass infoForCreatingInterclass;
-    private Interclass interclass;
+    private ClassyTreeItem treeItemInterclass;
     private Diagram diagram;
+    private ClassyTreeItem treeItemDiagram;
 
     public AddInterclassCommand(IClassyTree iClassyTree, Diagram diagram, InfoForCreatingInterclass infoForCreatingInterclass) {
         this.iClassyTree = iClassyTree;
         this.diagram = diagram;
+        this.treeItemDiagram = iClassyTree.getRoot().getTreeItemFromClassyNode(diagram);
+        this.treeItemInterclass = null;
         this.infoForCreatingInterclass = infoForCreatingInterclass;
     }
 
     @Override
     public void doCommand() {
-        interclass = (Interclass) iClassyTree.addChild(infoForCreatingInterclass);
-
+        if (treeItemInterclass == null) {
+            Interclass interclass = (Interclass) iClassyTree.addChild(infoForCreatingInterclass);
+            treeItemInterclass = iClassyTree.getRoot().getTreeItemFromClassyNode(interclass);
+        }
+        else {
+            treeItemInterclass.getClassyNode().setParent(diagram);
+            iClassyTree.attachChild(treeItemDiagram, treeItemInterclass);
+        }
         System.out.println("AddInterclass - doCommand");
         ApplicationFramework.getInstance().getClassyRepository().printTree();
     }
 
     @Override
     public void undoCommand() {
-        interclass.setParent(diagram); // this enables comparing two classyNodes with absolutePath
-        ClassyTreeItem treeItemInterclass =
-                MainFrame.getInstance().getClassyTree().getRoot().getTreeItemFromClassyNode(interclass);
         iClassyTree.removeItem(treeItemInterclass);
 
         System.out.println("AddInterclass - undoCommand");
