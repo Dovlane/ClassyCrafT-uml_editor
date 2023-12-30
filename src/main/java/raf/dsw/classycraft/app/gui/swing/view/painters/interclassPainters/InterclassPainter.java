@@ -58,7 +58,7 @@ public class InterclassPainter extends ElementPainter {
 
     protected void drawInterclassName(Graphics2D graphics2D, float x, float y) {
         float boxWidth = (float)getBoxWidth();
-        String interclassName = diagramElement.getName();
+        String interclassName = ((Interclass) diagramElement).getPlainName();
         graphics2D.setFont(interclassNameFont);
         LineMetrics metrics = getLineMetrics(graphics2D, interclassName);
         float messageWidth = (float)graphics2D.getFont().getStringBounds(interclassName, graphics2D.getFontRenderContext()).getWidth();
@@ -92,7 +92,7 @@ public class InterclassPainter extends ElementPainter {
     private float interclassNameWidth(Graphics2D graphics2D) {
         Font lastFont = graphics2D.getFont();
         graphics2D.setFont(interclassNameFont);
-        float interclassNameWidth = (float) graphics2D.getFont().getStringBounds(getInterclassElement().getName(), graphics2D.getFontRenderContext()).getWidth();
+        float interclassNameWidth = (float) graphics2D.getFont().getStringBounds(getInterclassElement().getPlainName(), graphics2D.getFontRenderContext()).getWidth();
         graphics2D.setFont(lastFont);
         return interclassNameWidth;
     }

@@ -67,7 +67,7 @@ public class ClassPainter extends InterclassPainter {
     @Override
     protected void drawInterclassName(Graphics2D graphics2D, float x, float y) {
         float boxWidth = (float)getBoxWidth();
-        String interclassName = ((Interclass)diagramElement).getName();
+        String interclassName = ((Interclass) diagramElement).getPlainName();
         if (getClassElement().getNonAccessModifiers() == NonAccessModifiers.ABSTRACT) {
             graphics2D.setFont(abstractInterclassNameFont);
         } else {

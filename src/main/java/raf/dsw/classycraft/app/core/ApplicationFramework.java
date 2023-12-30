@@ -33,7 +33,4 @@ public class ApplicationFramework {
         return classyRepository;
     }
 
-    public Serializer getSerializer() {
-        return serializer;
-    }
 }
