@@ -20,23 +20,32 @@ public class CommandManager {
     }
 
     public void doCommand(){
-        if(currentCommand < commands.size()){
+        if(currentCommand < commands.size()) {
+            MainFrame.getInstance().getActionManager().getUndoAction().setEnabled(true);
             commands.get(currentCommand++).doCommand();
             SwingUtilities.updateComponentTreeUI(MainFrame.getInstance().getClassyTree().getTreeView());
         }
         else {
-            System.out.println("doCommand is disabled");
+            MainFrame.getInstance().getActionManager().getRedoAction().setEnabled(false);
         }
     }
 
     public void undoCommand(){
-        if(currentCommand > 0){
+        if(currentCommand > 0) {
+            MainFrame.getInstance().getActionManager().getRedoAction().setEnabled(true);
             commands.get(--currentCommand).undoCommand();
             SwingUtilities.updateComponentTreeUI(MainFrame.getInstance().getClassyTree().getTreeView());
         }
         else {
-            System.out.println("undoCommand is disabled");
+            MainFrame.getInstance().getActionManager().getUndoAction().setEnabled(false);
         }
     }
 
+    public int getCurrentCommand() {
+        return currentCommand;
+    }
+
+    public int getCommandSize() {
+        return commands.size();
+    }
 }

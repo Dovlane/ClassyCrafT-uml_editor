@@ -1,5 +1,6 @@
 package raf.dsw.classycraft.app.gui.swing.view;
 
+import com.sun.tools.javac.Main;
 import raf.dsw.classycraft.app.gui.swing.view.painters.ElementPainter;
 import raf.dsw.classycraft.app.gui.swing.view.painters.FactoryForPainters;
 import raf.dsw.classycraft.app.gui.swing.view.painters.LassoPainter;
@@ -20,7 +21,7 @@ import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DiagramView extends JPanel implements IListener {
+public class DiagramView extends JPanel implements IListener, CommandGui {
 
     private final Diagram diagram;
     private final List<ElementPainter> painters;
@@ -227,5 +228,33 @@ public class DiagramView extends JPanel implements IListener {
 
     public CommandManager getCommandManager() {
         return commandManager;
+    }
+
+    @Override
+    public void updateUndoAndRedoButtons() {
+        if (commandManager.getCurrentCommand() == commandManager.getCommandSize())
+            disableRedoAction();
+        else if (commandManager.getCurrentCommand() == 0)
+            disableUndoAction();
+    }
+
+    @Override
+    public void disableUndoAction() {
+        MainFrame.getInstance().getActionManager().getUndoAction().setEnabled(false);
+    }
+
+    @Override
+    public void disableRedoAction() {
+        MainFrame.getInstance().getActionManager().getRedoAction().setEnabled(false);
+    }
+
+    @Override
+    public void enableUndoAction() {
+        MainFrame.getInstance().getActionManager().getUndoAction().setEnabled(true);
+    }
+
+    @Override
+    public void enableRedoAction() {
+        MainFrame.getInstance().getActionManager().getRedoAction().setEnabled(true);
     }
 }

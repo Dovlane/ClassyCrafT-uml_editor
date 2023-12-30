@@ -45,6 +45,23 @@ public class PackageView extends JSplitPane implements IListener {
         tabbedPane.addMouseListener(tabbedPaneMouseAdapter);
         tabbedPane.addMouseMotionListener(tabbedPaneMouseAdapter);
         tabbedPane.addMouseWheelListener(tabbedPaneMouseAdapter);
+//        tabbedPane.addChangeListener(e -> {
+//            DiagramView newSelectedDiagramView = (DiagramView) tabbedPane.getComponentAt(tabbedPane.getSelectedIndex());
+//            newSelectedDiagramView.updateUndoAndRedoButtons();
+//        });
+//        final int[] previousIndex  = {0};
+//        tabbedPane.addChangeListener(e -> {
+//            if (e.getSource() instanceof JTabbedPane && previousIndex[0] != tabbedPane.getSelectedIndex() && tabbedPane.getSelectedIndex() != -1) {
+//                DiagramView newSelectedDiagramView = (DiagramView) tabbedPane.getComponentAt(tabbedPane.getSelectedIndex());
+//                newSelectedDiagramView.updateUndoAndRedoButtons();
+//                previousIndex[0] = tabbedPane.getSelectedIndex();
+//            }
+//            else if (e.getSource() instanceof JTabbedPane && (tabbedPane.getSelectedIndex() == -1 || tabbedPane.getSelectedIndex() == 0)) {
+//                DiagramView firstDiagramView = (DiagramView) tabbedPane.getComponentAt(0);
+//                firstDiagramView.updateUndoAndRedoButtons();
+//            }
+//        });
+
 
         // Toolbar
         JToolBar toolBar = new JToolBar(JToolBar.VERTICAL);
