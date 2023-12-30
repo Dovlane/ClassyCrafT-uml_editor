@@ -23,6 +23,7 @@ public class ActionManager {
     private OpenProjectAction openProjectAction;
     private OpenPackageAction openPackageAction;
     private OpenDiagramAction openDiagramAction;
+    private LoadDiagramTemplateAction loadDiagramTemplateAction;
     private AboutUsAction aboutUsAction;
     private RedoAction redoAction;
     private UndoAction undoAction;
@@ -55,6 +56,7 @@ public class ActionManager {
         openProjectAction = new OpenProjectAction();
         openPackageAction = new OpenPackageAction();
         openDiagramAction = new OpenDiagramAction();
+        loadDiagramTemplateAction = new LoadDiagramTemplateAction();
 
         // EDIT actions
         aboutUsAction = new AboutUsAction();

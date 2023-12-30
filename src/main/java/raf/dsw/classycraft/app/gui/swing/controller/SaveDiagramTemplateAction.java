@@ -15,6 +15,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Objects;
 
 public class SaveDiagramTemplateAction extends AbstractClassyAction {
 
@@ -69,8 +70,7 @@ public class SaveDiagramTemplateAction extends AbstractClassyAction {
 
                         // Create a new template
                         URL diagramTemplatesURL = getClass().getResource("/DiagramTemplates");
-                        assert diagramTemplatesURL != null;
-                        Path basePath = Paths.get(diagramTemplatesURL.toURI());
+                        Path basePath = Paths.get(Objects.requireNonNull(diagramTemplatesURL).toURI());
                         Path newFilePath = basePath.resolve(content);
                         if (!Files.exists(newFilePath)) {
                             Files.createFile(newFilePath);
@@ -78,7 +78,10 @@ public class SaveDiagramTemplateAction extends AbstractClassyAction {
 
                         // Save the Diagram into new template
                         node.setJSONFilePath(newFilePath.toString());
+                        String originalName = node.getName();
+                        node.setName("__name__");
                         ApplicationFramework.getInstance().getJackson().saveToJSONFile(node);
+                        node.setName(originalName);
                         node.setChanged(false);
 
                         System.out.println("Diagram template has been saved: " + content);

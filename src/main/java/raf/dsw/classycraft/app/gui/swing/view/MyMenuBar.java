@@ -26,6 +26,7 @@ public class MyMenuBar extends JMenuBar {
         openMenu.add(MainFrame.getInstance().getActionManager().getOpenProjectAction());
         openMenu.add(MainFrame.getInstance().getActionManager().getOpenPackageAction());
         openMenu.add(MainFrame.getInstance().getActionManager().getOpenDiagramAction());
+        openMenu.add(MainFrame.getInstance().getActionManager().getLoadDiagramTemplateAction());
         add(openMenu);
 
 
