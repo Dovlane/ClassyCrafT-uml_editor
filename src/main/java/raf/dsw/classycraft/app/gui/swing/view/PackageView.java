@@ -8,15 +8,19 @@ import raf.dsw.classycraft.app.model.compositePattern.ClassyNode;
 import raf.dsw.classycraft.app.model.elements.Interclass.Interclass;
 import raf.dsw.classycraft.app.model.observerPattern.IListener;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.NoninvertibleTransformException;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class PackageView extends JSplitPane implements IListener {
 
@@ -59,13 +63,22 @@ public class PackageView extends JSplitPane implements IListener {
         addButton(toolBar, "DuplicateElement", false);
 
         // ZoomToFit Button
-        URL imageURL = getClass().getResource("/images/ZoomToFit.png");
-        JButton zoomToFitButton = new JButton(new ImageIcon(imageURL));
+        URL ZoomToFitImageURL = getClass().getResource("/images/ZoomToFit.png");
+        JButton zoomToFitButton = new JButton(new ImageIcon(Objects.requireNonNull(ZoomToFitImageURL)));
         zoomToFitButton.setToolTipText("ZoomToFit");
         zoomToFitButton.addActionListener( e -> {
             zoomToFitAction();
         });
         toolBar.add(zoomToFitButton);
+
+        // ExportToPNG Button
+        URL ExportToPNGImageURL = getClass().getResource("/images/ExportToPNG.png");
+        JButton ExportToPNGButton = new JButton(new ImageIcon(Objects.requireNonNull(ExportToPNGImageURL)));
+        ExportToPNGButton.setToolTipText("ExportToPNG");
+        ExportToPNGButton.addActionListener( e -> {
+            exportToPNGAction();
+        });
+        toolBar.add(ExportToPNGButton);
 
         // Merge TabbedPane and ToolBar
         JSplitPane drawingPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, tabbedPane, toolBar);
@@ -81,7 +94,7 @@ public class PackageView extends JSplitPane implements IListener {
     private void addButton(JToolBar toolBar, String toolText, boolean startSelected) {
 
         URL imageURL = getClass().getResource("/images/" + toolText + ".png");
-        JToggleButton button = new JToggleButton(new ImageIcon(imageURL));
+        JToggleButton button = new JToggleButton(new ImageIcon(Objects.requireNonNull(imageURL)));
         button.setToolTipText(toolText);
         button.setFocusPainted(false); // Remove focus border
 
@@ -207,6 +220,58 @@ public class PackageView extends JSplitPane implements IListener {
             zoomFactor = Math.min(Math.max(0.0001, zoomFactor), 10000);
             System.out.println(zoomFactor);
             diagramView.zoomWithFactor(zoomFactor, viewCentre);
+        }
+    }
+
+    public void exportToPNGAction() {
+        System.out.println("ExportToPNGAction has been performed.");
+
+        if (tabbedPane.getTabCount() > 0) {
+
+            // ZoomToFit
+            zoomToFitAction();
+
+            // Create a BufferedImage to store the captured image
+            JPanel panel = (JPanel) tabbedPane.getSelectedComponent();
+            BufferedImage image = new BufferedImage(panel.getWidth(), panel.getHeight(), BufferedImage.TYPE_INT_ARGB);
+
+            // Create a graphics context from the image
+            Graphics2D g2d = image.createGraphics();
+
+            // Paint the panel to the graphics context
+            panel.paint(g2d);
+
+            // Dispose the graphics context
+            g2d.dispose();
+
+            // Choose a folder using JFileChooser
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+            int result = fileChooser.showDialog(null, "Select Folder");
+
+            if (result == JFileChooser.APPROVE_OPTION) {
+                // Get the selected folder
+                File selectedFolder = fileChooser.getSelectedFile();
+
+                // Prompt the user to enter a file name
+                String fileName = JOptionPane.showInputDialog("Enter file name (without extension):");
+
+                // If the user entered a file name, save the image
+                if (fileName != null && !fileName.isEmpty()) {
+                    // Specify the full file path including the selected folder and file name
+                    File outputFile = new File(selectedFolder, fileName + ".png");
+
+                    try {
+                        ImageIO.write(image, "png", outputFile);
+                        System.out.println("Image saved to: " + outputFile.getAbsolutePath());
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                } else {
+                    System.out.println("File name not provided. Image not saved.");
+                }
+            }
         }
     }
 
