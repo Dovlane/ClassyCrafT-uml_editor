@@ -21,23 +21,21 @@ public class CommandManager {
 
     public void doCommand(){
         if(currentCommand < commands.size()) {
-            MainFrame.getInstance().getActionManager().getUndoAction().setEnabled(true);
             commands.get(currentCommand++).doCommand();
             SwingUtilities.updateComponentTreeUI(MainFrame.getInstance().getClassyTree().getTreeView());
         }
         else {
-            MainFrame.getInstance().getActionManager().getRedoAction().setEnabled(false);
+            System.out.println("doCommand() is disabled.");
         }
     }
 
     public void undoCommand(){
         if(currentCommand > 0) {
-            MainFrame.getInstance().getActionManager().getRedoAction().setEnabled(true);
             commands.get(--currentCommand).undoCommand();
             SwingUtilities.updateComponentTreeUI(MainFrame.getInstance().getClassyTree().getTreeView());
         }
         else {
-            MainFrame.getInstance().getActionManager().getUndoAction().setEnabled(false);
+            System.out.println("undoCommand() is disabled.");
         }
     }
 
