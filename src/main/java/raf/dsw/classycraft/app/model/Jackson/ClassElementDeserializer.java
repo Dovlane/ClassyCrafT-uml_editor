@@ -55,7 +55,7 @@ public final class ClassElementDeserializer extends StdDeserializer<ClassElement
                 MainFrame.getInstance().getClassyTree().getRoot().getTreeItemFromClassyNode(parent);
         boolean success = MainFrame.getInstance().getClassyTree().attachChild(classyTreeParent, classElement);
         if (!success) {
-            System.out.println("ClassElement with the same name already exists.");
+            System.out.println("Could not add a class element to its parent.");
             return null;
         }
 

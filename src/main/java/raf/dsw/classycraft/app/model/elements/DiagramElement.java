@@ -17,9 +17,4 @@ public abstract class DiagramElement extends ClassyNodeLeaf implements IPublishe
             listener.update(notification);
     }
 
-    @Override
-    public void changeOccurred() {
-        getParent().changeOccurred();
-    }
-
 }

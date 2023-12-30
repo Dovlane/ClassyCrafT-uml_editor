@@ -17,20 +17,10 @@ import lombok.Setter;
 public class Project extends ClassyNodeComposite implements IPublisher {
 
     private String author;
-    private String folderPath;
-    private boolean changed;
     private int nmbOfCreatedPackages;
 
     public Project(String name, ClassyNode parent) {
         super(name, parent);
-        this.changed = true;
-    }
-
-    public Project(String projectName, ClassyNode parent, String author, String folderPath) {
-        super(projectName, parent);
-        this.author = author;
-        this.folderPath = folderPath;
-        this.changed = true;
     }
 
     @Override
@@ -41,7 +31,7 @@ public class Project extends ClassyNodeComposite implements IPublisher {
                 Notification notification =
                         new Notification(child, NotificationType.ADD);
                 notifyAllSubscribers(notification);
-                setChanged(true);
+                changeOccurred();
                 return true;
             }
         }
@@ -75,7 +65,7 @@ public class Project extends ClassyNodeComposite implements IPublisher {
             Notification notification =
                     new Notification(this, NotificationType.SET);
             notifyAllSubscribers(notification);
-            setChanged(true);
+            changeOccurred();
 
             return true;
         }
@@ -85,11 +75,6 @@ public class Project extends ClassyNodeComposite implements IPublisher {
         }
 
         return false;
-    }
-
-    @Override
-    public void changeOccurred() {
-        setChanged(true);
     }
 
 }

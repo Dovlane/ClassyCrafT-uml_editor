@@ -53,7 +53,7 @@ public final class EnumElementDeserializer extends StdDeserializer<EnumElement> 
                 MainFrame.getInstance().getClassyTree().getRoot().getTreeItemFromClassyNode(parent);
         boolean success = MainFrame.getInstance().getClassyTree().attachChild(classyTreeParent, enumElement);
         if (!success) {
-            System.out.println("EnumElement with the same name already exists.");
+            System.out.println("Could not add a enum element to its parent.");
             return null;
         }
 

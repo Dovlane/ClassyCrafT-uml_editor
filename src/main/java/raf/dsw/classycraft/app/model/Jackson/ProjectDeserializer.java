@@ -38,12 +38,11 @@ public final class ProjectDeserializer extends StdDeserializer<Project> {
         // Read attributes values from JSON
         String name = node.path("name").asText();
         String author = node.path("author").asText();
-        String folderPath = node.path("folderPath").asText();
         int nmbOfCreatedPackages = node.path("nmbOfCreatedPackages").asInt();
 
         // Link to the parent
         String parentAbsolutePath = ClassyNode.getCurrentSelectedNodeAbsolutePath() + "/" + node.path("parent").asText();
-        ProjectExplorer parent = (ProjectExplorer) MainFrame.getInstance().getClassyTree().getNodeFromAbsolutePath(parentAbsolutePath);
+        ClassyNode parent = MainFrame.getInstance().getClassyTree().getNodeFromAbsolutePath(parentAbsolutePath);
         Project project = new Project(name, parent);
 
         // Add a child to its parent
@@ -51,13 +50,12 @@ public final class ProjectDeserializer extends StdDeserializer<Project> {
                 MainFrame.getInstance().getClassyTree().getRoot().getTreeItemFromClassyNode(parent);
         boolean success = MainFrame.getInstance().getClassyTree().attachChild(classyTreeParent, project);
         if (!success) {
-            System.out.println("Project with the same name already exists.");
+            System.out.println("Could not add a project to its parent.");
             return null;
         }
 
         // Write attributes to the project
         project.setAuthor(author);
-        project.setFolderPath(folderPath);
         project.setNmbOfCreatedPackages(nmbOfCreatedPackages);
 
         // Deserialize children

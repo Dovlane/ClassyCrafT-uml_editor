@@ -28,7 +28,7 @@ public class ProjectExplorer extends ClassyNodeComposite implements IPublisher {
 
     @Override
     public void changeOccurred() {
-
+        setChanged(true);
     }
 
     public void increaseCounter() {

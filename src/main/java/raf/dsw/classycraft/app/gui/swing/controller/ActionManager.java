@@ -19,7 +19,9 @@ public class ActionManager {
     private RenameAction renameAction;
     private ProjectAuthorAction projectAuthorAction;
     private SaveAction saveAction;
-    private OpenAction openAction;
+    private OpenProjectAction openProjectAction;
+    private OpenPackageAction openPackageAction;
+    private OpenDiagramAction openDiagramAction;
     private AboutUsAction aboutUsAction;
     private RedoAction redoAction;
     private UndoAction undoAction;
@@ -34,6 +36,8 @@ public class ActionManager {
     }
 
     private void initializeActions() {
+
+        // FILE actions
         exitAction = new ExitAction();
         newProjectAction = new NewProjectAction();
         newPackageAction = new NewPackageAction();
@@ -42,10 +46,16 @@ public class ActionManager {
         renameAction = new RenameAction();
         projectAuthorAction = new ProjectAuthorAction();
         saveAction = new SaveAction();
-        openAction = new OpenAction();
-        aboutUsAction = new AboutUsAction();
         redoAction = new RedoAction();
         undoAction = new UndoAction();
+
+        // OPEN actions
+        openProjectAction = new OpenProjectAction();
+        openPackageAction = new OpenPackageAction();
+        openDiagramAction = new OpenDiagramAction();
+
+        // EDIT actions
+        aboutUsAction = new AboutUsAction();
 
         // DEBUG actions
         errorTestAction = new ErrorTestAction();

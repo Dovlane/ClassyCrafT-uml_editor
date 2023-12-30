@@ -17,10 +17,17 @@ public class MyMenuBar extends JMenuBar {
         fileMenu.add(MainFrame.getInstance().getActionManager().getRenameAction());
         fileMenu.add(MainFrame.getInstance().getActionManager().getProjectAuthorAction());
         fileMenu.add(MainFrame.getInstance().getActionManager().getSaveAction());
-        fileMenu.add(MainFrame.getInstance().getActionManager().getOpenAction());
         fileMenu.add(MainFrame.getInstance().getActionManager().getExitAction());
-
         add(fileMenu);
+
+        // Add an Open Menu
+        JMenu openMenu = new JMenu("Open");
+        openMenu.setMnemonic(KeyEvent.VK_O);
+        openMenu.add(MainFrame.getInstance().getActionManager().getOpenProjectAction());
+        openMenu.add(MainFrame.getInstance().getActionManager().getOpenPackageAction());
+        openMenu.add(MainFrame.getInstance().getActionManager().getOpenDiagramAction());
+        add(openMenu);
+
 
         // Add a Edit Menu
         JMenu editMenu = new JMenu("Edit");

@@ -59,7 +59,7 @@ public class DependencyDeserializer extends StdDeserializer<Dependency> {
                 MainFrame.getInstance().getClassyTree().getRoot().getTreeItemFromClassyNode(parent);
         boolean success = MainFrame.getInstance().getClassyTree().attachChild(classyTreeParent, dependency);
         if (!success) {
-            System.out.println("Dependency with the same name already exists.");
+            System.out.println("Could not add a dependency to its parent.");
             return null;
         }
 
