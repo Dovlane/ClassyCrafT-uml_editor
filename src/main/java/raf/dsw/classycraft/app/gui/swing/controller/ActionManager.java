@@ -19,6 +19,7 @@ public class ActionManager {
     private RenameAction renameAction;
     private ProjectAuthorAction projectAuthorAction;
     private SaveAction saveAction;
+    private SaveDiagramTemplateAction saveDiagramTemplateAction;
     private OpenProjectAction openProjectAction;
     private OpenPackageAction openPackageAction;
     private OpenDiagramAction openDiagramAction;
@@ -46,6 +47,7 @@ public class ActionManager {
         renameAction = new RenameAction();
         projectAuthorAction = new ProjectAuthorAction();
         saveAction = new SaveAction();
+        saveDiagramTemplateAction = new SaveDiagramTemplateAction();
         redoAction = new RedoAction();
         undoAction = new UndoAction();
 

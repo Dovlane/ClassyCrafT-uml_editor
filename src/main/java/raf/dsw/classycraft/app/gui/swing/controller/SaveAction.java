@@ -5,6 +5,7 @@ import raf.dsw.classycraft.app.gui.swing.view.MainFrame;
 import raf.dsw.classycraft.app.model.ClassyRepository.Diagram;
 import raf.dsw.classycraft.app.model.ClassyRepository.Project;
 import raf.dsw.classycraft.app.model.ClassyRepository.ProjectExplorer;
+import raf.dsw.classycraft.app.model.MessageGenerator.MessageType;
 import raf.dsw.classycraft.app.model.compositePattern.ClassyNode;
 
 import javax.swing.*;
@@ -26,6 +27,7 @@ public class SaveAction extends AbstractClassyAction {
         JFileChooser jfc = new JFileChooser();
 
         if (MainFrame.getInstance().getClassyTree().getSelectedNode().getClassyNode() instanceof ProjectExplorer) {
+            MainFrame.getInstance().getMessageGenerator().generateMessage("Cannot save Project Explorer.", MessageType.ERROR);
             return;
         }
 
@@ -48,46 +50,6 @@ public class SaveAction extends AbstractClassyAction {
 
         ApplicationFramework.getInstance().getJackson().saveToJSONFile(node);
         node.setChanged(false);
-
-//        else if (MainFrame.getInstance().getClassyTree().getSelectedNode().getClassyNode() instanceof Diagram) {
-//
-//            // Create a pop-up window
-//            JFrame frame = new JFrame("Diagram Template Name");
-//            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-//            frame.setSize(350, 100);
-//
-//            // Create a JPanel to hold components
-//            JPanel panel = new JPanel();
-//            frame.add(panel);
-//
-//            // Create a JTextField (text box)
-//            JTextField textField = new JTextField(20);
-//            panel.add(textField);
-//
-//            // Create a JButton
-//            JButton saveButton = new JButton("Save");
-//            panel.add(saveButton);
-//
-//            // Add an ActionListener to the button
-//            saveButton.addActionListener(new ActionListener() {
-//                @Override
-//                public void actionPerformed(ActionEvent e) {
-//                    String content = textField.getText();
-//
-//                    if (!content.isEmpty()) {
-//
-//                        System.out.println(content);
-//
-//                        // Close the window after successful renaming
-//                        frame.dispose();
-//
-//                    }
-//                }
-//            });
-//
-//            // Display the JFrame
-//            frame.setVisible(true);
-//        }
     }
 
 }
