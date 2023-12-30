@@ -31,6 +31,7 @@ public class PackageView extends JSplitPane implements IListener {
     private final Label labelAuthorName;
     private final JTabbedPane tabbedPane;
     private static JToggleButton selectedButton;
+
     public PackageView(ProjectExplorer projectExplorer) {
         super(JSplitPane.VERTICAL_SPLIT);
 
@@ -251,6 +252,7 @@ public class PackageView extends JSplitPane implements IListener {
             int result = fileChooser.showDialog(null, "Select Folder");
 
             if (result == JFileChooser.APPROVE_OPTION) {
+
                 // Get the selected folder
                 File selectedFolder = fileChooser.getSelectedFile();
 
@@ -259,6 +261,7 @@ public class PackageView extends JSplitPane implements IListener {
 
                 // If the user entered a file name, save the image
                 if (fileName != null && !fileName.isEmpty()) {
+
                     // Specify the full file path including the selected folder and file name
                     File outputFile = new File(selectedFolder, fileName + ".png");
 
