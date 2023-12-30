@@ -1,18 +1,16 @@
 package raf.dsw.classycraft.app.gui.swing.tree;
 
-import raf.dsw.classycraft.app.core.ApplicationFramework;
+import lombok.Getter;
+import lombok.Setter;
 import raf.dsw.classycraft.app.gui.swing.tree.model.ClassyTreeItem;
 import raf.dsw.classycraft.app.gui.swing.tree.view.ClassyTreeView;
 import raf.dsw.classycraft.app.gui.swing.view.MainFrame;
 import raf.dsw.classycraft.app.model.MessageGenerator.MessageType;
 import raf.dsw.classycraft.app.model.ClassyRepository.*;
-import raf.dsw.classycraft.app.model.commandPattern.concreteCommand.AddInterclassCommand;
 import raf.dsw.classycraft.app.model.compositePattern.ClassyNode;
 import raf.dsw.classycraft.app.model.compositePattern.ClassyNodeComposite;
 import raf.dsw.classycraft.app.model.abstractFactoryForClassyNodes.*;
 import raf.dsw.classycraft.app.model.elements.Connection.Connection;
-import raf.dsw.classycraft.app.model.elements.DiagramElement;
-import raf.dsw.classycraft.app.model.elements.Interclass.Interclass;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultTreeModel;
@@ -20,6 +18,8 @@ import javax.swing.tree.TreePath;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+@Getter
+@Setter
 public class ClassyTree implements IClassyTree {
 
     private ClassyTreeItem root;
@@ -217,16 +217,22 @@ public class ClassyTree implements IClassyTree {
     }
 
     @Override
+    public ClassyNode getNodeFromAbsolutePath(String absolutePath) {
+        ClassyNode tmp = root.getClassyNode();
+        String[] parts = absolutePath.split("/");
+        for (int i = 1; i < parts.length; i++) {
+            String part = parts[i];
+            tmp = ((ClassyNodeComposite) tmp).getChildByName(part);
+            if (tmp == null) {
+                return null;
+            }
+        }
+        return tmp;
+    }
+
+    @Override
     public ClassyTreeItem getSelectedNode() {
         return (ClassyTreeItem) treeView.getLastSelectedPathComponent();
     }
 
-    @Override
-    public ClassyTreeItem getRoot() {
-        return root;
-    }
-
-    public ClassyTreeView getTreeView() {
-        return treeView;
-    }
 }

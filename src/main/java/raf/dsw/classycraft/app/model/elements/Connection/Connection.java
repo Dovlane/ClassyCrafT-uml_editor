@@ -1,18 +1,27 @@
 package raf.dsw.classycraft.app.model.elements.Connection;
 
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.Setter;
 import raf.dsw.classycraft.app.model.ClassyRepository.Diagram;
-import raf.dsw.classycraft.app.model.compositePattern.ClassyNode;
 import raf.dsw.classycraft.app.model.elements.DiagramElement;
 import raf.dsw.classycraft.app.model.elements.Interclass.Interclass;
 
 import java.awt.*;
 import java.util.Objects;
 
+@Getter
+@Setter
 public abstract class Connection extends DiagramElement {
 
+    @JsonIdentityReference
     protected Interclass from;
+    @JsonIdentityReference
     protected Interclass to;
+    @JsonIgnore
     protected Point currentPointFrom;
+    @JsonIgnore
     protected Point currentPointTo;
 
     public Connection(String name, Diagram parent) {
@@ -50,49 +59,13 @@ public abstract class Connection extends DiagramElement {
         return Point.distance(fromPoint.getX(), fromPoint.getY(), toPoint.getX(), toPoint.getY());
     }
 
+    @JsonIgnore
     public boolean isReflexiveConnection() {
         return getFrom().equals(getTo());
     }
 
-    @Override
-    public String getName() {
-        String prefix = "";
-        if (this instanceof Aggregation)
-            prefix = "agg";
-        else if (this instanceof Composition)
-            prefix = "com";
-        else if (this instanceof Dependency)
-            prefix = "dep";
-        else
-            prefix = "gen";
-        return prefix + "-" + from.getName() +
-                 "-" + to.getName();
-    }
-
-    public Point getCurrentPointFrom() {
-        return currentPointFrom;
-    }
-
-    public Point getCurrentPointTo() {
-        return currentPointTo;
-    }
-
-
-    // Getters and Setters
-    public Interclass getFrom() {
-        return from;
-    }
-
-    public void setFrom(Interclass from) {
-        this.from = from;
-    }
-
-    public Interclass getTo() {
-        return to;
-    }
-
-    public void setTo(Interclass to) {
-        this.to = to;
+    public String getPlainName() {
+        return from.getPlainName() + "-" + to.getPlainName();
     }
 
     @Override

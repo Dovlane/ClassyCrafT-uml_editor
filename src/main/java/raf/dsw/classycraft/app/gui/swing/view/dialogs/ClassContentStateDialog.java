@@ -2,7 +2,6 @@ package raf.dsw.classycraft.app.gui.swing.view.dialogs;
 
 import raf.dsw.classycraft.app.gui.swing.tree.model.ClassyTreeItem;
 import raf.dsw.classycraft.app.gui.swing.view.MainFrame;
-import raf.dsw.classycraft.app.model.MessageGenerator.MessageType;
 import raf.dsw.classycraft.app.model.elements.ClassContent.Attribute;
 import raf.dsw.classycraft.app.model.elements.ClassContent.EnumLiteral;
 import raf.dsw.classycraft.app.model.elements.ClassContent.Method;
@@ -205,17 +204,17 @@ public class ClassContentStateDialog extends JFrame {
             ClassElement classElement = (ClassElement) selectedDiagramElement;
             for (Method method : classElement.getClassMethods()) {
                 manageInitialRow(jTableMethods, false); // Delete the initial row if it exists
-                ((DefaultTableModel) jTableMethods.getModel()).addRow(new Object[]{method.getName(), method.getAccessModifiers(), method.getNonAccessModifiers(), method.getType()});
+                ((DefaultTableModel) jTableMethods.getModel()).addRow(new Object[]{method.getName(), method.getAccessModifiers(), method.getNonAccessModifiers(), method.getReturnType()});
             }
             for (Attribute attribute : classElement.getClassAttributes()) {
                 manageInitialRow(jTableAttributes, false); // Delete the initial row if it exists
-                ((DefaultTableModel) jTableAttributes.getModel()).addRow(new Object[]{attribute.getName(), attribute.getAccessModifiers(), attribute.getNonAccessModifiers(), attribute.getType()});
+                ((DefaultTableModel) jTableAttributes.getModel()).addRow(new Object[]{attribute.getName(), attribute.getAccessModifiers(), attribute.getNonAccessModifiers(), attribute.getDataType()});
             }
         } else if (classContentStateEnum == ClassContentStateEnum.INTERFACE_CONTENT) {
             InterfaceElement interfaceElement = (InterfaceElement) selectedDiagramElement;
             for (Method method : interfaceElement.getInterfaceMethods()) {
                 manageInitialRow(jTableMethods, false); // Delete the initial row if it exists
-                ((DefaultTableModel) jTableMethods.getModel()).addRow(new Object[]{method.getName(), method.getAccessModifiers(), method.getNonAccessModifiers(), method.getType()});
+                ((DefaultTableModel) jTableMethods.getModel()).addRow(new Object[]{method.getName(), method.getAccessModifiers(), method.getNonAccessModifiers(), method.getReturnType()});
             }
         } else if (classContentStateEnum == ClassContentStateEnum.ENUM_CONTENT) {
             EnumElement enumElement = (EnumElement) selectedDiagramElement;

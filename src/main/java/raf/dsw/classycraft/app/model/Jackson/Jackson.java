@@ -1,21 +1,20 @@
-package raf.dsw.classycraft.app.model.JacksonSerializer;
+package raf.dsw.classycraft.app.model.Jackson;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import raf.dsw.classycraft.app.model.ClassyRepository.Diagram;
 import raf.dsw.classycraft.app.model.ClassyRepository.Project;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 
-public class JacksonSerializer implements Serializer {
+public class Jackson implements IJackson {
 
     private final ObjectMapper objectMapper;
 
-    public JacksonSerializer() {
+    public Jackson() {
         objectMapper = new ObjectMapper();
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
+
     }
 
     @Override
@@ -35,6 +34,16 @@ public class JacksonSerializer implements Serializer {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public Diagram loadDiagram(File file) {
+        return null;
+    }
+
+    @Override
+    public void saveDiagram(Diagram node, String diagramTemplateName) {
+
     }
 
 }

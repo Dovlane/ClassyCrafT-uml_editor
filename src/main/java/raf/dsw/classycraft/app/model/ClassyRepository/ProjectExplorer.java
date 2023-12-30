@@ -10,13 +10,12 @@ public class ProjectExplorer extends ClassyNodeComposite implements IPublisher {
 
     public ProjectExplorer(String name) {
         super(name, null);
-        nmbOfCreatedProjects = 0;
     }
 
     @Override
     public boolean addChild(ClassyNode child) {
         if (child instanceof Project) {
-            if (!getChildren().contains(child)) {
+            if (getChildByName(child.getName()) == null) {
                 getChildren().add(child);
                 Notification notification =
                         new Notification(child, NotificationType.ADD);

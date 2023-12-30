@@ -1,11 +1,17 @@
 package raf.dsw.classycraft.app.model.elements.Connection;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import lombok.Getter;
+import lombok.Setter;
 import raf.dsw.classycraft.app.model.ClassyRepository.Diagram;
-import raf.dsw.classycraft.app.model.ClassyRepository.Package;
-import raf.dsw.classycraft.app.model.compositePattern.ClassyNode;
+import raf.dsw.classycraft.app.model.Jackson.CompositionDeserializer;
 import raf.dsw.classycraft.app.model.elements.Interclass.Interclass;
 import raf.dsw.classycraft.app.model.elements.Modifiers.AccessModifiers;
 
+@Getter
+@Setter
+@JsonDeserialize(using = CompositionDeserializer.class)
 public class Composition extends Connection implements IAggregationAndComposition {
 
     private CardinalityEnum cardinalityEnum;
@@ -29,18 +35,10 @@ public class Composition extends Connection implements IAggregationAndCompositio
         changeOccurred();
     }
 
+    @JsonIgnore
     @Override
-    public String getAttributeName() {
-        return attributeName;
+    public String getName() {
+        return "com-" + from.getName() + "-" + to.getName();
     }
 
-    @Override
-    public CardinalityEnum getCardinalityEnum() {
-        return cardinalityEnum;
-    }
-
-    @Override
-    public AccessModifiers getAttributeAccessModifier() {
-        return attributeAccessModifier;
-    }
 }

@@ -1,6 +1,8 @@
 package raf.dsw.classycraft.app.model.elements.Interclass;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.Setter;
 import raf.dsw.classycraft.app.model.ClassyRepository.Diagram;
 import raf.dsw.classycraft.app.model.ClassyRepository.Notification;
 import raf.dsw.classycraft.app.model.ClassyRepository.NotificationType;
@@ -13,6 +15,8 @@ import raf.dsw.classycraft.app.model.elements.Modifiers.NonAccessModifiers;
 import java.awt.*;
 import java.util.Dictionary;
 
+@Getter
+@Setter
 public abstract class Interclass extends DiagramElement {
 
     private static int initialBoxWidth = 200;
@@ -24,8 +28,6 @@ public abstract class Interclass extends DiagramElement {
     protected int boxWidth;
     protected int boxHeight;
     private int numberOfCopies;
-    @JsonIgnore
-    protected Point[] connectionAttachingPoints;
 
     public Interclass(String name, Diagram parent, Point point, AccessModifiers visibility, NonAccessModifiers nonAccessModifiers) {
         super(name, parent);
@@ -58,10 +60,6 @@ public abstract class Interclass extends DiagramElement {
         updateAbsoluteLocation(new Point(location.x + t.x, location.y + t.y));
     }
 
-    public Point getLocation() {
-        return location;
-    }
-
     public void setLocation(Point location) {
         this.location = location;
         Notification notification =
@@ -70,6 +68,7 @@ public abstract class Interclass extends DiagramElement {
         changeOccurred();
     }
 
+    @JsonIgnore
     public int getBoxWidth() {
         return boxWidth;
     }
@@ -79,6 +78,7 @@ public abstract class Interclass extends DiagramElement {
         changeOccurred();
     }
 
+    @JsonIgnore
     public int getBoxHeight() {
         return boxHeight;
     }
@@ -96,6 +96,7 @@ public abstract class Interclass extends DiagramElement {
         return initialBoxHeight;
     }
 
+    @JsonIgnore
     public Point[] getConnectionAttachingPoints() {
         int locationX = (int)location.getX();
         int locationY = (int)location.getY();
@@ -133,6 +134,7 @@ public abstract class Interclass extends DiagramElement {
         return visibility;
     }
 
+    @JsonIgnore
     public Point getBestStartingPoint(Point endPoint) {
         Point[] potentialStartingPoints = getConnectionAttachingPoints();
         Point bestStartingPoint = potentialStartingPoints[0];
@@ -170,4 +172,9 @@ public abstract class Interclass extends DiagramElement {
         notifyAllSubscribers(new Notification(this, NotificationType.SET));
         changeOccurred();
     }
+
+    public String getPlainName() {
+        return name;
+    }
+
 }

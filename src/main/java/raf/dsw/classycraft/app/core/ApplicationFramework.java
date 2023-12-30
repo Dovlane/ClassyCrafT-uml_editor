@@ -2,8 +2,8 @@ package raf.dsw.classycraft.app.core;
 
 import raf.dsw.classycraft.app.gui.swing.view.MainFrame;
 import raf.dsw.classycraft.app.model.ClassyRepository.ClassyRepository;
-import raf.dsw.classycraft.app.model.JacksonSerializer.JacksonSerializer;
-import raf.dsw.classycraft.app.model.JacksonSerializer.Serializer;
+import raf.dsw.classycraft.app.model.Jackson.Jackson;
+import raf.dsw.classycraft.app.model.Jackson.IJackson;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -14,11 +14,11 @@ public class ApplicationFramework {
 
     private static ApplicationFramework instance;
     private ClassyRepository classyRepository;
-    private Serializer serializer;
+    private IJackson jackson;
 
     public void initialize() {
         classyRepository = new ClassyRepository();
-        serializer = new JacksonSerializer();
+        jackson = new Jackson();
         MainFrame.getInstance().setVisible(true);
     }
 

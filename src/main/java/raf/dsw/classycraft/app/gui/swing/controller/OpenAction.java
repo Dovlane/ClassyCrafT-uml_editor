@@ -2,11 +2,9 @@ package raf.dsw.classycraft.app.gui.swing.controller;
 
 import raf.dsw.classycraft.app.core.ApplicationFramework;
 import raf.dsw.classycraft.app.gui.swing.view.MainFrame;
-import raf.dsw.classycraft.app.model.ClassyRepository.Project;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
 import java.io.File;
 
 public class OpenAction extends AbstractClassyAction {
@@ -25,8 +23,7 @@ public class OpenAction extends AbstractClassyAction {
         if (jfc.showOpenDialog(MainFrame.getInstance()) == JFileChooser.APPROVE_OPTION) {
             try {
                 File file = jfc.getSelectedFile();
-                Project p = ApplicationFramework.getInstance().getSerializer().loadProject(file);
-                MainFrame.getInstance().getClassyTree().loadProject(p);
+                ApplicationFramework.getInstance().getJackson().loadProject(file);
             }
             catch (Exception exception) {
                 exception.printStackTrace();

@@ -27,6 +27,8 @@ public interface IClassyTree {
 
     ClassyTreeItem getRoot();
 
+    ClassyNode getNodeFromAbsolutePath(String absolutePath);
+
     ClassyTreeItem getSelectedNode();
 
 }
