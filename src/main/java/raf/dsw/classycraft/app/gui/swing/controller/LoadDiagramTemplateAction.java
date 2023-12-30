@@ -73,7 +73,6 @@ public class LoadDiagramTemplateAction extends AbstractClassyAction {
                 // Loaded successfully
                 if (newNode != null) {
                     newNode.setName(oldNode.getName());
-                    newNode.setJSONFilePath(file.getPath());
                     ClassyNode.setCurrentSelectedNode(newNode);
                 }
                 // Failed to load
