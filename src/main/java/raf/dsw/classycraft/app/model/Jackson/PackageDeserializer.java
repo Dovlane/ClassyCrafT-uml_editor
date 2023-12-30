@@ -36,26 +36,13 @@ public final class PackageDeserializer extends StdDeserializer<Package> {
 
         // Read attributes values from JSON
         String name = node.path("name").asText();
-        String absolutePath = node.path("absolutePath").asText();
         int nmbOfCreatedPackages = node.path("nmbOfCreatedPackages").asInt();
         int nmbOfCreatedDiagrams = node.path("nmbOfCreatedDiagrams").asInt();
 
         // Link to the parent
-        ClassyNode parent;
-        Package aPackage;
-        if (node.path("parent").isObject()) {
-            if (node.path("parent").path("type").asText().equals("Project")) {
-                parent = objectMapper.treeToValue(node.path("parent"), Project.class);
-            }
-            else {
-                parent = objectMapper.treeToValue(node.path("parent"), Package.class);
-            }
-        }
-        else {
-            String parentAbsolutePath = node.path("parent").asText();
-            parent = MainFrame.getInstance().getClassyTree().getNodeFromAbsolutePath(parentAbsolutePath);
-        }
-        aPackage = new Package(name, parent);
+        String parentAbsolutePath = ClassyNode.getCurrentSelectedNodeAbsolutePath() + "/" + node.path("parent").asText();
+        ClassyNode parent = MainFrame.getInstance().getClassyTree().getNodeFromAbsolutePath(parentAbsolutePath);
+        Package aPackage = new Package(name, parent);
 
         // Add a child to its parent
         ClassyTreeItem classyTreeParent =

@@ -12,6 +12,7 @@ import raf.dsw.classycraft.app.gui.swing.view.MainFrame;
 import raf.dsw.classycraft.app.model.ClassyRepository.Package;
 import raf.dsw.classycraft.app.model.ClassyRepository.Project;
 import raf.dsw.classycraft.app.model.ClassyRepository.ProjectExplorer;
+import raf.dsw.classycraft.app.model.compositePattern.ClassyNode;
 
 import java.io.IOException;
 
@@ -36,13 +37,13 @@ public final class ProjectDeserializer extends StdDeserializer<Project> {
 
         // Read attributes values from JSON
         String name = node.path("name").asText();
-        String absolutePath = node.path("absolutePath").asText();
         String author = node.path("author").asText();
         String folderPath = node.path("folderPath").asText();
         int nmbOfCreatedPackages = node.path("nmbOfCreatedPackages").asInt();
 
         // Link to the parent
-        ProjectExplorer parent = ApplicationFramework.getInstance().getClassyRepository().getRoot();
+        String parentAbsolutePath = ClassyNode.getCurrentSelectedNodeAbsolutePath() + "/" + node.path("parent").asText();
+        ProjectExplorer parent = (ProjectExplorer) MainFrame.getInstance().getClassyTree().getNodeFromAbsolutePath(parentAbsolutePath);
         Project project = new Project(name, parent);
 
         // Add a child to its parent

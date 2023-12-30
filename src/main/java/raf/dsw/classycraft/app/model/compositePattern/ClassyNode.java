@@ -36,14 +36,15 @@ import java.util.List;
         @JsonSubTypes.Type(value = Dependency.class, name = "Dependency"),
         @JsonSubTypes.Type(value = Generalization.class, name = "Generalization")
 })
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "absolutePath")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "referencePath")
 public abstract class ClassyNode implements IPublisher {
 
     protected String name;
-    @JsonIdentityReference
+    @JsonIdentityReference(alwaysAsId = true)
     protected ClassyNode parent;
     @JsonIgnore
     protected List<IListener> listeners;
+    private static ClassyNode currentSelectedNode;
 
     public ClassyNode(String name, ClassyNode parent) {
         this.name = name;
@@ -96,6 +97,7 @@ public abstract class ClassyNode implements IPublisher {
         }
     }
 
+    @JsonIgnore
     public String getAbsolutePath() {
 
         // Recursive base case
@@ -153,6 +155,30 @@ public abstract class ClassyNode implements IPublisher {
 
     // Save Action
     public abstract void changeOccurred();
+
+
+    // Jackson Serialization/Deserialization
+    public static String getCurrentSelectedNodeAbsolutePath() {
+        return currentSelectedNode.getAbsolutePath();
+    }
+
+    public static void setCurrentSelectedNode(ClassyNode currentSelectedNode) {
+        ClassyNode.currentSelectedNode = currentSelectedNode;
+    }
+
+    public String getReferencePath() {
+
+        // Recursive base cases
+        if (this == currentSelectedNode.getParent()) {
+            return "";
+        }
+
+        if (this == currentSelectedNode) {
+            return getName();
+        }
+
+        return getParent().getReferencePath() + "/" + getName();
+    }
 
 
     // IPublisher

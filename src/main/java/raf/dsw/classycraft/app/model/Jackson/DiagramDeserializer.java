@@ -10,6 +10,7 @@ import raf.dsw.classycraft.app.gui.swing.tree.model.ClassyTreeItem;
 import raf.dsw.classycraft.app.gui.swing.view.MainFrame;
 import raf.dsw.classycraft.app.model.ClassyRepository.Diagram;
 import raf.dsw.classycraft.app.model.ClassyRepository.Package;
+import raf.dsw.classycraft.app.model.compositePattern.ClassyNode;
 import raf.dsw.classycraft.app.model.elements.Connection.Aggregation;
 import raf.dsw.classycraft.app.model.elements.Connection.Composition;
 import raf.dsw.classycraft.app.model.elements.Connection.Dependency;
@@ -41,19 +42,11 @@ public final class DiagramDeserializer extends StdDeserializer<Diagram> {
 
         // Read attributes values from JSON
         String name = node.path("name").asText();
-        String absolutePath = node.path("absolutePath").asText();
 
         // Link to the parent
-        Package parent;
-        Diagram diagram;
-        if (node.path("parent").isObject()) {
-            parent = objectMapper.treeToValue(node.path("parent"), Package.class);
-        }
-        else {
-            String parentAbsolutePath = node.path("parent").asText();
-            parent = (Package) MainFrame.getInstance().getClassyTree().getNodeFromAbsolutePath(parentAbsolutePath);
-        }
-        diagram = new Diagram(name, parent);
+        String parentAbsolutePath = ClassyNode.getCurrentSelectedNodeAbsolutePath() + "/" + node.path("parent").asText();
+        Package parent = (Package) MainFrame.getInstance().getClassyTree().getNodeFromAbsolutePath(parentAbsolutePath);
+        Diagram diagram = new Diagram(name, parent);
 
         // Add a child to its parent
         ClassyTreeItem classyTreeParent =

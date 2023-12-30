@@ -33,9 +33,9 @@ public final class AttributeDeserializer extends StdDeserializer<Attribute> {
         AccessModifiers accessModifiers = AccessModifiers.valueOf(node.path("accessModifiers").asText());
         NonAccessModifiers nonAccessModifiers = NonAccessModifiers.valueOf(node.path("nonAccessModifiers").asText());
         String name = node.path("name").asText();
-        String type = node.path("type").asText();
+        String dataType = node.path("dataType").asText();
 
-        return new Attribute(accessModifiers, nonAccessModifiers, name, type);
+        return new Attribute(accessModifiers, nonAccessModifiers, name, dataType);
     }
 
 }

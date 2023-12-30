@@ -33,9 +33,9 @@ public final class MethodDeserializer extends StdDeserializer<Method> {
         AccessModifiers accessModifiers = AccessModifiers.valueOf(node.path("accessModifiers").asText());
         NonAccessModifiers nonAccessModifiers = NonAccessModifiers.valueOf(node.path("nonAccessModifiers").asText());
         String name = node.path("name").asText();
-        String type = node.path("type").asText();
+        String returnType = node.path("returnType").asText();
 
-        return new Method(name, accessModifiers, nonAccessModifiers, type);
+        return new Method(name, accessModifiers, nonAccessModifiers, returnType);
     }
 
 }

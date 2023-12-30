@@ -1,6 +1,7 @@
 package raf.dsw.classycraft.app.gui.swing.tree.controller;
 
 import raf.dsw.classycraft.app.gui.swing.tree.model.ClassyTreeItem;
+import raf.dsw.classycraft.app.model.compositePattern.ClassyNode;
 
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
@@ -12,7 +13,8 @@ public class ClassyTreeSelectionListener implements TreeSelectionListener {
     public void valueChanged(TreeSelectionEvent e) {
         TreePath path = e.getPath();
         ClassyTreeItem treeItemSelected = (ClassyTreeItem)path.getLastPathComponent();
-        System.out.println("Selektovan čvor: " + treeItemSelected);
+        ClassyNode.setCurrentSelectedNode(treeItemSelected.getClassyNode());
+        System.out.println("Selected node: " + treeItemSelected);
         System.out.println("getPath: " + e.getPath());
     }
 
