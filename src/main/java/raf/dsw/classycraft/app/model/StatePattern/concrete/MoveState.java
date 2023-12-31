@@ -1,9 +1,14 @@
 package raf.dsw.classycraft.app.model.StatePattern.concrete;
 
+import raf.dsw.classycraft.app.gui.swing.tree.model.ClassyTreeItem;
 import raf.dsw.classycraft.app.gui.swing.view.DiagramView;
+import raf.dsw.classycraft.app.gui.swing.view.MainFrame;
 import raf.dsw.classycraft.app.gui.swing.view.painters.ElementPainter;
 import raf.dsw.classycraft.app.gui.swing.view.painters.interclassPainters.InterclassPainter;
+import raf.dsw.classycraft.app.model.ClassyRepository.Diagram;
 import raf.dsw.classycraft.app.model.StatePattern.State;
+import raf.dsw.classycraft.app.model.commandPattern.AbstractCommand;
+import raf.dsw.classycraft.app.model.commandPattern.concreteCommand.MoveCommand;
 import raf.dsw.classycraft.app.model.elements.DiagramElement;
 import raf.dsw.classycraft.app.model.elements.Interclass.Interclass;
 
@@ -16,29 +21,49 @@ public class MoveState implements State {
     Point previousLocationWorld;
     AffineTransform initialTransform;
     ElementPainter clickedElementPainter;
+    Point startLocation;
+    boolean mousePressedOnInterclassPainter = false;
+    boolean mouseIsMoved = false;
 
     @Override
     public void mousePressed(Point location, DiagramView diagramView) {
         System.out.println("mousePressed inside of MoveState");
 
         clickedElementPainter = diagramView.getPainterAt(location);
+
         previousLocationWorld = new Point(location);
 
         initialTransform = diagramView.getTransform();
         initialTransform.transform(location, location);
         previousLocation = location;
+        if (clickedElementPainter != null && clickedElementPainter instanceof InterclassPainter) {
+            startLocation = ((Interclass)clickedElementPainter.getDiagramElement()).getLocation();
+            mousePressedOnInterclassPainter = true;
+        }
     }
 
     @Override
     public void mouseReleased(Point location, DiagramView diagramView) {
         System.out.println("mouseReleased inside of MoveState");
-
+        if (mousePressedOnInterclassPainter && mouseIsMoved) {
+            Interclass movedInterclass = (Interclass) clickedElementPainter.getDiagramElement();
+            Point endLocation = movedInterclass.getLocation();
+            Diagram diagram = diagramView.getDiagram();
+            AbstractCommand moveCommand = new MoveCommand(diagram, movedInterclass, startLocation, endLocation);
+            diagramView.getCommandManager().addCommand(moveCommand);
+            startLocation = null;
+            clickedElementPainter = null;
+        }
+        mousePressedOnInterclassPainter = false;
+        mouseIsMoved = false;
     }
 
     @Override
     public void mouseDragged(Point startLocation, Point currentLocationOptimal, Point currentLocation, DiagramView diagramView) {
         System.out.println("mouseDragged inside of MoveState from " + startLocation + " to " + currentLocation);
         System.out.println("Optimal location: " + currentLocationOptimal);
+
+        mouseIsMoved = true;
 
         // Move selected DiagramElements around
         if (clickedElementPainter != null) {

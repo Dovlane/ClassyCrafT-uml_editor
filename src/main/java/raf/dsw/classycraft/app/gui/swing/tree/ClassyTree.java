@@ -1,5 +1,7 @@
 package raf.dsw.classycraft.app.gui.swing.tree;
 
+import lombok.Getter;
+import lombok.Setter;
 import raf.dsw.classycraft.app.gui.swing.tree.model.ClassyTreeItem;
 import raf.dsw.classycraft.app.gui.swing.tree.view.ClassyTreeView;
 import raf.dsw.classycraft.app.gui.swing.view.MainFrame;
@@ -8,6 +10,7 @@ import raf.dsw.classycraft.app.model.ClassyRepository.*;
 import raf.dsw.classycraft.app.model.compositePattern.ClassyNode;
 import raf.dsw.classycraft.app.model.compositePattern.ClassyNodeComposite;
 import raf.dsw.classycraft.app.model.abstractFactoryForClassyNodes.*;
+import raf.dsw.classycraft.app.model.elements.Connection.Connection;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultTreeModel;
@@ -15,6 +18,8 @@ import javax.swing.tree.TreePath;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+@Getter
+@Setter
 public class ClassyTree implements IClassyTree {
 
     private ClassyTreeItem root;
@@ -30,19 +35,35 @@ public class ClassyTree implements IClassyTree {
     }
 
     @Override
-    public boolean addChild(InfoForCreatingClassyNode infoForCreatingClassyNode) {
+    public void loadProject(Project node) {
+        ClassyTreeItem loadedProject = new ClassyTreeItem(node);
+        root.add(loadedProject);
+
+        ClassyNodeComposite classyNode = (ClassyNodeComposite) root.getClassyNode();
+        classyNode.addChild(node);
+
+        treeView.expandPath(treeView.getSelectionPath());
+        SwingUtilities.updateComponentTreeUI(treeView);
+    }
+
+    @Override
+    public ClassyNode addChild(InfoForCreatingClassyNode infoForCreatingClassyNode) {
         ClassyTreeItem parent = infoForCreatingClassyNode.getParent();
 
         ClassyNode child;
 
         if (infoForCreatingClassyNode instanceof InfoForCreatingClassyNodeComposite)
             child = abstractClassyCraftManufacturer.createClassyNodeComposite((InfoForCreatingClassyNodeComposite) infoForCreatingClassyNode);
-        else if (infoForCreatingClassyNode instanceof InfoForCreatingInterclass)
+        else if (infoForCreatingClassyNode instanceof InfoForCreatingInterclass) {
             child = abstractClassyCraftManufacturer.createInterclass((InfoForCreatingInterclass) infoForCreatingClassyNode);
+        }
         else
             child = abstractClassyCraftManufacturer.createConnection((InfoForCreatingConnection) infoForCreatingClassyNode);
 
-        return attachChild(parent, child);
+        if (attachChild(parent, child))
+            return child;
+        else
+            return null;
     }
 
     @Override
@@ -69,6 +90,27 @@ public class ClassyTree implements IClassyTree {
     }
 
     @Override
+    // unlike
+    public boolean attachChild(ClassyTreeItem parent, ClassyTreeItem child) {
+        if (parent == null) {
+            MainFrame.getInstance().getMessageGenerator().generateMessage(
+                    "Parent Node must be selected.", MessageType.ERROR);
+            return false;
+        }
+        boolean success = ((ClassyNodeComposite) parent.getClassyNode()).addChild(child.getClassyNode());
+
+        if (success) {
+            // Update JTree
+            parent.add(child);
+
+            // Refresh GUI - Classy Tree
+            treeView.expandPath(new TreePath(parent.getPath()));
+            SwingUtilities.updateComponentTreeUI(treeView);
+        }
+        return success;
+    }
+
+    @Override
     public void removeItem(ClassyTreeItem item) {
         if (item == null) {
             MainFrame.getInstance().getMessageGenerator().generateMessage(
@@ -83,8 +125,15 @@ public class ClassyTree implements IClassyTree {
             return;
         }
 
+        // connections can (i.e. their parents can be removed) if removeItem for interclass From or To is called before
+        if (node instanceof Connection  && node.getParent() == null) {
+            return;
+        }
+
+        node.changeOccurred();
         node.removeSubtree();
         item.removeFromParent();
+
 
         // Refresh GUI
         SwingUtilities.updateComponentTreeUI(treeView);
@@ -168,16 +217,22 @@ public class ClassyTree implements IClassyTree {
     }
 
     @Override
+    public ClassyNode getNodeFromAbsolutePath(String absolutePath) {
+        ClassyNode tmp = root.getClassyNode();
+        String[] parts = absolutePath.split("/");
+        for (int i = 1; i < parts.length; i++) {
+            String part = parts[i];
+            tmp = ((ClassyNodeComposite) tmp).getChildByName(part);
+            if (tmp == null) {
+                return null;
+            }
+        }
+        return tmp;
+    }
+
+    @Override
     public ClassyTreeItem getSelectedNode() {
         return (ClassyTreeItem) treeView.getLastSelectedPathComponent();
-    }
-
-    public ClassyTreeItem getRoot() {
-        return root;
-    }
-
-    public ClassyTreeView getTreeView() {
-        return treeView;
     }
 
 }

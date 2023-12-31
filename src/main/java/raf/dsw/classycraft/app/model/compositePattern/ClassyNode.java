@@ -1,10 +1,14 @@
 package raf.dsw.classycraft.app.model.compositePattern;
 
+import com.fasterxml.jackson.annotation.*;
+import lombok.Getter;
+import lombok.Setter;
 import raf.dsw.classycraft.app.gui.swing.tree.model.ClassyTreeItem;
 import raf.dsw.classycraft.app.gui.swing.view.MainFrame;
 import raf.dsw.classycraft.app.model.ClassyRepository.*;
+import raf.dsw.classycraft.app.model.ClassyRepository.Package;
 import raf.dsw.classycraft.app.model.MessageGenerator.MessageType;
-import raf.dsw.classycraft.app.model.elements.Connection.Connection;
+import raf.dsw.classycraft.app.model.elements.Connection.*;
 import raf.dsw.classycraft.app.model.elements.Interclass.ClassElement;
 import raf.dsw.classycraft.app.model.elements.Interclass.EnumElement;
 import raf.dsw.classycraft.app.model.elements.Interclass.Interclass;
@@ -15,15 +19,41 @@ import raf.dsw.classycraft.app.model.observerPattern.IPublisher;
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
+@Setter
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = Project.class, name = "Project"),
+        @JsonSubTypes.Type(value = Package.class, name = "Package"),
+        @JsonSubTypes.Type(value = Diagram.class, name = "Diagram"),
+
+        @JsonSubTypes.Type(value = ClassElement.class, name = "ClassElement"),
+        @JsonSubTypes.Type(value = InterfaceElement.class, name = "InterfaceElement"),
+        @JsonSubTypes.Type(value = EnumElement.class, name = "EnumElement"),
+
+        @JsonSubTypes.Type(value = Aggregation.class, name = "Aggregation"),
+        @JsonSubTypes.Type(value = Composition.class, name = "Composition"),
+        @JsonSubTypes.Type(value = Dependency.class, name = "Dependency"),
+        @JsonSubTypes.Type(value = Generalization.class, name = "Generalization")
+})
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "referencePath")
 public abstract class ClassyNode implements IPublisher {
 
     protected String name;
+    @JsonIdentityReference(alwaysAsId = true)
     protected ClassyNode parent;
+    @JsonIgnore
+    protected String JSONFilePath;
+    @JsonIgnore
+    private boolean changed;
+    @JsonIgnore
     protected List<IListener> listeners;
+    private static ClassyNode currentSelectedNode;
 
     public ClassyNode(String name, ClassyNode parent) {
         this.name = name;
         this.parent = parent;
+        this.changed = true;
         listeners = new ArrayList<>();
     }
 
@@ -56,13 +86,14 @@ public abstract class ClassyNode implements IPublisher {
                     }
                 }
 
+
+
                 // Actually remove all obsolete connections
                 for (ClassyNode child: connectionsForRemoval) {
                     ClassyTreeItem treeItemDiagramElement =
                             MainFrame.getInstance().getClassyTree().getRoot().getTreeItemFromClassyNode(child);
                     MainFrame.getInstance().getClassyTree().removeItem(treeItemDiagramElement);
                 }
-
             }
 
             // Notify about the child removal
@@ -70,18 +101,10 @@ public abstract class ClassyNode implements IPublisher {
                     new Notification(this, NotificationType.REMOVE);
             parent.notifyAllSubscribers(notification);
             parent.removeAt(this);
-
         }
     }
 
-    @Override
-    public boolean equals(Object object) {
-        if (object instanceof ClassyNode) {
-            return getAbsolutePath().equals(((ClassyNode) object).getAbsolutePath());
-        }
-        return false;
-    }
-
+    @JsonIgnore
     public String getAbsolutePath() {
 
         // Recursive base case
@@ -89,23 +112,7 @@ public abstract class ClassyNode implements IPublisher {
             return getName();
         }
 
-        // Check type of Interclass
-        String suffix = "";
-        if (this instanceof ClassElement) {
-            suffix = "Class-";
-        }
-        else if (this instanceof InterfaceElement) {
-            suffix = "Interface-";
-        }
-        else if (this instanceof EnumElement) {
-            suffix = "Enum-";
-        }
-
-        return getParent().getAbsolutePath() + "/" + suffix + getName();
-    }
-
-    public String getName() {
-        return name;
+        return getParent().getAbsolutePath() + "/" + getName();
     }
 
     public boolean setName(String name) {
@@ -127,6 +134,7 @@ public abstract class ClassyNode implements IPublisher {
             Notification notification =
                     new Notification(this, NotificationType.SET);
             parent.notifyAllSubscribers(notification);
+            changeOccurred();
 
             return true;
         }
@@ -143,14 +151,47 @@ public abstract class ClassyNode implements IPublisher {
         return false;
     }
 
-    public ClassyNode getParent() {
-        return parent;
+    @Override
+    public boolean equals(Object object) {
+        if (object instanceof ClassyNode) {
+            return getAbsolutePath().equals(((ClassyNode) object).getAbsolutePath());
+        }
+        return false;
     }
 
-    public void setParent(ClassyNode parent) {
-        this.parent = parent;
+
+    // Save Action
+    public void changeOccurred() {
+        setChanged(true);
+        getParent().changeOccurred();
     }
 
+
+    // Jackson Serialization/Deserialization
+    public static String getCurrentSelectedNodeAbsolutePath() {
+        return currentSelectedNode.getAbsolutePath();
+    }
+
+    public static void setCurrentSelectedNode(ClassyNode currentSelectedNode) {
+        ClassyNode.currentSelectedNode = currentSelectedNode;
+    }
+
+    public String getReferencePath() {
+
+        // Recursive base cases
+        if (this == currentSelectedNode.getParent()) {
+            return "";
+        }
+
+        if (this == currentSelectedNode) {
+            return getName();
+        }
+
+        return getParent().getReferencePath() + "/" + getName();
+    }
+
+
+    // IPublisher
     @Override
     public void addListener(IListener listener) {
         if (!listeners.contains(listener))

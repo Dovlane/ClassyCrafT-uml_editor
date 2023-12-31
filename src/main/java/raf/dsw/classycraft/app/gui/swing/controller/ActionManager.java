@@ -3,11 +3,12 @@ package raf.dsw.classycraft.app.gui.swing.controller;
 import raf.dsw.classycraft.app.gui.swing.controller.debug.ErrorTestAction;
 import raf.dsw.classycraft.app.gui.swing.controller.debug.PaintTestAction;
 import raf.dsw.classycraft.app.gui.swing.controller.debug.PrintTreeAction;
-import raf.dsw.classycraft.app.model.observerPattern.IListener;
 
-import java.awt.*;
-import java.util.ArrayList;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class ActionManager {
 
     private ExitAction exitAction;
@@ -17,17 +18,28 @@ public class ActionManager {
     private RemoveItemAction removeItemAction;
     private RenameAction renameAction;
     private ProjectAuthorAction projectAuthorAction;
+    private SaveAction saveAction;
+    private SaveDiagramTemplateAction saveDiagramTemplateAction;
+    private OpenProjectAction openProjectAction;
+    private OpenPackageAction openPackageAction;
+    private OpenDiagramAction openDiagramAction;
+    private LoadDiagramTemplateAction loadDiagramTemplateAction;
     private AboutUsAction aboutUsAction;
+    private RedoAction redoAction;
+    private UndoAction undoAction;
 
     // DEBUG actions
     private ErrorTestAction errorTestAction;
     private PrintTreeAction printTreeAction;
     private PaintTestAction paintTestAction;
+
     public ActionManager() {
         initializeActions();
     }
 
     private void initializeActions() {
+
+        // FILE actions
         exitAction = new ExitAction();
         newProjectAction = new NewProjectAction();
         newPackageAction = new NewPackageAction();
@@ -35,6 +47,18 @@ public class ActionManager {
         removeItemAction = new RemoveItemAction();
         renameAction = new RenameAction();
         projectAuthorAction = new ProjectAuthorAction();
+        saveAction = new SaveAction();
+        saveDiagramTemplateAction = new SaveDiagramTemplateAction();
+        redoAction = new RedoAction();
+        undoAction = new UndoAction();
+
+        // OPEN actions
+        openProjectAction = new OpenProjectAction();
+        openPackageAction = new OpenPackageAction();
+        openDiagramAction = new OpenDiagramAction();
+        loadDiagramTemplateAction = new LoadDiagramTemplateAction();
+
+        // EDIT actions
         aboutUsAction = new AboutUsAction();
 
         // DEBUG actions
@@ -43,47 +67,4 @@ public class ActionManager {
         paintTestAction = new PaintTestAction();
     }
 
-    public ExitAction getExitAction() {
-        return exitAction;
-    }
-
-    public NewProjectAction getNewProjectAction() {
-        return newProjectAction;
-    }
-
-    public NewPackageAction getNewPackageAction() {
-        return newPackageAction;
-    }
-
-    public NewDiagramAction getNewDiagramAction() {
-        return newDiagramAction;
-    }
-
-    public RemoveItemAction getRemoveItemAction() {
-        return removeItemAction;
-    }
-
-    public RenameAction getRenameAction() {
-        return renameAction;
-    }
-
-    public ProjectAuthorAction getProjectAuthorAction() {
-        return projectAuthorAction;
-    }
-
-    public AboutUsAction getAboutUsAction() {
-        return aboutUsAction;
-    }
-
-    public ErrorTestAction getErrorTestAction() {
-        return errorTestAction;
-    }
-
-    public PrintTreeAction getPrintTreeAction() {
-        return printTreeAction;
-    }
-
-    public PaintTestAction getPaintTestAction() {
-        return paintTestAction;
-    }
 }

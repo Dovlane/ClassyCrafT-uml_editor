@@ -6,8 +6,7 @@ import java.awt.event.KeyEvent;
 
 public class ExitAction extends AbstractClassyAction {
 
-    public ExitAction(){
-
+    public ExitAction() {
         putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_F4, ActionEvent.ALT_MASK));
         putValue(SMALL_ICON, loadIcon("/images/Exit.png"));
         putValue(NAME, "Exit");
@@ -16,7 +15,7 @@ public class ExitAction extends AbstractClassyAction {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        System.out.println("ExitAction is performed.");
+        System.out.println("ExitAction has been performed.");
         System.exit(0);
     }
 

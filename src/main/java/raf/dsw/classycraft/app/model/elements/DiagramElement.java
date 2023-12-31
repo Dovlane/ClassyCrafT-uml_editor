@@ -16,4 +16,5 @@ public abstract class DiagramElement extends ClassyNodeLeaf implements IPublishe
         for (IListener listener: listeners)
             listener.update(notification);
     }
+
 }

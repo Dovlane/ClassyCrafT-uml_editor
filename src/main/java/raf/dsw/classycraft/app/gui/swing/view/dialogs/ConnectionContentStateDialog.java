@@ -21,8 +21,8 @@ public class ConnectionContentStateDialog extends JFrame {
     private int windowHeight = 140;
 
     private Map<CardinalityEnum, String> cardinalityEnumDictionary = new HashMap<CardinalityEnum, String>() {{
-        put(CardinalityEnum.ZERO_OR_MORE, "*..0");
-        put(CardinalityEnum.ONE, "1");
+        put(CardinalityEnum.ZERO_OR_MORE, "0..*");
+        put(CardinalityEnum.ZERO_OR_ONE, "0..1");
     }};
     public ConnectionContentStateDialog(Connection connectionElement) {
         setTitle("Edit connection settings");
@@ -41,11 +41,11 @@ public class ConnectionContentStateDialog extends JFrame {
         }
 
         this.getContentPane().add(contentPanel, BorderLayout.CENTER);
+        pack();
         setVisible(true);
     }
 
     private void initializeComponents() {
-        setSize(windowWidth, windowHeight);
         buttonOK = new JButton("OK");
         labelName = new JLabel("Name : " + selectedConnection.getName());
         labelName.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -121,7 +121,7 @@ public class ConnectionContentStateDialog extends JFrame {
     }
 
     public void insertData() {
-        if (selectedConnection instanceof Aggregation || selectedConnection instanceof Composition) {
+        if (selectedConnection instanceof IAggregationAndComposition) {
             IAggregationAndComposition iAggregationAndComposition = null;
             if (selectedConnection instanceof Aggregation)
                 iAggregationAndComposition = (IAggregationAndComposition) (Aggregation) selectedConnection;
