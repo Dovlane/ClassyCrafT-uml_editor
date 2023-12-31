@@ -49,7 +49,7 @@ public final class PackageDeserializer extends StdDeserializer<Package> {
                 MainFrame.getInstance().getClassyTree().getRoot().getTreeItemFromClassyNode(parent);
         boolean success = MainFrame.getInstance().getClassyTree().attachChild(classyTreeParent, aPackage);
         if (!success) {
-            System.out.println("Package with the same name already exists.");
+            System.out.println("Could not add a package to its parent.");
             return null;
         }
 

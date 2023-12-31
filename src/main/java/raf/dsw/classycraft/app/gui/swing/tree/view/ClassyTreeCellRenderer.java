@@ -8,7 +8,6 @@ import raf.dsw.classycraft.app.model.ClassyRepository.ProjectExplorer;
 import raf.dsw.classycraft.app.model.elements.Connection.Connection;
 import raf.dsw.classycraft.app.model.elements.Interclass.ClassElement;
 import raf.dsw.classycraft.app.model.elements.Interclass.EnumElement;
-import raf.dsw.classycraft.app.model.elements.Interclass.Interclass;
 import raf.dsw.classycraft.app.model.elements.Interclass.InterfaceElement;
 
 import javax.swing.*;

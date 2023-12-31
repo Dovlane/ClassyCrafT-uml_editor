@@ -45,7 +45,7 @@ public final class DiagramDeserializer extends StdDeserializer<Diagram> {
 
         // Link to the parent
         String parentAbsolutePath = ClassyNode.getCurrentSelectedNodeAbsolutePath() + "/" + node.path("parent").asText();
-        Package parent = (Package) MainFrame.getInstance().getClassyTree().getNodeFromAbsolutePath(parentAbsolutePath);
+        ClassyNode parent = MainFrame.getInstance().getClassyTree().getNodeFromAbsolutePath(parentAbsolutePath);
         Diagram diagram = new Diagram(name, parent);
 
         // Add a child to its parent
@@ -53,7 +53,7 @@ public final class DiagramDeserializer extends StdDeserializer<Diagram> {
                 MainFrame.getInstance().getClassyTree().getRoot().getTreeItemFromClassyNode(parent);
         boolean success = MainFrame.getInstance().getClassyTree().attachChild(classyTreeParent, diagram);
         if (!success) {
-            System.out.println("Diagram with the same name already exists.");
+            System.out.println("Could not add a diagram to its parent.");
             return null;
         }
 

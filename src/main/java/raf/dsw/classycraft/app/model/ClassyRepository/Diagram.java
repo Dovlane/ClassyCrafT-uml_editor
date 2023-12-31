@@ -41,9 +41,4 @@ public class Diagram extends ClassyNodeComposite {
             listener.update(notification);
     }
 
-    @Override
-    public void changeOccurred() {
-        getParent().changeOccurred();
-    }
-
 }

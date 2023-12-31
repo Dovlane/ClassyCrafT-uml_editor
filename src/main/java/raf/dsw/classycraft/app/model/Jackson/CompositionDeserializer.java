@@ -65,7 +65,7 @@ public class CompositionDeserializer extends StdDeserializer<Composition> {
                 MainFrame.getInstance().getClassyTree().getRoot().getTreeItemFromClassyNode(parent);
         boolean success = MainFrame.getInstance().getClassyTree().attachChild(classyTreeParent, composition);
         if (!success) {
-            System.out.println("Composition with the same name already exists.");
+            System.out.println("Could not add a composition to its parent.");
             return null;
         }
 

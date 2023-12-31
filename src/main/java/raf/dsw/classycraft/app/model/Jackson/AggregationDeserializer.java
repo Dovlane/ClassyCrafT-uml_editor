@@ -65,7 +65,7 @@ public final class AggregationDeserializer extends StdDeserializer<Aggregation> 
                 MainFrame.getInstance().getClassyTree().getRoot().getTreeItemFromClassyNode(parent);
         boolean success = MainFrame.getInstance().getClassyTree().attachChild(classyTreeParent, aggregation);
         if (!success) {
-            System.out.println("Aggregation with the same name already exists.");
+            System.out.println("Could not add a aggregation to its parent.");
             return null;
         }
 

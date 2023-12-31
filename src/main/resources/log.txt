@@ -1,0 +1,2 @@
+[ERROR][2023-12-30 19:16:38.9238768] Selected diagram must be empty.
+[ERROR][2023-12-30 19:17:01.1478064] Package can only contain Diagrams and other Packages.

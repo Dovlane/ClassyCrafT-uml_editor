@@ -59,7 +59,7 @@ public class GeneralizationDeserializer extends StdDeserializer<Generalization> 
                 MainFrame.getInstance().getClassyTree().getRoot().getTreeItemFromClassyNode(parent);
         boolean success = MainFrame.getInstance().getClassyTree().attachChild(classyTreeParent, generalization);
         if (!success) {
-            System.out.println("Generalization with the same name already exists.");
+            System.out.println("Could not add a generalization to its parent.");
             return null;
         }
 

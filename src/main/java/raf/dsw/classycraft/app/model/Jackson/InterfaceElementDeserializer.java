@@ -53,7 +53,7 @@ public final class InterfaceElementDeserializer extends StdDeserializer<Interfac
                 MainFrame.getInstance().getClassyTree().getRoot().getTreeItemFromClassyNode(parent);
         boolean success = MainFrame.getInstance().getClassyTree().attachChild(classyTreeParent, interfaceElement);
         if (!success) {
-            System.out.println("InterfaceElement with the same name already exists.");
+            System.out.println("Could not add an interface element to its parent.");
             return null;
         }
 

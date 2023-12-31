@@ -57,9 +57,4 @@ public class Package extends ClassyNodeComposite implements IPublisher {
         notifyAllSubscribers(notification);
     }
 
-    @Override
-    public void changeOccurred() {
-        getParent().changeOccurred();
-    }
-
 }

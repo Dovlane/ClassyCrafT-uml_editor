@@ -43,12 +43,17 @@ public abstract class ClassyNode implements IPublisher {
     @JsonIdentityReference(alwaysAsId = true)
     protected ClassyNode parent;
     @JsonIgnore
+    protected String JSONFilePath;
+    @JsonIgnore
+    private boolean changed;
+    @JsonIgnore
     protected List<IListener> listeners;
     private static ClassyNode currentSelectedNode;
 
     public ClassyNode(String name, ClassyNode parent) {
         this.name = name;
         this.parent = parent;
+        this.changed = true;
         listeners = new ArrayList<>();
     }
 
@@ -156,7 +161,10 @@ public abstract class ClassyNode implements IPublisher {
 
 
     // Save Action
-    public abstract void changeOccurred();
+    public void changeOccurred() {
+        setChanged(true);
+        getParent().changeOccurred();
+    }
 
 
     // Jackson Serialization/Deserialization
