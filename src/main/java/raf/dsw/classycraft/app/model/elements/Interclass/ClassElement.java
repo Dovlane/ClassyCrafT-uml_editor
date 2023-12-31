@@ -12,6 +12,7 @@ import raf.dsw.classycraft.app.model.compositePattern.ClassyNode;
 import raf.dsw.classycraft.app.model.elements.ClassContent.Attribute;
 import raf.dsw.classycraft.app.model.elements.ClassContent.ClassContent;
 import raf.dsw.classycraft.app.model.elements.ClassContent.Method;
+import raf.dsw.classycraft.app.model.elements.Connection.CardinalityEnum;
 import raf.dsw.classycraft.app.model.elements.Connection.Connection;
 import raf.dsw.classycraft.app.model.elements.Connection.IAggregationAndComposition;
 import raf.dsw.classycraft.app.model.elements.DiagramElement;
@@ -93,13 +94,27 @@ public class ClassElement extends Interclass {
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
+
+        Diagram diagram = (Diagram) parent;
+
         String firstLine = String.format("%s %s %s %s { \n" , visibility.toString().toLowerCase(), nonAccessModifiers.toString().toLowerCase(), "class", getPlainName());
         stringBuilder.append(firstLine);
 
-        Diagram diagram = (Diagram) parent;
-        for (ClassyNode diagramElement : ((Diagram) parent).getChildren()) {
+
+        for (ClassyNode diagramElement : diagram.getChildren()) {
             if (diagramElement instanceof IAggregationAndComposition) {
-                
+                IAggregationAndComposition iAggregationAndComposition = (IAggregationAndComposition) diagramElement;
+                Connection connection = (Connection) diagramElement;
+                if (connection.getFrom().equals(this)) {
+                    AccessModifiers accessModifier = iAggregationAndComposition.getAttributeAccessModifier();
+                    String dataType = connection.getTo().getPlainName().toString();
+                    CardinalityEnum cardinalityEnum = iAggregationAndComposition.getCardinalityEnum();
+                    if (cardinalityEnum == CardinalityEnum.ZERO_OR_MORE)
+                        dataType = String.format("List<%s>", dataType);
+                    String name = iAggregationAndComposition.getAttributeName();
+                    String stringAttribute = String.format("\t%s %s %s;\n", accessModifier.toString().toLowerCase(), dataType, name);
+                    stringBuilder.append(stringAttribute);
+                }
             }
         }
 
