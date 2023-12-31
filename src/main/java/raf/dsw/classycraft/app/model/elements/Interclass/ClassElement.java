@@ -8,9 +8,13 @@ import raf.dsw.classycraft.app.model.ClassyRepository.Diagram;
 import raf.dsw.classycraft.app.model.ClassyRepository.Notification;
 import raf.dsw.classycraft.app.model.ClassyRepository.NotificationType;
 import raf.dsw.classycraft.app.model.Jackson.ClassElementDeserializer;
+import raf.dsw.classycraft.app.model.compositePattern.ClassyNode;
 import raf.dsw.classycraft.app.model.elements.ClassContent.Attribute;
 import raf.dsw.classycraft.app.model.elements.ClassContent.ClassContent;
 import raf.dsw.classycraft.app.model.elements.ClassContent.Method;
+import raf.dsw.classycraft.app.model.elements.Connection.Connection;
+import raf.dsw.classycraft.app.model.elements.Connection.IAggregationAndComposition;
+import raf.dsw.classycraft.app.model.elements.DiagramElement;
 import raf.dsw.classycraft.app.model.elements.Modifiers.AccessModifiers;
 import raf.dsw.classycraft.app.model.elements.Modifiers.NonAccessModifiers;
 
@@ -85,23 +89,31 @@ public class ClassElement extends Interclass {
         return "Class-" + getPlainName();
     }
 
+    @JsonIgnore
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        String firstLine = String.format("%s %s %s %s %s" , visibility.toString().toLowerCase(), nonAccessModifiers.toString().toLowerCase(), "class", getPlainName(), "{\n");
+        String firstLine = String.format("%s %s %s %s { \n" , visibility.toString().toLowerCase(), nonAccessModifiers.toString().toLowerCase(), "class", getPlainName());
         stringBuilder.append(firstLine);
 
+        Diagram diagram = (Diagram) parent;
+        for (ClassyNode diagramElement : ((Diagram) parent).getChildren()) {
+            if (diagramElement instanceof IAggregationAndComposition) {
+                
+            }
+        }
+
         for (Attribute attribute : getClassAttributes()) {
-            String stringAttribute = String.format("%s %s %s %s", attribute.getAccessModifiers().toString().toLowerCase(), attribute.getNonAccessModifiers().toString().toLowerCase(), attribute.getDataType(), attribute.getName() + "\n");
+            String stringAttribute = String.format("\t%s %s %s %s;\n", attribute.getAccessModifiers().toString().toLowerCase(), attribute.getNonAccessModifiers().toString().toLowerCase(), attribute.getDataType(), attribute.getName());
             stringBuilder.append(stringAttribute);
         }
 
         for (Method method : getClassMethods()) {
-            String stringMethod = String.format("%s %s %s %s", method.getAccessModifiers().toString().toLowerCase(), method.getNonAccessModifiers().toString().toLowerCase(), method.getReturnType(), method.getName() + "\n");
+            String stringMethod = String.format("\t%s %s %s %s();\n", method.getAccessModifiers().toString().toLowerCase(), method.getNonAccessModifiers().toString().toLowerCase(), method.getReturnType(), method.getName());
             stringBuilder.append(stringMethod);
         }
 
-        stringBuilder.append("}");
+        stringBuilder.append("}\n");
 
         return stringBuilder.toString();
     }

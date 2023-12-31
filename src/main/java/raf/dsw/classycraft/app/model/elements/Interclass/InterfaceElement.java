@@ -8,6 +8,7 @@ import raf.dsw.classycraft.app.model.ClassyRepository.Diagram;
 import raf.dsw.classycraft.app.model.ClassyRepository.Notification;
 import raf.dsw.classycraft.app.model.ClassyRepository.NotificationType;
 import raf.dsw.classycraft.app.model.Jackson.InterfaceElementDeserializer;
+import raf.dsw.classycraft.app.model.elements.ClassContent.Attribute;
 import raf.dsw.classycraft.app.model.elements.ClassContent.Method;
 import raf.dsw.classycraft.app.model.elements.Modifiers.AccessModifiers;
 import raf.dsw.classycraft.app.model.elements.Modifiers.NonAccessModifiers;
@@ -65,4 +66,20 @@ public class InterfaceElement extends Interclass {
         return "Interface-" + getPlainName();
     }
 
+    @JsonIgnore
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        String firstLine = String.format("%s %s %s %s { \n" , visibility.toString().toLowerCase(), nonAccessModifiers.toString().toLowerCase(), "interface", getPlainName());
+        stringBuilder.append(firstLine);
+
+        for (Method method : getInterfaceMethods()) {
+            String stringMethod = String.format("\t%s %s %s %s();\n", method.getAccessModifiers().toString().toLowerCase(), method.getNonAccessModifiers().toString().toLowerCase(), method.getReturnType(), method.getName());
+            stringBuilder.append(stringMethod);
+        }
+
+        stringBuilder.append("}\n");
+
+        return stringBuilder.toString();
+    }
 }

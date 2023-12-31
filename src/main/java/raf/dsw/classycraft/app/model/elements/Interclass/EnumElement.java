@@ -9,6 +9,7 @@ import raf.dsw.classycraft.app.model.ClassyRepository.Notification;
 import raf.dsw.classycraft.app.model.ClassyRepository.NotificationType;
 import raf.dsw.classycraft.app.model.Jackson.EnumElementDeserializer;
 import raf.dsw.classycraft.app.model.elements.ClassContent.EnumLiteral;
+import raf.dsw.classycraft.app.model.elements.ClassContent.Method;
 import raf.dsw.classycraft.app.model.elements.Modifiers.AccessModifiers;
 import raf.dsw.classycraft.app.model.elements.Modifiers.NonAccessModifiers;
 
@@ -54,6 +55,29 @@ public class EnumElement extends Interclass {
     @Override
     public String getName() {
         return "Enum-" + getPlainName();
+    }
+
+    @JsonIgnore
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        String firstLine = String.format("%s %s %s %s { \n" , visibility.toString().toLowerCase(), nonAccessModifiers.toString().toLowerCase(), "enum", getPlainName());
+        stringBuilder.append(firstLine);
+
+        stringBuilder.append("\t");
+        int n = enumLiterals.size();
+        if (n > 0) {
+            for (int i = 0; i < n - 1; i++) {
+                EnumLiteral enumLiteral = enumLiterals.get(i);
+                stringBuilder.append(enumLiteral + ", ");
+            }
+            stringBuilder.append(enumLiterals.get(n - 1));
+        }
+        stringBuilder.append("\n");
+
+        stringBuilder.append("}\n");
+
+        return stringBuilder.toString();
     }
 
 }
