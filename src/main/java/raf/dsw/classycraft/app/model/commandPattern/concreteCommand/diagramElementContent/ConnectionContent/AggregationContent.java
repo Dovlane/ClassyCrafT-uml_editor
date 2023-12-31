@@ -27,13 +27,6 @@ public class AggregationContent extends ConnectionContent {
     }
 
     @Override
-    public boolean thereIsNothingToUpdate(DiagramElement diagramElement) {
-        Aggregation aggregation = (Aggregation) diagramElement;
-        return super.thereIsNothingToUpdate(diagramElement) && aggregation.getAttributeAccessModifier() == attributeAccessModifier &&
-                aggregation.getCardinalityEnum() == cardinalityEnum && aggregation.getAttributeName().equals(attributeName);
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

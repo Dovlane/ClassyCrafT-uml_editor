@@ -17,11 +17,6 @@ public abstract class DiagramElementContent implements IDiagramElementContent {
     }
 
     @Override
-    public boolean thereIsNothingToUpdate(DiagramElement diagramElement) {
-        return name.equals(diagramElement.getName());
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

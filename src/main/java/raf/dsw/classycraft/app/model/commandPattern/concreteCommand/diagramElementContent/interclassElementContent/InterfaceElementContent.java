@@ -28,12 +28,6 @@ public class InterfaceElementContent extends InterclassElementContent {
     }
 
     @Override
-    public boolean thereIsNothingToUpdate(DiagramElement diagramElement) {
-        InterfaceElement interfaceElement = (InterfaceElement) diagramElement;
-        return super.thereIsNothingToUpdate(diagramElement) && listEqualsIgnoreOrder(interfaceElement.getInterfaceMethods(), methodList);
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

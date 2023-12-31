@@ -27,13 +27,6 @@ public class CompositionContent extends ConnectionContent{
     }
 
     @Override
-    public boolean thereIsNothingToUpdate(DiagramElement diagramElement) {
-        Composition composition = (Composition) diagramElement;
-        return super.thereIsNothingToUpdate(diagramElement) && composition.getAttributeAccessModifier() == attributeAccessModifier &&
-                composition.getCardinalityEnum() == cardinalityEnum && composition.getAttributeName().equals(attributeName);
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

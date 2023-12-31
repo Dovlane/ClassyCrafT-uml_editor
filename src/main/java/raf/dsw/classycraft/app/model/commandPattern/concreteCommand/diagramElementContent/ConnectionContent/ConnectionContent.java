@@ -14,9 +14,4 @@ public abstract class ConnectionContent extends DiagramElementContent {
         super.setDiagramElementContent(diagramElement);
     }
 
-    @Override
-    public boolean thereIsNothingToUpdate(DiagramElement diagramElement) {
-        return super.thereIsNothingToUpdate(diagramElement);
-    }
-
 }

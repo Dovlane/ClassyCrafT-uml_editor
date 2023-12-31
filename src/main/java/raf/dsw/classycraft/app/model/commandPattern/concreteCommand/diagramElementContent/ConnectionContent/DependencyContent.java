@@ -21,12 +21,6 @@ public class DependencyContent extends ConnectionContent {
     }
 
     @Override
-    public boolean thereIsNothingToUpdate(DiagramElement diagramElement) {
-        Dependency dependency = (Dependency) diagramElement;
-        return super.thereIsNothingToUpdate(diagramElement) && dependency.getDependencyEnum() == dependencyEnum;
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

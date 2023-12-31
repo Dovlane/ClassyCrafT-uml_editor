@@ -32,8 +32,8 @@ public abstract class Interclass extends DiagramElement {
     public Interclass(String name, Diagram parent, Point point, AccessModifiers visibility, NonAccessModifiers nonAccessModifiers) {
         super(name, parent);
         this.visibility = visibility;
-        this.boxWidth = 200;
-        this.boxHeight = 100;
+        this.boxWidth = initialBoxWidth;
+        this.boxHeight = initialBoxHeight;
         this.location = point;
         this.nonAccessModifiers = nonAccessModifiers;
     }

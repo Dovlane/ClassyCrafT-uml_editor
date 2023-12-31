@@ -28,12 +28,6 @@ public class EnumElementContent extends InterclassElementContent{
     }
 
     @Override
-    public boolean thereIsNothingToUpdate(DiagramElement diagramElement) {
-        EnumElement enumElement = (EnumElement) diagramElement;
-        return super.thereIsNothingToUpdate(diagramElement) && listEqualsIgnoreOrder(enumElement.getEnumLiterals(), enumLiterals);
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

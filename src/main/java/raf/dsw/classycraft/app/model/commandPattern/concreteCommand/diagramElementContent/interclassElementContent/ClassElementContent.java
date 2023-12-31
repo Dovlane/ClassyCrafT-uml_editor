@@ -31,12 +31,6 @@ public class ClassElementContent extends InterclassElementContent {
     }
 
     @Override
-    public boolean thereIsNothingToUpdate(DiagramElement diagramElement) {
-        ClassElement classElement = (ClassElement) diagramElement;
-        return super.thereIsNothingToUpdate(diagramElement) && listEqualsIgnoreOrder(classElement.getClassContent(), classContentList);
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
