@@ -14,6 +14,7 @@ import raf.dsw.classycraft.app.model.elements.ClassContent.ClassContent;
 import raf.dsw.classycraft.app.model.elements.ClassContent.Method;
 import raf.dsw.classycraft.app.model.elements.Connection.CardinalityEnum;
 import raf.dsw.classycraft.app.model.elements.Connection.Connection;
+import raf.dsw.classycraft.app.model.elements.Connection.Generalization;
 import raf.dsw.classycraft.app.model.elements.Connection.IAggregationAndComposition;
 import raf.dsw.classycraft.app.model.elements.DiagramElement;
 import raf.dsw.classycraft.app.model.elements.Modifiers.AccessModifiers;
@@ -96,8 +97,43 @@ public class ClassElement extends Interclass {
         StringBuilder stringBuilder = new StringBuilder();
 
         Diagram diagram = (Diagram) parent;
+        ClassElement superClass = null;
+        List<InterfaceElement> implementedInterfaces = new ArrayList<>();
+        for (ClassyNode diagramElement : diagram.getChildren()) {
+            if (diagramElement instanceof Generalization) {
+                Generalization generalization = (Generalization) diagramElement;
+                if (generalization.getFrom().equals(this)) {
+                    if (generalization.getTo() instanceof ClassElement) {
+                        superClass = (ClassElement) generalization.getTo();
+                    }
+                    else if (generalization.getTo() instanceof InterfaceElement) {
+                        implementedInterfaces.add((InterfaceElement) generalization.getTo());
+                    }
+                }
+            }
+        }
 
-        String firstLine = String.format("%s %s %s %s { \n" , visibility.toString().toLowerCase(), nonAccessModifiers.toString().toLowerCase(), "class", getPlainName());
+        StringBuilder stringBuilderForExtensionsAndImplementations = new StringBuilder();
+        String extension = "";
+        if (superClass != null) {
+            extension = " extends " + superClass.getPlainName();
+            stringBuilderForExtensionsAndImplementations.append(extension);
+        }
+
+        if (implementedInterfaces.size() > 0) {
+            stringBuilderForExtensionsAndImplementations.append(" implements ");
+            int n = implementedInterfaces.size();
+            for (int i = 0; i < n - 1; i++) {
+                InterfaceElement interfaceElement = implementedInterfaces.get(i);
+                stringBuilderForExtensionsAndImplementations.append(interfaceElement.getPlainName() + ", ");
+            }
+            InterfaceElement lastInterfaceElement = implementedInterfaces.get(n - 1);
+            stringBuilderForExtensionsAndImplementations.append(lastInterfaceElement.getPlainName());
+        }
+
+        String firstLine = String.format("%s %s %s %s%s { \n" , visibility.toString().toLowerCase(), nonAccessModifiers.toString().toLowerCase(), "class", getPlainName(),
+                                                                                                                        stringBuilderForExtensionsAndImplementations);
+
         stringBuilder.append(firstLine);
 
 
