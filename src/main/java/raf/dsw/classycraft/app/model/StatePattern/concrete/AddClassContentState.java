@@ -30,6 +30,9 @@ public class AddClassContentState implements State {
 
         DiagramElement diagramElementAt = diagramView.getElementAt(location);
         if (diagramElementAt != null) {
+
+            testToString(diagramElementAt);
+
             startContent = diagramElementContentFactory.createDiagramElementContent(diagramElementAt);
             if (diagramElementAt instanceof Interclass) {
                 ClassContentStateDialog classContentStateDialog = new ClassContentStateDialog(diagramElementAt);
@@ -88,14 +91,12 @@ public class AddClassContentState implements State {
     @Override
     public void mouseReleased(Point location, DiagramView diagramView) {
         System.out.println("mouseReleased inside of AddClassContentState");
-
     }
 
     @Override
     public void mouseDragged(Point startLocation, Point currentLocationOptimal, Point currentLocation, DiagramView diagramView) {
         System.out.println("mouseDragged inside of AddClassContentState from " + startLocation + " to " + currentLocation);
         System.out.println("Optimal location: " + currentLocationOptimal);
-
     }
 
     @Override
@@ -104,4 +105,7 @@ public class AddClassContentState implements State {
 
     }
 
+    private void testToString(DiagramElement diagramElement) {
+        System.out.println(diagramElement.toString());
+    }
 }

@@ -50,11 +50,6 @@ public class EnumElement extends Interclass {
         notifyAllSubscribers(notification);
     }
 
-    @Override
-    public String toString() {
-        return getName();
-    }
-
     @JsonIgnore
     @Override
     public String getName() {

@@ -194,7 +194,7 @@ public class ClassContentStateDialog extends JFrame {
     }
 
     private void fillInterclassDataOfDiagramElement() {
-        interclassNameJTextField.setText(selectedDiagramElement.getName());
+        interclassNameJTextField.setText(((Interclass) selectedDiagramElement).getPlainName());
         accessModifiersForInterclassJComboBox.setSelectedItem(((Interclass)selectedDiagramElement).getVisibility());
         nonAccessModifiersForInterclassJComboBox.setSelectedItem(((Interclass)selectedDiagramElement).getNonAccessModifiers());
     }

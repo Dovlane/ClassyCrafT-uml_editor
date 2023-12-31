@@ -1,6 +1,10 @@
 package raf.dsw.classycraft.app.model.commandPattern.concreteCommand.diagramElementContent.interclassElementContent;
 
+import raf.dsw.classycraft.app.model.ClassyRepository.Diagram;
+import raf.dsw.classycraft.app.model.ClassyRepository.Notification;
+import raf.dsw.classycraft.app.model.ClassyRepository.NotificationType;
 import raf.dsw.classycraft.app.model.commandPattern.concreteCommand.diagramElementContent.DiagramElementContent;
+import raf.dsw.classycraft.app.model.compositePattern.ClassyNode;
 import raf.dsw.classycraft.app.model.elements.DiagramElement;
 import raf.dsw.classycraft.app.model.elements.Interclass.Interclass;
 import raf.dsw.classycraft.app.model.elements.Modifiers.AccessModifiers;
@@ -30,12 +34,9 @@ public abstract class InterclassElementContent extends DiagramElementContent {
         Interclass interclass = (Interclass) diagramElement;
         interclass.setVisibility(visibility);
         interclass.setNonAccessModifiers(nonAccessModifiers);
-    }
-
-    @Override
-    public boolean thereIsNothingToUpdate(DiagramElement diagramElement) {
-        Interclass interclass = (Interclass) diagramElement;
-        return super.thereIsNothingToUpdate(diagramElement) && interclass.getVisibility().equals(visibility) && interclass.getNonAccessModifiers() == nonAccessModifiers;
+//        Diagram diagram = (Diagram) diagramElement.getParent();
+//        Notification notification = new Notification(null, NotificationType.ADD);
+//        diagram.notifyAllSubscribers(notification);
     }
 
     @Override

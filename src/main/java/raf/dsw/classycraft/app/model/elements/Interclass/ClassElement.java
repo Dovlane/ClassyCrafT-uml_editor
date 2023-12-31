@@ -84,4 +84,25 @@ public class ClassElement extends Interclass {
     public String getName() {
         return "Class-" + getPlainName();
     }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        String firstLine = String.format("%s %s %s %s %s" , visibility.toString().toLowerCase(), nonAccessModifiers.toString().toLowerCase(), "class", getPlainName(), "{\n");
+        stringBuilder.append(firstLine);
+
+        for (Attribute attribute : getClassAttributes()) {
+            String stringAttribute = String.format("%s %s %s %s", attribute.getAccessModifiers().toString().toLowerCase(), attribute.getNonAccessModifiers().toString().toLowerCase(), attribute.getDataType(), attribute.getName() + "\n");
+            stringBuilder.append(stringAttribute);
+        }
+
+        for (Method method : getClassMethods()) {
+            String stringMethod = String.format("%s %s %s %s", method.getAccessModifiers().toString().toLowerCase(), method.getNonAccessModifiers().toString().toLowerCase(), method.getReturnType(), method.getName() + "\n");
+            stringBuilder.append(stringMethod);
+        }
+
+        stringBuilder.append("}");
+
+        return stringBuilder.toString();
+    }
 }
