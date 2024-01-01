@@ -19,6 +19,7 @@ public class ActionManager {
     private RenameAction renameAction;
     private ProjectAuthorAction projectAuthorAction;
     private SaveAction saveAction;
+    private ExportCodeAction exportCodeAction;
     private SaveDiagramTemplateAction saveDiagramTemplateAction;
     private OpenProjectAction openProjectAction;
     private OpenPackageAction openPackageAction;
@@ -48,6 +49,7 @@ public class ActionManager {
         renameAction = new RenameAction();
         projectAuthorAction = new ProjectAuthorAction();
         saveAction = new SaveAction();
+        exportCodeAction = new ExportCodeAction();
         saveDiagramTemplateAction = new SaveDiagramTemplateAction();
         redoAction = new RedoAction();
         undoAction = new UndoAction();

@@ -1,0 +1,1 @@
+[ERROR][2024-01-01 17:19:50.4897396] ClassyTreeItem must be selected, and it must be Project.

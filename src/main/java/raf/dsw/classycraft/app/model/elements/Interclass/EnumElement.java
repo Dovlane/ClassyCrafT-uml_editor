@@ -57,7 +57,6 @@ public class EnumElement extends Interclass {
         return "Enum-" + getPlainName();
     }
 
-    @JsonIgnore
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();

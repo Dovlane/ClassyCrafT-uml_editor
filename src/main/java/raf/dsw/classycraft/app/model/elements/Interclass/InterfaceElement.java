@@ -8,13 +8,15 @@ import raf.dsw.classycraft.app.model.ClassyRepository.Diagram;
 import raf.dsw.classycraft.app.model.ClassyRepository.Notification;
 import raf.dsw.classycraft.app.model.ClassyRepository.NotificationType;
 import raf.dsw.classycraft.app.model.Jackson.InterfaceElementDeserializer;
-import raf.dsw.classycraft.app.model.elements.ClassContent.Attribute;
+import raf.dsw.classycraft.app.model.compositePattern.ClassyNode;
 import raf.dsw.classycraft.app.model.elements.ClassContent.Method;
+import raf.dsw.classycraft.app.model.elements.Connection.Generalization;
 import raf.dsw.classycraft.app.model.elements.Modifiers.AccessModifiers;
 import raf.dsw.classycraft.app.model.elements.Modifiers.NonAccessModifiers;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Getter
@@ -66,20 +68,89 @@ public class InterfaceElement extends Interclass {
         return "Interface-" + getPlainName();
     }
 
-    @JsonIgnore
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        String firstLine = String.format("%s %s %s %s { \n" , visibility.toString().toLowerCase(), nonAccessModifiers.toString().toLowerCase(), "interface", getPlainName());
+        Diagram diagram = (Diagram) parent;
+        List<InterfaceElement> implementedInterfaces = new ArrayList<>();
+
+        getImplementedInterfaces(implementedInterfaces, diagram);
+        String implementations = implementedInterfacesToString(implementedInterfaces);
+        String firstLine = String.format("%s %s %s %s%s { \n" , visibility.toString().toLowerCase(), nonAccessModifiers.toString().toLowerCase(), "interface", getPlainName(), implementations);
         stringBuilder.append(firstLine);
 
-        for (Method method : getInterfaceMethods()) {
-            String stringMethod = String.format("\t%s %s %s %s();\n", method.getAccessModifiers().toString().toLowerCase(), method.getNonAccessModifiers().toString().toLowerCase(), method.getReturnType(), method.getName());
-            stringBuilder.append(stringMethod);
+        HashMap<Method, Boolean> methodsOverriden = new HashMap<>();
+        List<Method> methodsFromInterfaces = new ArrayList<>();
+        getUnimplementedMethodsFromInterfaces(methodsFromInterfaces, methodsOverriden, implementedInterfaces);
+        for (Method method : methods) {
+            stringBuilder.append(methodToString(method, false));
+        }
+        for (Method method : methodsFromInterfaces) {
+            stringBuilder.append(methodToString(method, false));
         }
 
         stringBuilder.append("}\n");
 
         return stringBuilder.toString();
     }
+
+    private String methodToString(Method method ,boolean override) {
+        StringBuilder stringBuilder = new StringBuilder();
+        if (override)
+            stringBuilder.append("@Override\n");
+
+        String end;
+        if (method.getNonAccessModifiers() == NonAccessModifiers.ABSTRACT)
+            end = "();";
+        else
+            end = "() {};";
+
+        String stringMethod = String.format("\t%s %s %s %s%s\n", method.getAccessModifiers().toString().toLowerCase(), method.getNonAccessModifiers().toString().toLowerCase(), method.getReturnType(), method.getName(), end);
+
+        return stringMethod;
+    }
+
+    @JsonIgnore
+    private void getImplementedInterfaces(List<InterfaceElement> implementedInterfaces, Diagram diagram) {
+        for (ClassyNode diagramElement : diagram.getChildren()) {
+            if (diagramElement instanceof Generalization) {
+                Generalization generalization = (Generalization) diagramElement;
+                if (generalization.getFrom().equals(this)) {
+                    if (generalization.getTo() instanceof InterfaceElement) {
+                        implementedInterfaces.add((InterfaceElement) generalization.getTo());
+                    }
+                }
+            }
+        }
+    }
+
+    private String implementedInterfacesToString(List<InterfaceElement> implementedInterfaces) {
+        StringBuilder stringBuilderForImplementations = new StringBuilder();
+
+        if (implementedInterfaces.size() > 0) {
+            stringBuilderForImplementations.append(" implements ");
+            int n = implementedInterfaces.size();
+            for (int i = 0; i < n - 1; i++) {
+                InterfaceElement interfaceElement = implementedInterfaces.get(i);
+                stringBuilderForImplementations.append(interfaceElement.getPlainName() + ", ");
+            }
+            InterfaceElement lastInterfaceElement = implementedInterfaces.get(n - 1);
+            stringBuilderForImplementations.append(lastInterfaceElement.getPlainName());
+        }
+
+        return stringBuilderForImplementations.toString();
+    }
+
+    @JsonIgnore
+    private void getUnimplementedMethodsFromInterfaces(List<Method> methodsFromSuperClassAndInterfaces, HashMap<Method, Boolean> methodsOverriden, List<InterfaceElement> implementedInterfaces) {
+        for (InterfaceElement interfaceElement : implementedInterfaces) {
+            for (Method method : interfaceElement.getInterfaceMethods()) {
+                if (getInterfaceMethods().contains(method))
+                    methodsOverriden.put(method, true);
+                else
+                    methodsFromSuperClassAndInterfaces.add(method);
+            }
+        }
+    }
+
 }

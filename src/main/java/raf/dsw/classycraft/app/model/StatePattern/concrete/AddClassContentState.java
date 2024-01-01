@@ -29,9 +29,12 @@ public class AddClassContentState implements State {
         System.out.println("mousePressed inside of AddClassContentState");
 
         DiagramElement diagramElementAt = diagramView.getElementAt(location);
+
+        System.out.println(diagramView.getDiagram().toString());
+
         if (diagramElementAt != null) {
 
-            testToString(diagramElementAt);
+            //testToString(diagramElementAt);
 
             startContent = diagramElementContentFactory.createDiagramElementContent(diagramElementAt);
             if (diagramElementAt instanceof Interclass) {

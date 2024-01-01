@@ -16,12 +16,11 @@ import raf.dsw.classycraft.app.model.elements.Connection.CardinalityEnum;
 import raf.dsw.classycraft.app.model.elements.Connection.Connection;
 import raf.dsw.classycraft.app.model.elements.Connection.Generalization;
 import raf.dsw.classycraft.app.model.elements.Connection.IAggregationAndComposition;
-import raf.dsw.classycraft.app.model.elements.DiagramElement;
 import raf.dsw.classycraft.app.model.elements.Modifiers.AccessModifiers;
 import raf.dsw.classycraft.app.model.elements.Modifiers.NonAccessModifiers;
 
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
 
 @Getter
@@ -97,8 +96,54 @@ public class ClassElement extends Interclass {
         StringBuilder stringBuilder = new StringBuilder();
 
         Diagram diagram = (Diagram) parent;
-        ClassElement superClass = null;
         List<InterfaceElement> implementedInterfaces = new ArrayList<>();
+
+        ClassElement superClass = getSuperClassAndImplementedInterfaces(implementedInterfaces, diagram);
+        String extensionAndImplementations = superClassAndImplementedInterfacesToString(superClass, implementedInterfaces);
+        String firstLine = String.format("%s %s %s %s%s { \n" , visibility.toString().toLowerCase(), nonAccessModifiers.toString().toLowerCase(), "class", getPlainName(), extensionAndImplementations);
+        stringBuilder.append(firstLine);
+
+
+        addCompositionAndAggregationAttributes(stringBuilder, diagram);
+        for (Attribute attribute : getClassAttributes()) {
+            String stringAttribute = String.format("\t%s %s %s %s;\n", attribute.getAccessModifiers().toString().toLowerCase(), attribute.getNonAccessModifiers().toString().toLowerCase(), attribute.getDataType(), attribute.getName());
+            stringBuilder.append(stringAttribute);
+        }
+
+        HashMap<Method, Boolean> methodsOverriden = new HashMap<>();
+        List<Method> methodsFromSuperClassAndInterfaces = new ArrayList<>();
+        getUnimplementedMethodsFromSuperclassAndInterfaces(methodsFromSuperClassAndInterfaces, methodsOverriden, superClass, implementedInterfaces);
+        for (Method method : getClassMethods()) {
+            stringBuilder.append(methodToString(method, false));
+        }
+        for (Method method : methodsFromSuperClassAndInterfaces) {
+            stringBuilder.append(methodToString(method, false));
+        }
+
+        stringBuilder.append("}\n");
+
+        return stringBuilder.toString();
+    }
+
+    private String methodToString(Method method ,boolean override) {
+        StringBuilder stringBuilder = new StringBuilder();
+        if (override)
+            stringBuilder.append("@Override\n");
+
+        String end;
+        if (method.getNonAccessModifiers() == NonAccessModifiers.ABSTRACT)
+            end = "();";
+        else
+            end = "() {};";
+
+        String stringMethod = String.format("\t%s %s %s %s%s\n", method.getAccessModifiers().toString().toLowerCase(), method.getNonAccessModifiers().toString().toLowerCase(), method.getReturnType(), method.getName(), end);
+
+        return stringMethod;
+    }
+
+    @JsonIgnore
+    private ClassElement getSuperClassAndImplementedInterfaces(List<InterfaceElement> implementedInterfaces, Diagram diagram) {
+        ClassElement superClass = null;
         for (ClassyNode diagramElement : diagram.getChildren()) {
             if (diagramElement instanceof Generalization) {
                 Generalization generalization = (Generalization) diagramElement;
@@ -112,7 +157,10 @@ public class ClassElement extends Interclass {
                 }
             }
         }
+        return superClass;
+    }
 
+    private String superClassAndImplementedInterfacesToString(ClassElement superClass, List<InterfaceElement> implementedInterfaces) {
         StringBuilder stringBuilderForExtensionsAndImplementations = new StringBuilder();
         String extension = "";
         if (superClass != null) {
@@ -131,41 +179,51 @@ public class ClassElement extends Interclass {
             stringBuilderForExtensionsAndImplementations.append(lastInterfaceElement.getPlainName());
         }
 
-        String firstLine = String.format("%s %s %s %s%s { \n" , visibility.toString().toLowerCase(), nonAccessModifiers.toString().toLowerCase(), "class", getPlainName(),
-                                                                                                                        stringBuilderForExtensionsAndImplementations);
+        return stringBuilderForExtensionsAndImplementations.toString();
+    }
 
-        stringBuilder.append(firstLine);
-
-
+    private void addCompositionAndAggregationAttributes(StringBuilder sb, Diagram diagram) {
         for (ClassyNode diagramElement : diagram.getChildren()) {
             if (diagramElement instanceof IAggregationAndComposition) {
                 IAggregationAndComposition iAggregationAndComposition = (IAggregationAndComposition) diagramElement;
                 Connection connection = (Connection) diagramElement;
-                if (connection.getFrom().equals(this)) {
+
+                if (connection.getTo().equals(this)) {
                     AccessModifiers accessModifier = iAggregationAndComposition.getAttributeAccessModifier();
-                    String dataType = connection.getTo().getPlainName().toString();
+                    String dataType = connection.getFrom().getPlainName().toString();
                     CardinalityEnum cardinalityEnum = iAggregationAndComposition.getCardinalityEnum();
+
                     if (cardinalityEnum == CardinalityEnum.ZERO_OR_MORE)
                         dataType = String.format("List<%s>", dataType);
+
                     String name = iAggregationAndComposition.getAttributeName();
                     String stringAttribute = String.format("\t%s %s %s;\n", accessModifier.toString().toLowerCase(), dataType, name);
-                    stringBuilder.append(stringAttribute);
+
+                    sb.append(stringAttribute);
                 }
             }
         }
+    }
 
-        for (Attribute attribute : getClassAttributes()) {
-            String stringAttribute = String.format("\t%s %s %s %s;\n", attribute.getAccessModifiers().toString().toLowerCase(), attribute.getNonAccessModifiers().toString().toLowerCase(), attribute.getDataType(), attribute.getName());
-            stringBuilder.append(stringAttribute);
+    @JsonIgnore
+    private void getUnimplementedMethodsFromSuperclassAndInterfaces(List<Method> methodsFromSuperClassAndInterfaces, HashMap<Method, Boolean> methodsOverriden, ClassElement superClass, List<InterfaceElement> implementedInterfaces) {
+        if (superClass != null) {
+            for (Method method : superClass.getClassMethods()) {
+                if (method.getNonAccessModifiers() == NonAccessModifiers.ABSTRACT) {
+                    if (getClassMethods().contains(method))
+                        methodsOverriden.put(method, true);
+                    else
+                        methodsFromSuperClassAndInterfaces.add(method);
+                }
+            }
         }
-
-        for (Method method : getClassMethods()) {
-            String stringMethod = String.format("\t%s %s %s %s();\n", method.getAccessModifiers().toString().toLowerCase(), method.getNonAccessModifiers().toString().toLowerCase(), method.getReturnType(), method.getName());
-            stringBuilder.append(stringMethod);
+        for (InterfaceElement interfaceElement : implementedInterfaces) {
+            for (Method method : interfaceElement.getInterfaceMethods()) {
+                if (getClassMethods().contains(method))
+                    methodsOverriden.put(method, true);
+                else
+                    methodsFromSuperClassAndInterfaces.add(method);
+            }
         }
-
-        stringBuilder.append("}\n");
-
-        return stringBuilder.toString();
     }
 }
