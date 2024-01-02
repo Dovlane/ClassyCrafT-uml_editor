@@ -14,6 +14,7 @@ import raf.dsw.classycraft.app.model.elements.Modifiers.NonAccessModifiers;
 
 import java.awt.*;
 import java.util.Dictionary;
+import java.util.HashMap;
 
 @Getter
 @Setter
@@ -28,6 +29,13 @@ public abstract class Interclass extends DiagramElement {
     protected int boxWidth;
     protected int boxHeight;
     private int numberOfCopies;
+    protected static HashMap<AccessModifiers, String> modifiersStringHashMap = new HashMap<>()
+    {{
+        put(AccessModifiers.PRIVATE, "private ");
+        put(AccessModifiers.PUBLIC, "public ");
+        put(AccessModifiers.PROTECTED, "protected ");
+        put(AccessModifiers.DEFAULT, "");
+    }};
 
     public Interclass(String name, Diagram parent, Point point, AccessModifiers visibility, NonAccessModifiers nonAccessModifiers) {
         super(name, parent);

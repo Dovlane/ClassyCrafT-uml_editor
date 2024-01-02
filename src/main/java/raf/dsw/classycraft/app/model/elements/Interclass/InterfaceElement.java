@@ -76,17 +76,16 @@ public class InterfaceElement extends Interclass {
 
         getImplementedInterfaces(implementedInterfaces, diagram);
         String implementations = implementedInterfacesToString(implementedInterfaces);
-        String firstLine = String.format("%s %s %s %s%s { \n" , visibility.toString().toLowerCase(), nonAccessModifiers.toString().toLowerCase(), "interface", getPlainName(), implementations);
+        String firstLine = String.format("%s%s %s %s%s { \n" , modifiersStringHashMap.get(visibility), nonAccessModifiers.toString().toLowerCase(), "interface", getPlainName(), implementations);
         stringBuilder.append(firstLine);
 
-        HashMap<Method, Boolean> methodsOverriden = new HashMap<>();
         List<Method> methodsFromInterfaces = new ArrayList<>();
-        getUnimplementedMethodsFromInterfaces(methodsFromInterfaces, methodsOverriden, implementedInterfaces);
+        getUnimplementedMethodsFromInterfaces(methodsFromInterfaces, implementedInterfaces);
         for (Method method : methods) {
-            stringBuilder.append(methodToString(method, false));
+            stringBuilder.append(methodToString(method));
         }
         for (Method method : methodsFromInterfaces) {
-            stringBuilder.append(methodToString(method, false));
+            stringBuilder.append(methodToString(method));
         }
 
         stringBuilder.append("}\n");
@@ -94,10 +93,8 @@ public class InterfaceElement extends Interclass {
         return stringBuilder.toString();
     }
 
-    private String methodToString(Method method ,boolean override) {
+    private String methodToString(Method method) {
         StringBuilder stringBuilder = new StringBuilder();
-        if (override)
-            stringBuilder.append("@Override\n");
 
         String end;
         if (method.getNonAccessModifiers() == NonAccessModifiers.ABSTRACT)
@@ -105,7 +102,7 @@ public class InterfaceElement extends Interclass {
         else
             end = "() {};";
 
-        String stringMethod = String.format("\t%s %s %s %s%s\n", method.getAccessModifiers().toString().toLowerCase(), method.getNonAccessModifiers().toString().toLowerCase(), method.getReturnType(), method.getName(), end);
+        String stringMethod = String.format("\t%s%s %s %s%s\n", modifiersStringHashMap.get(method.getAccessModifiers()), method.getNonAccessModifiers().toString().toLowerCase(), method.getReturnType(), method.getName(), end);
 
         return stringMethod;
     }
@@ -142,13 +139,10 @@ public class InterfaceElement extends Interclass {
     }
 
     @JsonIgnore
-    private void getUnimplementedMethodsFromInterfaces(List<Method> methodsFromSuperClassAndInterfaces, HashMap<Method, Boolean> methodsOverriden, List<InterfaceElement> implementedInterfaces) {
+    private void getUnimplementedMethodsFromInterfaces(List<Method> methodsFromSuperClassAndInterfaces, List<InterfaceElement> implementedInterfaces) {
         for (InterfaceElement interfaceElement : implementedInterfaces) {
             for (Method method : interfaceElement.getInterfaceMethods()) {
-                if (getInterfaceMethods().contains(method))
-                    methodsOverriden.put(method, true);
-                else
-                    methodsFromSuperClassAndInterfaces.add(method);
+                methodsFromSuperClassAndInterfaces.add(method);
             }
         }
     }

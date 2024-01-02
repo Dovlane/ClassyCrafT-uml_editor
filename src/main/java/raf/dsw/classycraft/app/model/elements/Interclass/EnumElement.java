@@ -60,7 +60,7 @@ public class EnumElement extends Interclass {
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        String firstLine = String.format("%s %s %s %s { \n" , visibility.toString().toLowerCase(), nonAccessModifiers.toString().toLowerCase(), "enum", getPlainName());
+        String firstLine = String.format("%s%s %s %s { \n" , modifiersStringHashMap.get(visibility), nonAccessModifiers.toString().toLowerCase(), "enum", getPlainName());
         stringBuilder.append(firstLine);
 
         stringBuilder.append("\t");

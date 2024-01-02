@@ -100,24 +100,23 @@ public class ClassElement extends Interclass {
 
         ClassElement superClass = getSuperClassAndImplementedInterfaces(implementedInterfaces, diagram);
         String extensionAndImplementations = superClassAndImplementedInterfacesToString(superClass, implementedInterfaces);
-        String firstLine = String.format("%s %s %s %s%s { \n" , visibility.toString().toLowerCase(), nonAccessModifiers.toString().toLowerCase(), "class", getPlainName(), extensionAndImplementations);
+        String firstLine = String.format("%s%s %s %s%s { \n" , modifiersStringHashMap.get(visibility), nonAccessModifiers.toString().toLowerCase(), "class", getPlainName(), extensionAndImplementations);
         stringBuilder.append(firstLine);
 
 
         addCompositionAndAggregationAttributes(stringBuilder, diagram);
         for (Attribute attribute : getClassAttributes()) {
-            String stringAttribute = String.format("\t%s %s %s %s;\n", attribute.getAccessModifiers().toString().toLowerCase(), attribute.getNonAccessModifiers().toString().toLowerCase(), attribute.getDataType(), attribute.getName());
+            String stringAttribute = String.format("\t%s%s %s %s;\n", modifiersStringHashMap.get(visibility), nonAccessModifiers.toString().toLowerCase(), attribute.getDataType(), attribute.getName());
             stringBuilder.append(stringAttribute);
         }
 
-        HashMap<Method, Boolean> methodsOverriden = new HashMap<>();
         List<Method> methodsFromSuperClassAndInterfaces = new ArrayList<>();
-        getUnimplementedMethodsFromSuperclassAndInterfaces(methodsFromSuperClassAndInterfaces, methodsOverriden, superClass, implementedInterfaces);
+        getUnimplementedMethodsFromSuperclassAndInterfaces(methodsFromSuperClassAndInterfaces, superClass, implementedInterfaces);
         for (Method method : getClassMethods()) {
-            stringBuilder.append(methodToString(method, false));
+            stringBuilder.append(methodToString(method));
         }
         for (Method method : methodsFromSuperClassAndInterfaces) {
-            stringBuilder.append(methodToString(method, false));
+            stringBuilder.append(methodToString(method));
         }
 
         stringBuilder.append("}\n");
@@ -125,18 +124,14 @@ public class ClassElement extends Interclass {
         return stringBuilder.toString();
     }
 
-    private String methodToString(Method method ,boolean override) {
-        StringBuilder stringBuilder = new StringBuilder();
-        if (override)
-            stringBuilder.append("@Override\n");
-
+    private String methodToString(Method method) {
         String end;
         if (method.getNonAccessModifiers() == NonAccessModifiers.ABSTRACT)
             end = "();";
         else
             end = "() {};";
 
-        String stringMethod = String.format("\t%s %s %s %s%s\n", method.getAccessModifiers().toString().toLowerCase(), method.getNonAccessModifiers().toString().toLowerCase(), method.getReturnType(), method.getName(), end);
+        String stringMethod = String.format("\t%s%s %s %s%s\n", modifiersStringHashMap.get(method.getAccessModifiers()), method.getNonAccessModifiers().toString().toLowerCase(), method.getReturnType(), method.getName(), end);
 
         return stringMethod;
     }
@@ -197,7 +192,7 @@ public class ClassElement extends Interclass {
                         dataType = String.format("List<%s>", dataType);
 
                     String name = iAggregationAndComposition.getAttributeName();
-                    String stringAttribute = String.format("\t%s %s %s;\n", accessModifier.toString().toLowerCase(), dataType, name);
+                    String stringAttribute = String.format("\t%s%s %s;\n", modifiersStringHashMap.get(accessModifier), dataType, name);
 
                     sb.append(stringAttribute);
                 }
@@ -206,23 +201,17 @@ public class ClassElement extends Interclass {
     }
 
     @JsonIgnore
-    private void getUnimplementedMethodsFromSuperclassAndInterfaces(List<Method> methodsFromSuperClassAndInterfaces, HashMap<Method, Boolean> methodsOverriden, ClassElement superClass, List<InterfaceElement> implementedInterfaces) {
+    private void getUnimplementedMethodsFromSuperclassAndInterfaces(List<Method> methodsFromSuperClassAndInterfaces, ClassElement superClass, List<InterfaceElement> implementedInterfaces) {
         if (superClass != null) {
             for (Method method : superClass.getClassMethods()) {
                 if (method.getNonAccessModifiers() == NonAccessModifiers.ABSTRACT) {
-                    if (getClassMethods().contains(method))
-                        methodsOverriden.put(method, true);
-                    else
-                        methodsFromSuperClassAndInterfaces.add(method);
+                    methodsFromSuperClassAndInterfaces.add(method);
                 }
             }
         }
         for (InterfaceElement interfaceElement : implementedInterfaces) {
             for (Method method : interfaceElement.getInterfaceMethods()) {
-                if (getClassMethods().contains(method))
-                    methodsOverriden.put(method, true);
-                else
-                    methodsFromSuperClassAndInterfaces.add(method);
+                methodsFromSuperClassAndInterfaces.add(method);
             }
         }
     }
