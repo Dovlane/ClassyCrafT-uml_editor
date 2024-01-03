@@ -1,7 +1,7 @@
 {
   "type" : "Diagram",
-  "referencePath" : "Diagram1",
-  "name" : "Diagram1",
+  "referencePath" : "__name__",
+  "name" : "__name__",
   "parent" : "",
   "children" : [],
   "childCount" : 1
