@@ -29,6 +29,7 @@ public abstract class Interclass extends DiagramElement {
     protected int boxWidth;
     protected int boxHeight;
     private int numberOfCopies;
+
     protected static HashMap<AccessModifiers, String> modifiersStringHashMap = new HashMap<>()
     {{
         put(AccessModifiers.PRIVATE, "private ");
