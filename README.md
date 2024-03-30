@@ -87,10 +87,7 @@ In order not to loose your work when closing application you can save a whole pr
 
 Now your project i safely stored. To open it again use a 'Open' menu item and choose a file to be opened.
 
-<p float="left">
-  <img height="300" alt="63" src="https://github.com/Dovlane/ClassyCrafT-uml_editor/assets/57462728/1deac03d-fc48-41c3-a98f-31614b7d5dbe">
-  <img height="300" alt="64" src="https://github.com/Dovlane/ClassyCrafT-uml_editor/assets/57462728/36010f3c-0d44-4759-a366-e9e59eeb12c6">
-</p>
+![](https://github.com/Dovlane/ClassyCrafT-uml_editor/assets/57462728/1deac03d-fc48-41c3-a98f-31614b7d5dbe) | ![](https://github.com/Dovlane/ClassyCrafT-uml_editor/assets/57462728/36010f3c-0d44-4759-a366-e9e59eeb12c6) 
 
 ### Exporting
 
