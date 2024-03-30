@@ -77,7 +77,7 @@ Select the chain link icon to add relationships between objects. Click and drag 
 
 By repeting previous steps for all the other items finished diagram could look something like this:
 
-<img width="850" alt="final diagram" src="https://github.com/Dovlane/ClassyCrafT-uml_editor/assets/57462728/68fe5d02-ef3c-4932-92af-02fb3a02f2c2">
+<img width="500" alt="316264220-68fe5d02-ef3c-4932-92af-02fb3a02f2c2" src="https://github.com/Dovlane/ClassyCrafT-uml_editor/assets/57462728/72db3e9f-6193-4ce1-a876-79b896db5965">
 
 ### Saving and opening
 
