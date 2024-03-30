@@ -67,8 +67,8 @@ To add methods and attributes select 'Add content button' represented by a penci
 Select the chain link icon to add relationships between objects. Click and drag the connection from one object to another. You will be prompted to choose type of a relationship. After clicking 'OK' relationship will be added.
 
 <p float="left">
-  <img height="270" alt="add relationship" src="https://github.com/Dovlane/ClassyCrafT-uml_editor/assets/57462728/3aee791a-c91f-404b-bb29-1a610477c7c9">
-  <img height="270" alt="relationship added" src="https://github.com/Dovlane/ClassyCrafT-uml_editor/assets/57462728/9df90712-1667-4ae9-b5f5-8ec3ce6eabf9">
+  <img height="250" alt="add relationship" src="https://github.com/Dovlane/ClassyCrafT-uml_editor/assets/57462728/3aee791a-c91f-404b-bb29-1a610477c7c9">
+  <img height="250" alt="relationship added" src="https://github.com/Dovlane/ClassyCrafT-uml_editor/assets/57462728/9df90712-1667-4ae9-b5f5-8ec3ce6eabf9">
 </p>
 
 Edit item' button can be used on the relationships as well. Here you can change cardinality accessibility and name of an attribute corresponding to a composition or am aggregation relationship. 
