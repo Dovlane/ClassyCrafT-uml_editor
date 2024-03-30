@@ -54,8 +54,8 @@ With all preparations complete, we can now move on to creating the diagram itsel
 A window will pop up where you can provide information about class being created. Specify classes's name and modifiers here, then click 'OK' to confirm your choice. Blue rectangle representing your newly created class will appear on a diagram view and tree will be refreshed accordingly. You can rename or remove diagram items from tree in same way as previously shown. 
 
 <p float="left">
-  <img height="300" alt="add class" src="https://github.com/Dovlane/ClassyCrafT-uml_editor/assets/57462728/f0278e6f-1a78-4148-a646-8dfaec95aaa1">
-  <img height="300" alt="class" src="https://github.com/Dovlane/ClassyCrafT-uml_editor/assets/57462728/2ba9a0fc-c185-4452-9c5f-8c20dcd39d7b">
+  <img height="250" alt="add class" src="https://github.com/Dovlane/ClassyCrafT-uml_editor/assets/57462728/f0278e6f-1a78-4148-a646-8dfaec95aaa1">
+  <img height="250" alt="class" src="https://github.com/Dovlane/ClassyCrafT-uml_editor/assets/57462728/2ba9a0fc-c185-4452-9c5f-8c20dcd39d7b">
 </p>
 
 To add methods and attributes select 'Add content button' represented by a pencil icon in the toolbar and select desired class. Provide name and a data type in appropriate fields and choose modifiers from drop-down menus. Use radio buttons to indicate whether it's an attribute or a method and click on the 'ADD' button to add it. It will be listed in the table at the bottom of a pop-up. You can select items in the tables and remove them using 'DELETE' button. Click 'OK' button to save the changes. 
